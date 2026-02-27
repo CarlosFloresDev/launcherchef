@@ -1,0 +1,57 @@
+{
+  "name": "launcherchef",
+  "version": "1.0.0",
+  "description": "LauncherChef - Launcher de Minecraft con gestión automática de mods",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "generate-manifest": "node tools/generate-manifest.js",
+    "update-urls": "node tools/update-urls.js",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.launcherchef.app",
+    "productName": "LauncherChef",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "config/settings.json",
+      "config/servers.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "shortcutName": "LauncherChef",
+      "artifactName": "LauncherChef-Setup-${version}.${ext}"
+    },
+    "asar": true
+  },
+  "author": "LauncherChef",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "minecraft-launcher-core": "^3.18.2",
+    "msmc": "^5.0.5"
+  },
+  "devDependencies": {
+    "electron": "^33.3.1",
+    "electron-builder": "^26.8.1"
+  }
+}

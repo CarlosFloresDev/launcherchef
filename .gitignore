@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+minecraft_data/
+temp-repo/
+tortillaland-mods-temp/
+*.log
+.env
+config/auth.json
+config/local.json

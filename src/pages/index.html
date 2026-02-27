@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LauncherChef</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <!-- Custom Titlebar -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-drag">
+      <div class="titlebar-icon">🍳</div>
+      <span class="titlebar-title">LauncherChef</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="tb-btn" id="btn-minimize">─</button>
+      <button class="tb-btn" id="btn-maximize">□</button>
+      <button class="tb-btn tb-close" id="btn-close">✕</button>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="user-section" id="user-section">
+        <div class="avatar" id="user-avatar">?</div>
+        <div class="user-info">
+          <span class="username" id="username">No conectado</span>
+          <div class="auth-buttons">
+            <button class="btn-login" id="btn-auth">Premium</button>
+            <button class="btn-login btn-nopremuim" id="btn-offline">No Premium</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offline login modal -->
+      <div class="modal-overlay" id="offline-modal" style="display:none;">
+        <div class="modal">
+          <h3>Modo No Premium</h3>
+          <p class="modal-desc">Ingresa tu nombre de usuario para jugar en modo offline.</p>
+          <input type="text" id="offline-username" placeholder="Tu nombre de usuario" maxlength="16" class="modal-input">
+          <div class="modal-buttons">
+            <button class="btn-secondary" id="offline-cancel">Cancelar</button>
+            <button class="btn-login" id="offline-confirm">Entrar</button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-section="servers">
+          <span class="nav-icon">🖥️</span> Servidores
+        </button>
+        <button class="nav-item" data-section="mods">
+          <span class="nav-icon">📦</span> Mods
+        </button>
+        <button class="nav-item" data-section="settings">
+          <span class="nav-icon">⚙️</span> Ajustes
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="version-tag">v1.0.0</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <!-- Servers Section -->
+      <section class="section active" id="section-servers">
+        <div class="section-header">
+          <h2>Servidores</h2>
+          <p class="section-desc">Selecciona un servidor para jugar. Los mods se sincronizaran automaticamente.</p>
+        </div>
+
+        <div class="server-list" id="server-list">
+          <!-- Servers loaded dynamically -->
+        </div>
+
+        <div class="server-detail" id="server-detail" style="display:none;">
+          <div class="detail-header">
+            <button class="btn-back" id="btn-back-servers">← Volver</button>
+            <h3 id="detail-server-name">Servidor</h3>
+          </div>
+          <div class="detail-info">
+            <div class="info-row">
+              <span class="info-label">Version:</span>
+              <span class="info-value" id="detail-mc-version">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Mod Loader:</span>
+              <span class="info-value" id="detail-mod-loader">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Mods:</span>
+              <span class="info-value" id="detail-mod-count">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Direccion:</span>
+              <span class="info-value" id="detail-address">-</span>
+            </div>
+          </div>
+
+          <div class="mod-list-preview" id="detail-mod-list">
+            <!-- Mods for this server -->
+          </div>
+
+          <div class="launch-section">
+            <div class="progress-container" id="progress-container" style="display:none;">
+              <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+              <span class="progress-text" id="progress-text">Preparando...</span>
+            </div>
+            <button class="btn-play" id="btn-play" disabled>
+              <span class="play-icon">▶</span> JUGAR
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mods Section -->
+      <section class="section" id="section-mods">
+        <div class="section-header">
+          <h2>Gestor de Mods</h2>
+          <p class="section-desc">Mods instalados para el servidor seleccionado.</p>
+        </div>
+
+        <div class="mods-toolbar">
+          <span class="mods-server-label" id="mods-server-label">Ningun servidor seleccionado</span>
+          <button class="btn-sync" id="btn-sync-mods" disabled>🔄 Sincronizar</button>
+        </div>
+
+        <div class="mod-grid" id="mod-grid">
+          <div class="empty-state">
+            <span class="empty-icon">📦</span>
+            <p>Selecciona un servidor primero para ver sus mods</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section class="section" id="section-settings">
+        <div class="section-header">
+          <h2>Ajustes</h2>
+        </div>
+
+        <div class="settings-group">
+          <h3>Memoria (RAM)</h3>
+          <div class="setting-row">
+            <label for="ram-min">RAM Minima (MB):</label>
+            <input type="number" id="ram-min" value="1024" min="512" step="256">
+          </div>
+          <div class="setting-row">
+            <label for="ram-max">RAM Maxima (MB):</label>
+            <input type="number" id="ram-max" value="4096" min="1024" step="256">
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3>Java</h3>
+          <div class="setting-row">
+            <label for="java-path">Ruta de Java (vacio = automatico):</label>
+            <input type="text" id="java-path" placeholder="Detectar automaticamente">
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3>Directorio de datos</h3>
+          <div class="setting-row">
+            <label>Ubicacion:</label>
+            <span class="path-display" id="data-path-display">-</span>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3>Servidor de Distribucion</h3>
+          <p class="setting-hint">URL del manifiesto JSON con la lista de servidores y mods.</p>
+          <div class="setting-row">
+            <label for="distro-url">URL del manifiesto:</label>
+            <input type="text" id="distro-url" placeholder="https://tu-servidor.com/distribution.json">
+          </div>
+          <button class="btn-secondary" id="btn-load-distro">Cargar</button>
+        </div>
+
+        <button class="btn-save-settings" id="btn-save-settings">Guardar Ajustes</button>
+      </section>
+    </main>
+  </div>
+
+  <!-- Log Console (togglable) -->
+  <div class="log-console" id="log-console" style="display:none;">
+    <div class="log-header">
+      <span>Consola</span>
+      <button class="log-toggle" id="log-toggle">✕</button>
+    </div>
+    <div class="log-body" id="log-body"></div>
+  </div>
+
+  <button class="btn-console-toggle" id="btn-show-log" title="Mostrar consola">📋</button>
+
+  <script src="../js/renderer.js"></script>
+</body>
+</html>

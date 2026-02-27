@@ -1,0 +1,46 @@
+{
+  "_comment": "Este es un ejemplo de manifiesto de distribucion para LauncherChef.",
+  "_instructions": [
+    "Sube este archivo a tu servidor web (GitHub Pages, tu propio hosting, etc.)",
+    "Los jugadores configuran la URL en Ajustes > Servidor de Distribucion.",
+    "Al seleccionar un servidor, el launcher descarga/actualiza/elimina mods automaticamente.",
+    "Puedes actualizar este archivo en tu servidor y los jugadores recibiran los cambios al abrir el launcher."
+  ],
+  "launcher_version": "1.0.0",
+  "servers": [
+    {
+      "id": "mi-servidor-survival",
+      "name": "Mi Servidor Survival",
+      "description": "Un servidor survival con mods de optimizacion.",
+      "address": "mi-servidor.com:25565",
+      "minecraft_version": "1.20.4",
+      "mod_loader": "fabric",
+      "mod_loader_version": "0.15.6",
+      "icon": "🏠",
+      "status": "online",
+      "mods": [
+        {
+          "name": "Sodium",
+          "filename": "sodium-fabric-0.5.8+mc1.20.4.jar",
+          "url": "https://cdn.modrinth.com/data/AANobbMI/versions/IZskON6d/sodium-fabric-0.5.8%2Bmc1.20.4.jar",
+          "sha256": "a1b2c3d4e5f6...",
+          "required": true
+        },
+        {
+          "name": "Lithium",
+          "filename": "lithium-fabric-0.12.1+mc1.20.4.jar",
+          "url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/nMhjKWVE/lithium-fabric-mc1.20.4-0.12.1.jar",
+          "sha256": "f6e5d4c3b2a1...",
+          "required": true
+        },
+        {
+          "name": "Iris Shaders",
+          "filename": "iris-1.6.11+mc1.20.4.jar",
+          "url": "https://cdn.modrinth.com/data/YL57xq9U/versions/...",
+          "sha256": "",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

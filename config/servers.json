@@ -1,0 +1,1665 @@
+[
+  {
+    "id": "tortillaland-2",
+    "name": "TortillaLand 2",
+    "description": "Servidor TortillaLand 2 (Unofficial) - 206 mods con NeoForge. Survival, tecnologia, decoracion y mas!",
+    "address": "147.135.9.233:19606",
+    "minecraft_version": "1.21.1",
+    "mod_loader": "neoforge",
+    "mod_loader_version": "21.1.219",
+    "icon": "🌮",
+    "status": "online",
+    "manifestUrl": "https://raw.githubusercontent.com/CarlosFloresDev/tortillaland-mods/main/distribution.json",
+    "configsUrl": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/configs.zip",
+    "mods": [
+      {
+        "name": "Additionallanterns",
+        "filename": "additionallanterns-1.1.2-neoforge-mc1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/additionallanterns-1.1.2-neoforge-mc1.21.jar",
+        "sha256": "5cf36e4a49385c59f29d2b6a003438c8d761ae4d65544d85617e5a8f4d9c1ea0",
+        "size": 3041170,
+        "required": true
+      },
+      {
+        "name": "Adorable Eggs 1.21.1",
+        "filename": "adorable_eggs-NeoForge-1.21.1-1.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/adorable_eggs-NeoForge-1.21.1-1.0.2.jar",
+        "sha256": "e84d2bdbc74c3245806fe8ab6ec49c21f6d518d4ef739d4a4a7799b498ce00a4",
+        "size": 1011152,
+        "required": true
+      },
+      {
+        "name": "Adorn",
+        "filename": "Adorn-6.1.2+1.21.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Adorn-6.1.2%2B1.21.1-neoforge.jar",
+        "sha256": "1799ff123c93cc149041661270abdaf31c2814ed86d1064639ca7c0f9e2e132f",
+        "size": 5114266,
+        "required": true
+      },
+      {
+        "name": "Alltheleaks",
+        "filename": "alltheleaks-1.1.6+1.21.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/alltheleaks-1.1.6%2B1.21.1-neoforge.jar",
+        "sha256": "f2a81e5565c80e722717b4708bce00adb12dac862d22626bd270de4825a97d2f",
+        "size": 527501,
+        "required": true
+      },
+      {
+        "name": "Alternate Current",
+        "filename": "alternate_current-mc1.21-1.9.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/alternate_current-mc1.21-1.9.0.jar",
+        "sha256": "d23731fcb31cf561544fd7a97b0076b3abb42a0ece0631f86de9a1425fe046f5",
+        "size": 50425,
+        "required": true
+      },
+      {
+        "name": "AmbientSounds V6.3.4",
+        "filename": "AmbientSounds_NEOFORGE_v6.3.4_mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/AmbientSounds_NEOFORGE_v6.3.4_mc1.21.1.jar",
+        "sha256": "d8e264af9bd7e3118f6613cebb94b4f0a21c7a7ba4ccedb5225e7fe973894b15",
+        "size": 84811185,
+        "required": true
+      },
+      {
+        "name": "Amendments 1.21",
+        "filename": "amendments-1.21-2.0.15-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/amendments-1.21-2.0.15-neoforge.jar",
+        "sha256": "e44e67d5c2eb5a73ee8ca3d1e9099ed20ccbf8167022bc407df8434b1bf362b5",
+        "size": 1143659,
+        "required": true
+      },
+      {
+        "name": "Animal Armor Trims 1.21",
+        "filename": "animal_armor_trims-merged-1.21-2.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/animal_armor_trims-merged-1.21-2.0.0.jar",
+        "sha256": "4f7690067b1882419f0567d605b80d3f159ae7dad230fc137fd63cb032c85192",
+        "size": 533568,
+        "required": true
+      },
+      {
+        "name": "Appleskin",
+        "filename": "appleskin-neoforge-mc1.21-3.0.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/appleskin-neoforge-mc1.21-3.0.8.jar",
+        "sha256": "60691595ce02e48281c1ec0d1fac4e56ba1aadd496dd6c071a41b4da7f82bf42",
+        "size": 75595,
+        "required": true
+      },
+      {
+        "name": "Aquaculture 1.21.1",
+        "filename": "Aquaculture-1.21.1-2.7.18.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Aquaculture-1.21.1-2.7.18.jar",
+        "sha256": "61ae5741db157642b5cb3580f3b7f2929ca3bbed13d8f6f7e55195e76f49019c",
+        "size": 605678,
+        "required": true
+      },
+      {
+        "name": "Architectury",
+        "filename": "architectury-13.0.8-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/architectury-13.0.8-neoforge.jar",
+        "sha256": "5ec578f814e8cca87aeffa6e424032e78d9ea5ea6b603dd834c2dc13c31141ee",
+        "size": 584004,
+        "required": true
+      },
+      {
+        "name": "Armadillo Scute Armor   MC 1.21   1.0.2",
+        "filename": "[NeoForge] Armadillo Scute Armor - MC 1.21 - 1.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/NeoForge-Armadillo-Scute-Armor-MC1.21-1.0.2.jar",
+        "sha256": "89853e5d7b529bbb49b58b3c010dd526098b43cda6c1a2802ab399e365d6151c",
+        "size": 38204,
+        "required": true
+      },
+      {
+        "name": "Artifacts",
+        "filename": "artifacts-neoforge-13.2.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/artifacts-neoforge-13.2.0.jar",
+        "sha256": "3768f05bef154ec079bba7ea9e8f3f0e570af4853b27784047151a845c08b675",
+        "size": 1022570,
+        "required": true
+      },
+      {
+        "name": "Athena 1.21",
+        "filename": "athena-neoforge-1.21-4.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/athena-neoforge-1.21-4.0.2.jar",
+        "sha256": "81cff69ac23885f64dc9998bb3890e3ab2e21ae16c134936c552d12fbab385d6",
+        "size": 92698,
+        "required": true
+      },
+      {
+        "name": "Attributefix 1.21.1",
+        "filename": "attributefix-neoforge-1.21.1-21.1.3.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/attributefix-neoforge-1.21.1-21.1.3.jar",
+        "sha256": "b2b20f3d44e824071284c14de3f4d3323d420e1c450040b339a5c37d2c382ad4",
+        "size": 19809,
+        "required": true
+      },
+      {
+        "name": "Automessage 1.21.1",
+        "filename": "automessage-merged-1.21.1-3.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/automessage-merged-1.21.1-3.0.0.jar",
+        "sha256": "af32936d158cd980df5816887750541cbe054afe2274e9a3f70d59b613c00a90",
+        "size": 140337,
+        "required": true
+      },
+      {
+        "name": "BadOptimizations 2.4.1",
+        "filename": "BadOptimizations-2.4.1-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/BadOptimizations-2.4.1-1.21.1.jar",
+        "sha256": "22e2467892d3706f43d1cf2aa637785bb8601c20b0098a82ab956e6a8fc4d2ba",
+        "size": 283566,
+        "required": true
+      },
+      {
+        "name": "Badpackets Neo",
+        "filename": "badpackets-neo-0.8.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/badpackets-neo-0.8.2.jar",
+        "sha256": "6e97bf8c2a66df484e8c100a1fc1b615b8beac70ec44f4c3bc07bb672dcd54c6",
+        "size": 54641,
+        "required": true
+      },
+      {
+        "name": "Bagus Lib 1.21.1",
+        "filename": "bagus_lib-1.21.1-13.25.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/bagus_lib-1.21.1-13.25.1.jar",
+        "sha256": "a1e6baf5c41881235fe9b6f820426a7755c75fe174df62bac0aa341bab5483d4",
+        "size": 224874,
+        "required": true
+      },
+      {
+        "name": "Balm 1.21.1",
+        "filename": "balm-neoforge-1.21.1-21.0.56.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/balm-neoforge-1.21.1-21.0.56.jar",
+        "sha256": "670ed64e73cacb646b21eaa6e2d2028f95c498d0cf1ae5cffcf7035d0b2fb32e",
+        "size": 739709,
+        "required": true
+      },
+      {
+        "name": "BEB 1.21",
+        "filename": "BEB-NeoForge-1.21-6.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/BEB-NeoForge-1.21-6.0.0.jar",
+        "sha256": "fb31fe9e9684481443d888fadbd54f39e7cb19309a171d53bdf9473cff9c2ba6",
+        "size": 1772579,
+        "required": true
+      },
+      {
+        "name": "BetterF3 11.0.3",
+        "filename": "BetterF3-11.0.3-NeoForge-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/BetterF3-11.0.3-NeoForge-1.21.1.jar",
+        "sha256": "1a97b6ca5c81b3b18d653f403929908e3b48bb1bdb6e8bd8559f89cf0294dc26",
+        "size": 481646,
+        "required": true
+      },
+      {
+        "name": "Betterpickaxetrims 1.21.1",
+        "filename": "betterpickaxetrims-neoforge-1.21.1-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/betterpickaxetrims-neoforge-1.21.1-1.0.0.jar",
+        "sha256": "429b3cb591e4ef8f16389c11ef5861a92bf24a57dd0844554b0a0122e0afe31d",
+        "size": 111079,
+        "required": true
+      },
+      {
+        "name": "BetterThirdPerson",
+        "filename": "BetterThirdPerson-neoforge-1.9.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/BetterThirdPerson-neoforge-1.9.0.jar",
+        "sha256": "2e74076c67a78f16d696ec9ad1e3138d6ed1418544b297dbe3f4ad9cd791d059",
+        "size": 60941,
+        "required": true
+      },
+      {
+        "name": "BHMenu 1.21",
+        "filename": "BHMenu-NeoForge-1.21-2.4.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/BHMenu-NeoForge-1.21-2.4.4.jar",
+        "sha256": "96be3f854d120b5c7d1046509b1a904092a687416848e7e5b713e59e1368efa1",
+        "size": 163914,
+        "required": true
+      },
+      {
+        "name": "Blueprint 1.21.1",
+        "filename": "blueprint-1.21.1-8.0.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/blueprint-1.21.1-8.0.8.jar",
+        "sha256": "64c6c3dd4ba12e0939b2fdf3f25426570aff450dc277f14d8d2b248b5bc7dfb7",
+        "size": 1098679,
+        "required": true
+      },
+      {
+        "name": "Bookshelf 1.21.1",
+        "filename": "bookshelf-neoforge-1.21.1-21.1.81.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/bookshelf-neoforge-1.21.1-21.1.81.jar",
+        "sha256": "19e88d40da2b6a114c2b808f7fb469d96e66a5379df0a8a43fcb7834498b3e76",
+        "size": 328813,
+        "required": true
+      },
+      {
+        "name": "BTP 1.21.1",
+        "filename": "BTP-NeoForge-1.21.1-1.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/BTP-NeoForge-1.21.1-1.0.2.jar",
+        "sha256": "945db0422146db3a551e020c46c2e517aa1ebaa153d2cd7f471a66ab5daa7193",
+        "size": 815875,
+        "required": true
+      },
+      {
+        "name": "Camera 1.21.1",
+        "filename": "camera-neoforge-1.21.1-1.0.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/camera-neoforge-1.21.1-1.0.21.jar",
+        "sha256": "750b8efab99bed37c8be8dbd105d7424ee05a7bb7a1bdefa689290d41cc7f647",
+        "size": 302968,
+        "required": true
+      },
+      {
+        "name": "Carryon 1.21.1",
+        "filename": "carryon-neoforge-1.21.1-2.2.4.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/carryon-neoforge-1.21.1-2.2.4.4.jar",
+        "sha256": "ad69537be8be8b433227792e43f8df7b4d3cef7e359255d471a44e776ad8dd57",
+        "size": 357489,
+        "required": true
+      },
+      {
+        "name": "Catalogue 1.21.1",
+        "filename": "catalogue-neoforge-1.21.1-1.11.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/catalogue-neoforge-1.21.1-1.11.2.jar",
+        "sha256": "b3c958772c61354fccf04b52264f2e398c8bf9a28d192d675bf82359b647ef43",
+        "size": 302750,
+        "required": true
+      },
+      {
+        "name": "CerbonsAPI 1.21",
+        "filename": "CerbonsAPI-NeoForge-1.21-1.3.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/CerbonsAPI-NeoForge-1.21-1.3.0.jar",
+        "sha256": "5c750762b31ab79127df6f455351fe79793d8c2b41e1a0f94b335a5a1123534d",
+        "size": 250545,
+        "required": true
+      },
+      {
+        "name": "Chat Heads 0.15.0",
+        "filename": "chat_heads-0.15.0-neoforge-1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/chat_heads-0.15.0-neoforge-1.21.jar",
+        "sha256": "fb649cfcd08bbb1c68b2cc966045f6340e26e0a5fa99a5490b12ab94e3fbac3b",
+        "size": 89489,
+        "required": true
+      },
+      {
+        "name": "Chipped 1.21.1",
+        "filename": "chipped-neoforge-1.21.1-4.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/chipped-neoforge-1.21.1-4.0.2.jar",
+        "sha256": "18ac6fd6b30db4922ccc6ee8bea5b113f69587505b7529834f37ace506427291",
+        "size": 15020578,
+        "required": true
+      },
+      {
+        "name": "Chunksending 1.21",
+        "filename": "chunksending-1.21-2.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/chunksending-1.21-2.8.jar",
+        "sha256": "711f0f41cf4742a543a643fbc233df9497e577887f5b494c020e146cbd76bf9b",
+        "size": 11753,
+        "required": true
+      },
+      {
+        "name": "Cleanswing",
+        "filename": "cleanswing-1.9.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/cleanswing-1.9.jar",
+        "sha256": "b86e69372a3451a09c1b5d09d69f2e20485c6d2aa62fa8a538ef77509a5f5595",
+        "size": 8449,
+        "required": true
+      },
+      {
+        "name": "Clickadv 1.21",
+        "filename": "clickadv-1.21-3.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/clickadv-1.21-3.8.jar",
+        "sha256": "1d149d19063ecf862757460504d72eabcf31339d986c16ba23e4cee1b43a13fd",
+        "size": 14593,
+        "required": true
+      },
+      {
+        "name": "Cloth Config",
+        "filename": "cloth-config-15.0.140-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/cloth-config-15.0.140-neoforge.jar",
+        "sha256": "65e722e0d98431a07c45f8bdd8d529a217cc8c175fde1740248bd5c1b4f3c0d4",
+        "size": 1163890,
+        "required": true
+      },
+      {
+        "name": "Clumps 1.21.1",
+        "filename": "Clumps-neoforge-1.21.1-19.0.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Clumps-neoforge-1.21.1-19.0.0.1.jar",
+        "sha256": "b524ccdace2ef8fd19f5b2074f7de1103ac5065c52553f064c00e098346c293e",
+        "size": 18382,
+        "required": true
+      },
+      {
+        "name": "Colourfulearth 1.21",
+        "filename": "colourfulearth-1.21-1.0.0-NeoForge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/colourfulearth-1.21-1.0.0-NeoForge.jar",
+        "sha256": "3939280cfcc0affd24bc9cbcdf01ae64745d68cc5518c1f54ff8e3229be10aca",
+        "size": 305739,
+        "required": true
+      },
+      {
+        "name": "Comforts",
+        "filename": "comforts-neoforge-9.0.5+1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/comforts-neoforge-9.0.5%2B1.21.1.jar",
+        "sha256": "6b0fd35a1349107e08a45539adbde9683bb203febc43a3305f6fc4ac73e59615",
+        "size": 422658,
+        "required": true
+      },
+      {
+        "name": "Connectedglass",
+        "filename": "connectedglass-1.1.14-neoforge-mc1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/connectedglass-1.1.14-neoforge-mc1.21.jar",
+        "sha256": "e5b2a1cd8ef1b8a49a322aeccfc5cd9a53d8303613b9f30718f12a1e525d49fe",
+        "size": 819976,
+        "required": true
+      },
+      {
+        "name": "Connectivity 1.21.1",
+        "filename": "connectivity-1.21.1-7.6.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/connectivity-1.21.1-7.6.jar",
+        "sha256": "2366973ddae5ba00b9ba15a26e5b610a6648038b9f2549bf81b9ae61342b281a",
+        "size": 114165,
+        "required": true
+      },
+      {
+        "name": "Controlling 1.21.1",
+        "filename": "Controlling-neoforge-1.21.1-19.0.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Controlling-neoforge-1.21.1-19.0.5.jar",
+        "sha256": "cc525fb6b030d9e4d33176983f278919e17b33935e2ca568929bdfa98f2b44a0",
+        "size": 77555,
+        "required": true
+      },
+      {
+        "name": "Corail Woodcutter 1.21.1",
+        "filename": "corail_woodcutter-neoforge-1.21.1-3.4.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/corail_woodcutter-neoforge-1.21.1-3.4.2.jar",
+        "sha256": "1e2b8ff3ed65a76266f0a10b51b6a5dfa06757c6f04d4756636011c1a868e7cf",
+        "size": 320160,
+        "required": true
+      },
+      {
+        "name": "Corgilib 1.21.1",
+        "filename": "Corgilib-NeoForge-1.21.1-5.0.0.7.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Corgilib-NeoForge-1.21.1-5.0.0.7.jar",
+        "sha256": "a43d07254c09bc5e40ab1b4897dfaef76594aab7ef1cdb4c3ec895081186119f",
+        "size": 310185,
+        "required": true
+      },
+      {
+        "name": "Coroutil 1.21.0",
+        "filename": "coroutil-neoforge-1.21.0-1.3.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/coroutil-neoforge-1.21.0-1.3.8.jar",
+        "sha256": "9b32bcf2c793d33b93b5d4739c0dc4b64231025c7dc5fe40732b66d7cf4b2826",
+        "size": 63981,
+        "required": true
+      },
+      {
+        "name": "Corpse 1.21.1",
+        "filename": "corpse-neoforge-1.21.1-1.1.13.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/corpse-neoforge-1.21.1-1.1.13.jar",
+        "sha256": "f61e750eb2cb49867483d34d6630e02597a52e41680fc38d1c65ece4ef36fd2b",
+        "size": 253695,
+        "required": true
+      },
+      {
+        "name": "Cosmeticarmorreworked 1.21.1 V1",
+        "filename": "cosmeticarmorreworked-1.21.1-v1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/cosmeticarmorreworked-1.21.1-v1-neoforge.jar",
+        "sha256": "6328049755735159c55f5918ac301cff53a8d8790c3fe63e32e7d8a0e37f123f",
+        "size": 92722,
+        "required": true
+      },
+      {
+        "name": "Crabclaws",
+        "filename": "crabclaws-1.3.0-1.21.1+neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/crabclaws-1.3.0-1.21.1%2Bneoforge.jar",
+        "sha256": "86fa8599dac8675137e6222c6986641fb8e792600d36b7906a1cf14c1803f5f0",
+        "size": 231264,
+        "required": true
+      },
+      {
+        "name": "Craftingtweaks 1.21.1",
+        "filename": "craftingtweaks-neoforge-1.21.1-21.1.7.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/craftingtweaks-neoforge-1.21.1-21.1.7.jar",
+        "sha256": "a48db6f2f4f793c71bec8dc4b11257776f5ba11b402bcd22067a96ce47451e0f",
+        "size": 255939,
+        "required": true
+      },
+      {
+        "name": "Create 1.21.1",
+        "filename": "create-1.21.1-6.0.9.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/create-1.21.1-6.0.9.jar",
+        "sha256": "c3030f79894ba7410d51e99dd5e5b8a4f4cc9de6cb63c5906dc8f909000a4f55",
+        "size": 19019888,
+        "required": true
+      },
+      {
+        "name": "CreativeCore V2.13.30",
+        "filename": "CreativeCore_NEOFORGE_v2.13.30_mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/CreativeCore_NEOFORGE_v2.13.30_mc1.21.1.jar",
+        "sha256": "a1117c62e48e63b6bb74c4bf5d47735308e3d1e2cc340c36b50059b3b3ddf15a",
+        "size": 1209993,
+        "required": true
+      },
+      {
+        "name": "CreeperOverhaul 1.21.1",
+        "filename": "CreeperOverhaul-neoforge-1.21.1-4.0.6.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/CreeperOverhaul-neoforge-1.21.1-4.0.6.jar",
+        "sha256": "ed83bea2826667fca80a6a8067f89fe7b97eb8b3213bbcb7f0f4e6a6898c0bc9",
+        "size": 1185088,
+        "required": true
+      },
+      {
+        "name": "Croptopia 1.21.1 NEO",
+        "filename": "croptopia_1.21.1_NEO-FORGE-4.2.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/croptopia_1.21.1_NEO-FORGE-4.2.1.jar",
+        "sha256": "b1a6629ea0ebee05ca5e1ac8205e3205e2f292a8953c7614afcadf29cd06954d",
+        "size": 2194312,
+        "required": true
+      },
+      {
+        "name": "Cupboard 1.21",
+        "filename": "cupboard-1.21-2.9.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/cupboard-1.21-2.9.jar",
+        "sha256": "0d7093deae83d223674e3bf0fc37943658f3f028e655df6f9e25209c32f41668",
+        "size": 23509,
+        "required": true
+      },
+      {
+        "name": "Curios",
+        "filename": "curios-neoforge-9.5.1+1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/curios-neoforge-9.5.1%2B1.21.1.jar",
+        "sha256": "a45df2125c26219974aba7507ffc9afe7b83acc941a386af3faacb1cc0056fde",
+        "size": 410690,
+        "required": true
+      },
+      {
+        "name": "Curious Armor Stands",
+        "filename": "curious_armor_stands-8.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/curious_armor_stands-8.0.0.jar",
+        "sha256": "d72506a3cb6e022fe78b07af0806a07bf6984979d4480376780e10b36bcfb5d9",
+        "size": 12497,
+        "required": true
+      },
+      {
+        "name": "Danger Close 1.21.1",
+        "filename": "danger_close-neoforge-1.21.1-3.1.3.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/danger_close-neoforge-1.21.1-3.1.3.jar",
+        "sha256": "8b1b89c733ed7a68b702655b7126b142f98dd79a4e05a9f3758d3b4fd488b643",
+        "size": 34458,
+        "required": true
+      },
+      {
+        "name": "Data Anchor 1.21.1",
+        "filename": "Data_Anchor-neoforge-1.21.1-2.0.0.13.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Data_Anchor-neoforge-1.21.1-2.0.0.13.jar",
+        "sha256": "84d0fea1e051913a6cd9656fb63692313f1748d06221e453911ec1a22940262e",
+        "size": 111722,
+        "required": true
+      },
+      {
+        "name": "Deeperdarker 1.21.1",
+        "filename": "deeperdarker-neoforge-1.21.1-1.3.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/deeperdarker-neoforge-1.21.1-1.3.5.jar",
+        "sha256": "47c20399153996301782644573b3f373278bc60187a238d3dbc8a2955c7ec376",
+        "size": 17886030,
+        "required": true
+      },
+      {
+        "name": "Defaultoptions 1.21.1",
+        "filename": "defaultoptions-neoforge-1.21.1-21.1.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/defaultoptions-neoforge-1.21.1-21.1.5.jar",
+        "sha256": "a42f0ff542725b5a56b82f5e8ad064ba778392e3f81e2b8b2c0a48f3712c2fc3",
+        "size": 95656,
+        "required": true
+      },
+      {
+        "name": "Disenchanting Table 1.21.1",
+        "filename": "disenchanting_table-merged-1.21.1-5.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/disenchanting_table-merged-1.21.1-5.0.2.jar",
+        "sha256": "bdb4f294f968b0e5bb75fe4b9bfe65563add01da2e34df81ba6c65fb7e77dc9c",
+        "size": 306197,
+        "required": true
+      },
+      {
+        "name": "DungeonCrawl 1.21",
+        "filename": "DungeonCrawl-NeoForge-1.21-2.3.15.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/DungeonCrawl-NeoForge-1.21-2.3.15.jar",
+        "sha256": "ce2244e98421c2201af2f78133d0482590532d2d1014304128f7fc974ff2742c",
+        "size": 737298,
+        "required": true
+      },
+      {
+        "name": "DungeonsArise 1.21.1 2.1.68 Release",
+        "filename": "DungeonsArise-1.21.1-2.1.68-release.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/DungeonsArise-1.21.1-2.1.68-release.jar",
+        "sha256": "7eee1eca7e3b2c6c1bede055934f391ae2e8349ffe33e106f451176d2cfcf0e4",
+        "size": 11842679,
+        "required": true
+      },
+      {
+        "name": "Dynamicassetgenerator",
+        "filename": "dynamicassetgenerator-6.1.2-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/dynamicassetgenerator-6.1.2-neoforge.jar",
+        "sha256": "31f6cca89635683816ef3aac4ecdb29e5d2374fe41f6741c86c254d91c74d61a",
+        "size": 393572,
+        "required": true
+      },
+      {
+        "name": "Dynamiclights 1.21.1.2NF",
+        "filename": "dynamiclights-1.21.1.2NF.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/dynamiclights-1.21.1.2NF.jar",
+        "sha256": "065ac4275f0d8f823892310bc3774655512f55f36ba97c4544b323b4da67bf0e",
+        "size": 49110,
+        "required": true
+      },
+      {
+        "name": "Earthmobsmod 1.21.1",
+        "filename": "earthmobsmod-1.21.1-19.3.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/earthmobsmod-1.21.1-19.3.0.jar",
+        "sha256": "ff65593922c56dfc982737483022f46606f09cf0d23c5c096dac8fcc64734605",
+        "size": 1162513,
+        "required": true
+      },
+      {
+        "name": "Eat An Omelette 1.21.1",
+        "filename": "eat_an_omelette-merged-1.21.1-1.5.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/eat_an_omelette-merged-1.21.1-1.5.0.jar",
+        "sha256": "b77e85f54ff5ece3044d3070e155d434a95e28ac0359c4555b39dc40cf409cc0",
+        "size": 385273,
+        "required": true
+      },
+      {
+        "name": "Elementalmaces 1.21",
+        "filename": "elementalmaces-neoforge-1.21-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/elementalmaces-neoforge-1.21-1.0.0.jar",
+        "sha256": "5f015c9a8ff26ec2db322d332f22248bbe15852bb86296cbd9c0957422bb6d6e",
+        "size": 39705,
+        "required": true
+      },
+      {
+        "name": "Elevatorid 1.21.1",
+        "filename": "elevatorid-neoforge-1.21.1-1.11.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/elevatorid-neoforge-1.21.1-1.11.4.jar",
+        "sha256": "c3908b14549addaa18951c473d2d1f67a3df61bcf5599c6031e71ca5685bf14c",
+        "size": 191190,
+        "required": true
+      },
+      {
+        "name": "Emotecraft For",
+        "filename": "emotecraft-for-MC1.21.1-2.4.12-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/emotecraft-for-MC1.21.1-2.4.12-neoforge.jar",
+        "sha256": "8cff63e900acd55bb39d41978cc2a70a974e326e2038c30ff20ccfde4c953a43",
+        "size": 861829,
+        "required": true
+      },
+      {
+        "name": "Enchantwithmob 1.21.1",
+        "filename": "enchantwithmob-1.21.1-20.12.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/enchantwithmob-1.21.1-20.12.0.jar",
+        "sha256": "67082914fa20270a94574fad35ebbaa28748190c1886529a111901a9533f07e6",
+        "size": 567037,
+        "required": true
+      },
+      {
+        "name": "Ender Pack 1.21.1",
+        "filename": "ender_pack-merged-1.21.1-2.2.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/ender_pack-merged-1.21.1-2.2.0.jar",
+        "sha256": "fb10e8ea0a972486a3f76d6e684441f2cc1ff0fd746200b90cb86505d2f1e756",
+        "size": 181530,
+        "required": true
+      },
+      {
+        "name": "Enhanced Celestials 1.21.1",
+        "filename": "Enhanced-Celestials-NeoForge-1.21.1-6.0.2.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Enhanced-Celestials-NeoForge-1.21.1-6.0.2.5.jar",
+        "sha256": "eb0d2c334278d2ca648ad43b29286ab9d58df59c2329ca605d1e039935b95b9d",
+        "size": 1611531,
+        "required": true
+      },
+      {
+        "name": "Entity Model Features 1.21",
+        "filename": "entity_model_features_1.21-neoforge-3.0.11.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/entity_model_features_1.21-neoforge-3.0.11.jar",
+        "sha256": "dfad7968a3614db58f298c23e68d75f9fb8ef2405ea8efdbcd87e007cda5397a",
+        "size": 493897,
+        "required": true
+      },
+      {
+        "name": "Entity Texture Features 1.21",
+        "filename": "entity_texture_features_1.21-neoforge-7.0.9.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/entity_texture_features_1.21-neoforge-7.0.9.jar",
+        "sha256": "5c237e895f0257a11b5c26015c05e4015d04fc28725bbc358e4ffdb2e6910a1c",
+        "size": 735043,
+        "required": true
+      },
+      {
+        "name": "Entityculling",
+        "filename": "entityculling-neoforge-1.9.5-mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/entityculling-neoforge-1.9.5-mc1.21.1.jar",
+        "sha256": "6357c6c7649d139f088b7176d589e3e7b16790f3c484a544c112702df0373001",
+        "size": 1564767,
+        "required": true
+      },
+      {
+        "name": "EpheroLib 1.21.1 NEO",
+        "filename": "EpheroLib-1.21.1-NEO-FORGE-1.2.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/EpheroLib-1.21.1-NEO-FORGE-1.2.0.jar",
+        "sha256": "875647ca276c2cfc9418ee2d62398c61380eac8d79ab0e555aefa09ac3b07d18",
+        "size": 746263,
+        "required": true
+      },
+      {
+        "name": "Epicpowerbracelets 1.21",
+        "filename": "epicpowerbracelets-neoforge-1.21-1.1.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/epicpowerbracelets-neoforge-1.21-1.1.1.jar",
+        "sha256": "37046882c81b28697a5b16ab0fc374ea78bc8856945b7b1e73cd9c4c6f338bb0",
+        "size": 47915,
+        "required": true
+      },
+      {
+        "name": "EuphoriaPatcher 1.8.6 R5.7.1",
+        "filename": "EuphoriaPatcher-1.8.6-r5.7.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/EuphoriaPatcher-1.8.6-r5.7.1-neoforge.jar",
+        "sha256": "ed61db7ab3c5d43a404cbe09663d0ce59d7cf9e3a3dd3d0d224afea4b5213efa",
+        "size": 2773488,
+        "required": true
+      },
+      {
+        "name": "EW 1.21.1",
+        "filename": "EW-NeoForge-1.21.1-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/EW-NeoForge-1.21.1-1.0.0.jar",
+        "sha256": "fca02c0a53f761867c8ec4f9d45f2eaf535c795017e8249ed5ed4e915cc12d62",
+        "size": 425681,
+        "required": true
+      },
+      {
+        "name": "Excavatedvariants",
+        "filename": "excavatedvariants-4.3.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/excavatedvariants-4.3.1-neoforge.jar",
+        "sha256": "3eb6a00ef1eff1738d9894195dd2a5b58ad81774fdd3ea3904fcda0ed956c2da",
+        "size": 456057,
+        "required": true
+      },
+      {
+        "name": "Expandability",
+        "filename": "expandability-12.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/expandability-12.0.0.jar",
+        "sha256": "6e9e21d60d6f48052482dddf0f3a24662687ac2ad3c868d7c9a88fe851d293c5",
+        "size": 44765,
+        "required": true
+      },
+      {
+        "name": "Fancymenu 3.8.1 MC",
+        "filename": "fancymenu_neoforge_3.8.1_MC_1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/fancymenu_neoforge_3.8.1_MC_1.21.1.jar",
+        "sha256": "d935c9862541a41083f0ab086684b0510a924c05f609f8935f7fab6fbe843613",
+        "size": 4297501,
+        "required": true
+      },
+      {
+        "name": "FarmersDelight 1.21.1",
+        "filename": "FarmersDelight-1.21.1-1.2.10.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/FarmersDelight-1.21.1-1.2.10.jar",
+        "sha256": "5346b829cdb4b4ae530a3e588b56aa4d26356ceec57a07e3d0c6b681f3f96dcb",
+        "size": 2935025,
+        "required": true
+      },
+      {
+        "name": "Fast Ip Ping V1.0.8",
+        "filename": "fast-ip-ping-v1.0.8-mc1.21.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/fast-ip-ping-v1.0.8-mc1.21.1-neoforge.jar",
+        "sha256": "a94b965f7bacea49d9a6253866801cc9073ca5d38e184c7695d82b6a2536b707",
+        "size": 10332,
+        "required": true
+      },
+      {
+        "name": "Fastasyncworldsave 1.21",
+        "filename": "fastasyncworldsave-1.21-2.6.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/fastasyncworldsave-1.21-2.6.jar",
+        "sha256": "099316ee212ff44bcd7aea853f0153cd28432e0297676d21f61e8b000089714f",
+        "size": 11050,
+        "required": true
+      },
+      {
+        "name": "Fastleafdecay",
+        "filename": "fastleafdecay-35.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/fastleafdecay-35.jar",
+        "sha256": "0b90f259caef64c3aa09d05427859990a51adec072540a9c598370b86c966a98",
+        "size": 9511,
+        "required": true
+      },
+      {
+        "name": "Fastpaintings 1.21",
+        "filename": "fastpaintings-1.21-1.3.0-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/fastpaintings-1.21-1.3.0-neoforge.jar",
+        "sha256": "782afb6f4c631c9d3313b6442d304b36336f794273dfa5c381485142020ca05a",
+        "size": 155810,
+        "required": true
+      },
+      {
+        "name": "Ferritecore",
+        "filename": "ferritecore-7.0.3-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/ferritecore-7.0.3-neoforge.jar",
+        "sha256": "d87ea28262715ebff45b8a82d493e6b468e7a4521bc021df5d88302196d030a8",
+        "size": 121559,
+        "required": true
+      },
+      {
+        "name": "FHG 1.21.1",
+        "filename": "FHG-NeoForge-1.21.1-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/FHG-NeoForge-1.21.1-1.0.0.jar",
+        "sha256": "c854703eb12b1ed55992dbc699e121e49d63268a1cfa349b94f0fca7eda60b2f",
+        "size": 363956,
+        "required": true
+      },
+      {
+        "name": "FramedBlocks",
+        "filename": "FramedBlocks-10.5.3.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/FramedBlocks-10.5.3.jar",
+        "sha256": "478689929c5f490b0a5f0368a1748599c49ab790065b29acaa48fe9173e55223",
+        "size": 4301567,
+        "required": true
+      },
+      {
+        "name": "Framework 1.21.1",
+        "filename": "framework-neoforge-1.21.1-0.13.11.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/framework-neoforge-1.21.1-0.13.11.jar",
+        "sha256": "429ea90a162d7c25c1463ee60979e4d7b1ddb525d9384a3a2a2f45d70bda03f5",
+        "size": 387334,
+        "required": true
+      },
+      {
+        "name": "Friendsandfoes",
+        "filename": "friendsandfoes-neoforge-4.0.19+mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/friendsandfoes-neoforge-4.0.19%2Bmc1.21.1.jar",
+        "sha256": "9a68f548913695bf0ec8191b6b399c7911854588cd946755299c82e2159e3a5a",
+        "size": 4982527,
+        "required": true
+      },
+      {
+        "name": "Fusion",
+        "filename": "fusion-1.2.12-neoforge-mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/fusion-1.2.12-neoforge-mc1.21.1.jar",
+        "sha256": "5961f78d85b7bd88205bc65c9f8182bc041646aa3579fa39810878d9b5b87c0c",
+        "size": 532912,
+        "required": true
+      },
+      {
+        "name": "Geckolib 1.21.1",
+        "filename": "geckolib-neoforge-1.21.1-4.8.3.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/geckolib-neoforge-1.21.1-4.8.3.jar",
+        "sha256": "f5bbf6f9f84021ff044e3debba00a0c03c3d3ffab3150bb72c0f92c8b8218a92",
+        "size": 622121,
+        "required": true
+      },
+      {
+        "name": "Golden Foods 1.21.1",
+        "filename": "golden_foods-merged-1.21.1-2.4.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/golden_foods-merged-1.21.1-2.4.0.jar",
+        "sha256": "f6ed34defe61db3c0cc12962e6fad5ca18e1ab090f4b2e174dc5dbf6eff4dae8",
+        "size": 287555,
+        "required": true
+      },
+      {
+        "name": "Gpumemleakfix 1.21",
+        "filename": "gpumemleakfix-1.21-1.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/gpumemleakfix-1.21-1.8.jar",
+        "sha256": "4bd0682e26b8d4ba78442ce8d969fc7fa3cac2c21fc600de34a54b2ff7814931",
+        "size": 6574,
+        "required": true
+      },
+      {
+        "name": "Guardvillagers 2.4.5",
+        "filename": "guardvillagers-2.4.5-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/guardvillagers-2.4.5-1.21.1.jar",
+        "sha256": "576b4968da7febdc5b104c4fc38eea2ca7666f6c8d66a575cda82f3668e6b0cf",
+        "size": 281799,
+        "required": true
+      },
+      {
+        "name": "Happy Ghasts Boost 1.21.1",
+        "filename": "happy_ghasts_boost-merged-1.21.1-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/happy_ghasts_boost-merged-1.21.1-1.0.0.jar",
+        "sha256": "0cd32c7ea1c426738c192b8b6560021d4e6cd0277f482073230092348e39eba7",
+        "size": 110094,
+        "required": true
+      },
+      {
+        "name": "Healthy Water 1.21.1",
+        "filename": "healthy_water-merged-1.21.1-1.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/healthy_water-merged-1.21.1-1.0.1.jar",
+        "sha256": "53284c0ff177fb4c22bb3d3f19f2c7c1ece944f52e47ae7ebc7e09574a795343",
+        "size": 173667,
+        "required": true
+      },
+      {
+        "name": "Hiddennames 1.21.0",
+        "filename": "hiddennames-1.21.0-1.0.6.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/hiddennames-1.21.0-1.0.6.jar",
+        "sha256": "af91573fb2d86d9f37f47e373bbeba4ce153d084db27b60fd82fa6ef2e5f9563",
+        "size": 48056,
+        "required": true
+      },
+      {
+        "name": "Highlighter 1.21",
+        "filename": "Highlighter-1.21-neoforge-1.1.11.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Highlighter-1.21-neoforge-1.1.11.jar",
+        "sha256": "cc9480a383a8f9bcf2c6c3bfc913aa7e3b1b9ad1062c5180c4d0d281000c9f8b",
+        "size": 30417,
+        "required": true
+      },
+      {
+        "name": "Iceberg 1.21.1",
+        "filename": "Iceberg-1.21.1-neoforge-1.3.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Iceberg-1.21.1-neoforge-1.3.2.jar",
+        "sha256": "0d620c975619b04110b94a73d5b42d252563ff59c1eae9d21ab2ee7e38460a3c",
+        "size": 213853,
+        "required": true
+      },
+      {
+        "name": "ImmediatelyFast",
+        "filename": "ImmediatelyFast-NeoForge-1.6.10+1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/ImmediatelyFast-NeoForge-1.6.10%2B1.21.1.jar",
+        "sha256": "9fbb8dce1bb72feacdc3b75c6fcbf689865ad3793a19649443d76be20993ddd0",
+        "size": 368598,
+        "required": true
+      },
+      {
+        "name": "Infernalmobs 1.21.1.3NF",
+        "filename": "infernalmobs-1.21.1.3NF.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/infernalmobs-1.21.1.3NF.jar",
+        "sha256": "331ce9d68ca4b1358368a825532666a8cf3ca2a0de2f09c953ebe8ba86b58738",
+        "size": 141468,
+        "required": true
+      },
+      {
+        "name": "Inventoryhud.Neoforged.1.21.1",
+        "filename": "inventoryhud.neoforged.1.21.1-3.4.28.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/inventoryhud.neoforged.1.21.1-3.4.28.jar",
+        "sha256": "1bbd368273b299857ccdb236d096169d289513f67e7561d4743375b55f5a584a",
+        "size": 236206,
+        "required": true
+      },
+      {
+        "name": "Iris",
+        "filename": "iris-neoforge-1.8.12+mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/iris-neoforge-1.8.12%2Bmc1.21.1.jar",
+        "sha256": "3e3f94d2d5cdcb8145c4385d521974aa2d8669b2cc212351f70cf06488182e83",
+        "size": 2438548,
+        "required": true
+      },
+      {
+        "name": "Jade 1.21.1",
+        "filename": "Jade-1.21.1-NeoForge-15.10.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Jade-1.21.1-NeoForge-15.10.5.jar",
+        "sha256": "067bb4b007e1d6f6b79f0afe99c91252aa825472b99a76d33a60d24442f9e92d",
+        "size": 725742,
+        "required": true
+      },
+      {
+        "name": "Jearchaeology 1.21.1",
+        "filename": "jearchaeology-1.21.1-1.1.6.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/jearchaeology-1.21.1-1.1.6.jar",
+        "sha256": "8cbad2d75cdbe35af8b73bbdc4d472fe6b445ee384ea6ce4aaff1156716a1c34",
+        "size": 44537,
+        "required": true
+      },
+      {
+        "name": "Jei 1.21.1",
+        "filename": "jei-1.21.1-neoforge-19.27.0.340.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/jei-1.21.1-neoforge-19.27.0.340.jar",
+        "sha256": "8aaf547432f1b4958239b036356b910692fe40f858c3073d996f56bbf7c99826",
+        "size": 1529391,
+        "required": true
+      },
+      {
+        "name": "Journeymap 1.21.1 6.0.0 Beta.54",
+        "filename": "journeymap-neoforge-1.21.1-6.0.0-beta.54.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/journeymap-neoforge-1.21.1-6.0.0-beta.54.jar",
+        "sha256": "7fcbbf3c4b1cb0f753b3ac73f772f4c9c6bcc9f6013ac6745b9c4251658dc2eb",
+        "size": 3546018,
+        "required": true
+      },
+      {
+        "name": "Justenoughbreeding 1.21 1.21.1",
+        "filename": "justenoughbreeding-neoforge-1.21-1.21.1-1.6.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/justenoughbreeding-neoforge-1.21-1.21.1-1.6.2.jar",
+        "sha256": "4857ff49f674dac569495eb6cd4252cf5bb075c0c2566923b44be434c4c401d2",
+        "size": 134388,
+        "required": true
+      },
+      {
+        "name": "JustEnoughProfessions 1.21.1",
+        "filename": "JustEnoughProfessions-neoforge-1.21.1-4.0.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/JustEnoughProfessions-neoforge-1.21.1-4.0.4.jar",
+        "sha256": "42ff35ec355edc1a1ebafeb26a9e351c5bb8abd7bd73c343b00aaca19200615b",
+        "size": 24449,
+        "required": true
+      },
+      {
+        "name": "Justzoom 2.1.0 MC",
+        "filename": "justzoom_neoforge_2.1.0_MC_1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/justzoom_neoforge_2.1.0_MC_1.21.1.jar",
+        "sha256": "83f1701f7802d4355e57f73c2751b29e4b760a4e2a18427504bbd9ce7090a0c1",
+        "size": 43798,
+        "required": true
+      },
+      {
+        "name": "Kiwi 1.21.1",
+        "filename": "Kiwi-1.21.1-NeoForge-15.7.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Kiwi-1.21.1-NeoForge-15.7.5.jar",
+        "sha256": "a618e192086b0d321e4e8959fa0030469bef0ee72598bbb0bffce704349514e8",
+        "size": 1530230,
+        "required": true
+      },
+      {
+        "name": "Konkrete 1.9.9 MC",
+        "filename": "konkrete_neoforge_1.9.9_MC_1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/konkrete_neoforge_1.9.9_MC_1.21.jar",
+        "sha256": "791c5538751dd3015ef3a2ce92d98719e1a28a48ebbd817b78506771256654cd",
+        "size": 618842,
+        "required": true
+      },
+      {
+        "name": "Kotlinforforge 5.11.0 All",
+        "filename": "kotlinforforge-5.11.0-all.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/kotlinforforge-5.11.0-all.jar",
+        "sha256": "89d2ccd9d2ca2996ca3ee57b27165893f4bc4b8431be89461f8b2f8fe6162ac1",
+        "size": 6869790,
+        "required": true
+      },
+      {
+        "name": "Krypton Fnp 1.21.1 0.2.28.1",
+        "filename": "krypton_fnp-neoforge-1.21.1-0.2.28.1-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/krypton_fnp-neoforge-1.21.1-0.2.28.1-1.21.1.jar",
+        "sha256": "05ebe849611daafe533fc57ed9b5156edfa9157ced04d38a7860b1e2075984b9",
+        "size": 1015871,
+        "required": true
+      },
+      {
+        "name": "LibIPN 1.21.1",
+        "filename": "libIPN-neoforge-1.21.1-6.6.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/libIPN-neoforge-1.21.1-6.6.2.jar",
+        "sha256": "5c9e1b083440fd1b26d0c7bc5484468dd40df985efcab04aaa2f2c88966479d4",
+        "size": 626176,
+        "required": true
+      },
+      {
+        "name": "Lithium",
+        "filename": "lithium-neoforge-0.15.2+mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/lithium-neoforge-0.15.2%2Bmc1.21.1.jar",
+        "sha256": "d1826a20cbd6f8df7566c677c72ccc4502b7eb98088b2b4d10f10b7170f7a6a0",
+        "size": 773944,
+        "required": true
+      },
+      {
+        "name": "Livingthings 1.21.1",
+        "filename": "livingthings-neoforge-1.21.1-2.3.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/livingthings-neoforge-1.21.1-2.3.0.jar",
+        "sha256": "dbb2a21db7555b41325c107db872a0304066b7c3eabb5e1e0cb010c294bbaca5",
+        "size": 962953,
+        "required": true
+      },
+      {
+        "name": "Loadingbackgrounds 2.0.0 1.20.2 To",
+        "filename": "loadingbackgrounds-2.0.0-neoforge-1.20.2_to_1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/loadingbackgrounds-2.0.0-neoforge-1.20.2_to_1.21.1.jar",
+        "sha256": "b6a8294942e841c3844254fa4eb1dbb88d1ffe2674aa1829e3f9eccf36a775ba",
+        "size": 173392,
+        "required": true
+      },
+      {
+        "name": "Longer Following Time 1.21.1",
+        "filename": "longer_following_time-merged-1.21.1-1.1.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/longer_following_time-merged-1.21.1-1.1.0.jar",
+        "sha256": "1682ccd78b08c878e40a6eff9fc80ecf2e597303586bcee550be0c107c40a2d7",
+        "size": 36431,
+        "required": true
+      },
+      {
+        "name": "Mace3d",
+        "filename": "mace3d-1.2.0-1.21.1+neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mace3d-1.2.0-1.21.1%2Bneoforge.jar",
+        "sha256": "69e1a8a7dca89c0b3d7f2abf4e922096a89bc755223541bb6ca5e5456724a9db",
+        "size": 188719,
+        "required": true
+      },
+      {
+        "name": "Mcw Bridges 3.1.1neoforge",
+        "filename": "mcw-bridges-3.1.1-mc1.21.1neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mcw-bridges-3.1.1-mc1.21.1neoforge.jar",
+        "sha256": "9a140c6a1014f1f80b887fc629a4e1ef9ff3036b07a27803dcf44d32dd543b91",
+        "size": 652279,
+        "required": true
+      },
+      {
+        "name": "Mcw Mcwfences 1.2.1neoforge",
+        "filename": "mcw-mcwfences-1.2.1-mc1.21.1neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mcw-mcwfences-1.2.1-mc1.21.1neoforge.jar",
+        "sha256": "e4b0e5a5b67decc2285e71f017fb4f60284796fa0838de3edeaf6b7cb0395735",
+        "size": 673871,
+        "required": true
+      },
+      {
+        "name": "Mcw Mcwpaths 1.1.1neoforge",
+        "filename": "mcw-mcwpaths-1.1.1-mc1.21.1neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mcw-mcwpaths-1.1.1-mc1.21.1neoforge.jar",
+        "sha256": "f04b51518f75c8a7d5fe1be5589dbcb8a7b0d4f67373ca903578804d971b1286",
+        "size": 777742,
+        "required": true
+      },
+      {
+        "name": "Mcw Roofs 2.3.2neoforge",
+        "filename": "mcw-roofs-2.3.2-mc1.21.1neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mcw-roofs-2.3.2-mc1.21.1neoforge.jar",
+        "sha256": "25c79def993a24b05b0f8494ee9417717d469bc000d5ed7c219b47dcc3b3e9c8",
+        "size": 1784829,
+        "required": true
+      },
+      {
+        "name": "Medieval Buildings 1.21.1",
+        "filename": "medieval_buildings-1.21.1-1.1.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/medieval_buildings-1.21.1-1.1.1-neoforge.jar",
+        "sha256": "367422cf0768bcdcf3d8ce21ce7c123e8d87022c11085f66f671fef1abc37102",
+        "size": 214623,
+        "required": true
+      },
+      {
+        "name": "Medieval Buildings End Edition 1.21.1",
+        "filename": "medieval_buildings_end_edition-1.21.1-1.0.4-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/medieval_buildings_end_edition-1.21.1-1.0.4-neoforge.jar",
+        "sha256": "d11b62c633c739426c6b5812f6b1162265323e981a75ee2517b51ff78e7c20d4",
+        "size": 438618,
+        "required": true
+      },
+      {
+        "name": "Medieval Buildings Nether Edition 1.21.1",
+        "filename": "medieval_buildings_nether_edition-1.21.1-1.0.2-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/medieval_buildings_nether_edition-1.21.1-1.0.2-neoforge.jar",
+        "sha256": "6aae01f723d6e0fc0b233ee038d7ca1ee983b1d609306c05f128e3642581cd91",
+        "size": 538109,
+        "required": true
+      },
+      {
+        "name": "Melody 1.0.10 MC",
+        "filename": "melody_neoforge_1.0.10_MC_1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/melody_neoforge_1.0.10_MC_1.21.jar",
+        "sha256": "6b973a4564703c531fc0eae09db08b07a38091e0a743c687b8d2049457e84871",
+        "size": 36096,
+        "required": true
+      },
+      {
+        "name": "Memorysettings 1.21",
+        "filename": "memorysettings-1.21-5.9.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/memorysettings-1.21-5.9.jar",
+        "sha256": "42d9b25092572b6859fd8f5a9e9bbddacf7a6bd8d78ef0675cd862ad95df1b92",
+        "size": 22328,
+        "required": true
+      },
+      {
+        "name": "MineTraps 1.21 (V.3.0.2)",
+        "filename": "MineTraps-1.21-(v.3.0.2).jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/MineTraps-1.21-v3.0.2.jar",
+        "sha256": "079f3c4081341ff9f71c88683370c922577482d21cdc136df3d48e76d4a313d8",
+        "size": 169884,
+        "required": true
+      },
+      {
+        "name": "Mob Drops Recipes End 1.21.1",
+        "filename": "mob_drops_recipes_end-merged-1.21.1-2.1.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mob_drops_recipes_end-merged-1.21.1-2.1.0.jar",
+        "sha256": "f0abd506206843f8dbc510eeb4c9b718266effdba711b1e5568df34f27340f39",
+        "size": 51936,
+        "required": true
+      },
+      {
+        "name": "Mob Drops Recipes Nether 1.21.1",
+        "filename": "mob_drops_recipes_nether-merged-1.21.1-2.1.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mob_drops_recipes_nether-merged-1.21.1-2.1.1.jar",
+        "sha256": "32b4009f588fa271dbedf825f2b1eb8eefbddbf90b105193019c1a493fce044c",
+        "size": 71946,
+        "required": true
+      },
+      {
+        "name": "Mob Drops Recipes Overworld 1.21.1",
+        "filename": "mob_drops_recipes_overworld-merged-1.21.1-2.1.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/mob_drops_recipes_overworld-merged-1.21.1-2.1.0.jar",
+        "sha256": "9d42ea3e6b5b062cb3663c1808dd511bed212305a89b908f868930ef60e5c101",
+        "size": 76849,
+        "required": true
+      },
+      {
+        "name": "Monolib 1.21.1",
+        "filename": "monolib-neoforge-1.21.1-2.1.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/monolib-neoforge-1.21.1-2.1.0.jar",
+        "sha256": "46b20622774b924cf2ab66e48a7f5dc7fc4a0995ba7d771a0a697a2468ac69ae",
+        "size": 179499,
+        "required": true
+      },
+      {
+        "name": "Moonlight 1.21",
+        "filename": "moonlight-1.21-2.29.16-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/moonlight-1.21-2.29.16-neoforge.jar",
+        "sha256": "45aa8ef1acb472c70714044ae598217ce6c53962339665fd68675ea51a76bb49",
+        "size": 1575809,
+        "required": true
+      },
+      {
+        "name": "More Beautiful Torches 1.21",
+        "filename": "more_beautiful_torches-merged-1.21-3.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/more_beautiful_torches-merged-1.21-3.0.0.jar",
+        "sha256": "fe4e1ab2b48a451d5d2287908595a069d45b42be577071197532b717a676ecac",
+        "size": 3791922,
+        "required": true
+      },
+      {
+        "name": "More Bows And Arrows 1.21.1",
+        "filename": "more_bows_and_arrows-merged-1.21.1-5.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/more_bows_and_arrows-merged-1.21.1-5.0.1.jar",
+        "sha256": "0971251f0d3926baa3f98f8fa0f6f7fd26d1081c5a0421de09f1059bb94a699d",
+        "size": 541131,
+        "required": true
+      },
+      {
+        "name": "More Crafting Tables 1.21",
+        "filename": "More Crafting Tables-neoforge-1.21-7.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/MoreCraftingTables-neoforge-1.21-7.0.2.jar",
+        "sha256": "b9127226a6e13dbd5cc5ec9946602baf6b4702db08a7374860417136d0b21553",
+        "size": 540952,
+        "required": true
+      },
+      {
+        "name": "More Useful Copper 1.21.1",
+        "filename": "more_useful_copper-merged-1.21.1-2.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/more_useful_copper-merged-1.21.1-2.0.0.jar",
+        "sha256": "e880e9a274f083b9048f87b2c7c9f9de8eb7b3a1dbaaa8ff016fdea88416f168",
+        "size": 330890,
+        "required": true
+      },
+      {
+        "name": "MouseTweaks",
+        "filename": "MouseTweaks-neoforge-mc1.21-2.26.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/MouseTweaks-neoforge-mc1.21-2.26.1.jar",
+        "sha256": "68e6f4201c5de97b77929a7215c9552495696ca6a3bf3ae4eacc34e135f6cc8b",
+        "size": 73938,
+        "required": true
+      },
+      {
+        "name": "Neo Startinv 1.0.0",
+        "filename": "neo_startinv-1.0.0-1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/neo_startinv-1.0.0-1.21.jar",
+        "sha256": "ff35eff1f878222a9d2d768ecd68a46a031416d9619f6fbad8d5fc33f0ecea62",
+        "size": 9275,
+        "required": true
+      },
+      {
+        "name": "Neoforge Wider Ender Chests 1.0.3",
+        "filename": "neoforge_wider_ender_chests-1.0.3-1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/neoforge_wider_ender_chests-1.0.3-1.21.jar",
+        "sha256": "43b2a4ba1b283208e9d943ff83f0b5272e933ba873411eaa03569bbffc23af1c",
+        "size": 171447,
+        "required": true
+      },
+      {
+        "name": "Netherportalfix 1.21.1",
+        "filename": "netherportalfix-neoforge-1.21.1-21.1.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/netherportalfix-neoforge-1.21.1-21.1.1.jar",
+        "sha256": "c1077de0c7f1ff5289d1852e0674d9c477247d4318c9809b21c60e56a31ae31a",
+        "size": 211972,
+        "required": true
+      },
+      {
+        "name": "New Slab Variants 1.21.1",
+        "filename": "new_slab_variants-merged-1.21.1-3.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/new_slab_variants-merged-1.21.1-3.0.1.jar",
+        "sha256": "f48760ae3d0aea4dd2164e6ad8244be00046b0772f5c887207ec5804df96b708",
+        "size": 1287430,
+        "required": true
+      },
+      {
+        "name": "Notenoughanimations",
+        "filename": "notenoughanimations-neoforge-1.11.2-mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/notenoughanimations-neoforge-1.11.2-mc1.21.1.jar",
+        "sha256": "a2d7bbf5e13d5d5bb6da970f61c1c3077c649781bb65b0613936939093d9ca27",
+        "size": 1930488,
+        "required": true
+      },
+      {
+        "name": "Peaceful Hunger 1.21.1",
+        "filename": "peaceful_hunger-neoforge-1.21.1-2.2.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/peaceful_hunger-neoforge-1.21.1-2.2.0.jar",
+        "sha256": "43c09cf0a8dbca22d2b4406c551b2dc91c2ab71988009483334b5f3d7d2059fa",
+        "size": 32307,
+        "required": true
+      },
+      {
+        "name": "Placebo 1.21.1",
+        "filename": "Placebo-1.21.1-9.9.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Placebo-1.21.1-9.9.1.jar",
+        "sha256": "42c90bc43800558b9322bd60faa9011d6694e66a87b7e6b3b9f51fa735b527ea",
+        "size": 324056,
+        "required": true
+      },
+      {
+        "name": "Platform 1.21.1",
+        "filename": "Platform-neoforge-1.21.1-1.2.11.6.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Platform-neoforge-1.21.1-1.2.11.6.2.jar",
+        "sha256": "c433719a116cd0f42a2526b9eed6df1831d8d5487fbbd2d16773d25797173fce",
+        "size": 469409,
+        "required": true
+      },
+      {
+        "name": "Player Animation Lib",
+        "filename": "player-animation-lib-forge-2.0.4+1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/player-animation-lib-forge-2.0.4%2B1.21.1.jar",
+        "sha256": "dbe5de45f5cd60c0e5e47af14e6d564534a98456e973cf670cb881f6938eee92",
+        "size": 203149,
+        "required": true
+      },
+      {
+        "name": "PlayerRevive V2.1.0",
+        "filename": "PlayerRevive_NEOFORGE_v2.1.0_mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/PlayerRevive_NEOFORGE_v2.1.0_mc1.21.1.jar",
+        "sha256": "08b6252996627aece36164c553715f6e8180030f55bf61db004f3369b4ca3115",
+        "size": 5304844,
+        "required": true
+      },
+      {
+        "name": "Polymorph",
+        "filename": "polymorph-neoforge-1.1.0+1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/polymorph-neoforge-1.1.0%2B1.21.1.jar",
+        "sha256": "bec8118978adeb052de9c4eaf9a595830621d82515a764f32f9c8a4dd52ab94b",
+        "size": 174972,
+        "required": true
+      },
+      {
+        "name": "PrettyPipes 1.22.0 All",
+        "filename": "PrettyPipes-1.22.0-all.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/PrettyPipes-1.22.0-all.jar",
+        "sha256": "2f6e33ec7c58d10be8f4108df8144559475b0dc4cca94a8a61291ea3e50931e6",
+        "size": 2299647,
+        "required": true
+      },
+      {
+        "name": "Prickle 1.21.1",
+        "filename": "prickle-neoforge-1.21.1-21.1.11.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/prickle-neoforge-1.21.1-21.1.11.jar",
+        "sha256": "ccf46c442ed3c7fe41ad056f0940560829ec4dd88360985dfacd78f4614eb167",
+        "size": 84812,
+        "required": true
+      },
+      {
+        "name": "Reap 1.21.1",
+        "filename": "reap-neoforge-1.21.1-1.1.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/reap-neoforge-1.21.1-1.1.2.jar",
+        "sha256": "0362d2518db50666ebcb832d56b61de36990cf812f4f87cedf923e8420d6b3e1",
+        "size": 140551,
+        "required": true
+      },
+      {
+        "name": "Recipeessentials 1.21",
+        "filename": "recipeessentials-1.21-4.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/recipeessentials-1.21-4.0.jar",
+        "sha256": "d07d9267afc4386c4985d68c53d957cad3e76a177457135241e57fd136a802a2",
+        "size": 43950,
+        "required": true
+      },
+      {
+        "name": "Redirected 1.0.0",
+        "filename": "redirected-neoforge-1.0.0-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/redirected-neoforge-1.0.0-1.21.1.jar",
+        "sha256": "bdaf4c3399b7436d3be7d79729d87ed707a964420dc58720e13fb2f4960c8b9e",
+        "size": 217587,
+        "required": true
+      },
+      {
+        "name": "Reeses Sodium Options",
+        "filename": "reeses-sodium-options-neoforge-1.8.3+mc1.21.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/reeses-sodium-options-neoforge-1.8.3%2Bmc1.21.4.jar",
+        "sha256": "e00e960f9cae9ea411429fadaa48e2d778f8064667cf6aaee7ce88332813b0bf",
+        "size": 78451,
+        "required": true
+      },
+      {
+        "name": "Refurbished Furniture 1.21.1",
+        "filename": "refurbished_furniture-neoforge-1.21.1-1.0.22.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/refurbished_furniture-neoforge-1.21.1-1.0.22.jar",
+        "sha256": "953a7840261eb79959769a97caa60cba2ee141700a4cbe208825268327136bdf",
+        "size": 7133477,
+        "required": true
+      },
+      {
+        "name": "Resourcefulconfig 1.21",
+        "filename": "resourcefulconfig-neoforge-1.21-3.0.11.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/resourcefulconfig-neoforge-1.21-3.0.11.jar",
+        "sha256": "25b4f3502d25c535004acd4a9420272fff01d2f1e2df352239fec93fdab005d4",
+        "size": 341009,
+        "required": true
+      },
+      {
+        "name": "Resourcefullib 1.21",
+        "filename": "resourcefullib-neoforge-1.21-3.0.12.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/resourcefullib-neoforge-1.21-3.0.12.jar",
+        "sha256": "5e36f2c69de008dc5795f730c84ab767688f15c810944b585485349a0c911261",
+        "size": 484332,
+        "required": true
+      },
+      {
+        "name": "Searchables 1.21.1",
+        "filename": "Searchables-neoforge-1.21.1-1.0.2.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/Searchables-neoforge-1.21.1-1.0.2.jar",
+        "sha256": "ca193f0c69033d8f709f9e073a7c1ef4ea46714e5c2f94eb23ace12781c6aa68",
+        "size": 77326,
+        "required": true
+      },
+      {
+        "name": "SecurityCraft V1.10.1",
+        "filename": "[1.21.1] SecurityCraft v1.10.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/SecurityCraft-1.21.1-v1.10.1.jar",
+        "sha256": "cce82e9f2b74b2c678241a24eeca6c656a07f55f73e16d4d860591db5ed4435f",
+        "size": 4951098,
+        "required": true
+      },
+      {
+        "name": "Simple Villager Follow 1.21.1",
+        "filename": "simple_villager_follow-neoforge-1.21.1-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/simple_villager_follow-neoforge-1.21.1-1.0.0.jar",
+        "sha256": "51a02720809dd6084a7d65dd456396fe08818e799d946a2ba27f900e36f584f5",
+        "size": 11307,
+        "required": true
+      },
+      {
+        "name": "Simpleplanes 1.21.1",
+        "filename": "simpleplanes-1.21.1-5.3.7.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/simpleplanes-1.21.1-5.3.7.jar",
+        "sha256": "4945b6d489011965e2be9910573860fcb8f0a23cfffde5fd2b75482a12eb2751",
+        "size": 904120,
+        "required": true
+      },
+      {
+        "name": "Sit 1.21.1",
+        "filename": "sit-1.21.1-1.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sit-1.21.1-1.4.jar",
+        "sha256": "a726385d1c6781f93906dce38d125fe5f4da32b10ae5601bf855773939603c04",
+        "size": 14031,
+        "required": true
+      },
+      {
+        "name": "Skinlayers3d",
+        "filename": "skinlayers3d-neoforge-1.10.1-mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/skinlayers3d-neoforge-1.10.1-mc1.21.1.jar",
+        "sha256": "b3e10dd28ba72f2bee961e6e783749f15eca84aee804aad74a4d6c97ddde8a79",
+        "size": 1966859,
+        "required": true
+      },
+      {
+        "name": "Skinned Lanterns 1.21.1",
+        "filename": "skinned_lanterns-1.21.1-1.4.0-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/skinned_lanterns-1.21.1-1.4.0-neoforge.jar",
+        "sha256": "290f8f5f4dc8958d59aaffdfec131acee4405bb9d00b7cc0d17fae75a74d3af9",
+        "size": 527228,
+        "required": true
+      },
+      {
+        "name": "Smallships 1.21.1 2.0.0 B2.1",
+        "filename": "smallships-neoforge-1.21.1-2.0.0-b2.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/smallships-neoforge-1.21.1-2.0.0-b2.1.jar",
+        "sha256": "423d81eaeccf32088ed0b42a3a1c0976695fa5ab99c2b6b1d4c5706537fcbf62",
+        "size": 1914804,
+        "required": true
+      },
+      {
+        "name": "Smoothchunk 1.21",
+        "filename": "smoothchunk-1.21-4.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/smoothchunk-1.21-4.1.jar",
+        "sha256": "a79f06eaffe7e5b834620da3c2cdad782aeaf4f1f207d03f8b0228a20bab65e3",
+        "size": 12852,
+        "required": true
+      },
+      {
+        "name": "SnowRealMagic 1.21.1",
+        "filename": "SnowRealMagic-1.21.1-NeoForge-12.2.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/SnowRealMagic-1.21.1-NeoForge-12.2.0.jar",
+        "sha256": "b8475aceaf99b4149d8eade029fa8a98597b9d339ae19467a0e6012bac50e9b3",
+        "size": 3894880,
+        "required": true
+      },
+      {
+        "name": "Snowundertrees 1.21.1",
+        "filename": "snowundertrees-1.21.1-1.5.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/snowundertrees-1.21.1-1.5.jar",
+        "sha256": "669a846286337ddeeb3064e87f1098e9dd529523f9908e30d279418381a375cf",
+        "size": 30334,
+        "required": true
+      },
+      {
+        "name": "SOB 1.21.1",
+        "filename": "SOB-NeoForge-1.21.1-1.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/SOB-NeoForge-1.21.1-1.0.0.jar",
+        "sha256": "1661023822d0e1651480e0b26bbb037a3013e5d2d3134b4d0f88141a32a72e30",
+        "size": 553024,
+        "required": true
+      },
+      {
+        "name": "Sodium",
+        "filename": "sodium-neoforge-0.6.13+mc1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sodium-neoforge-0.6.13%2Bmc1.21.1.jar",
+        "sha256": "7acd7af2ef75ec883a6872c17494ead65e38025151eb08a1d60e36d34377f403",
+        "size": 1162994,
+        "required": true
+      },
+      {
+        "name": "Sodiumextras 1.0.8",
+        "filename": "sodiumextras-neoforge-1.0.8-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sodiumextras-neoforge-1.0.8-1.21.1.jar",
+        "sha256": "2f9d6ab7f3d968b985f30c083b136466b84d54f4cc9d5f05394c39615aae2f8f",
+        "size": 276988,
+        "required": true
+      },
+      {
+        "name": "Sodiumoptionsapi 1.0.10",
+        "filename": "sodiumoptionsapi-neoforge-1.0.10-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sodiumoptionsapi-neoforge-1.0.10-1.21.1.jar",
+        "sha256": "a6b9114615e2fff97e1a99fbf9fae17b87baacb26b69dde2f423867b5932bc02",
+        "size": 309122,
+        "required": true
+      },
+      {
+        "name": "Sophisticatedbackpacks 1.21.1",
+        "filename": "sophisticatedbackpacks-1.21.1-3.25.27.1528.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sophisticatedbackpacks-1.21.1-3.25.27.1528.jar",
+        "sha256": "34f52b12268f4cf3e9b73eb381f1dd9aa33c14c16212b92953a7fd6ea496ef32",
+        "size": 986494,
+        "required": true
+      },
+      {
+        "name": "Sophisticatedcore 1.21.1",
+        "filename": "sophisticatedcore-1.21.1-1.4.3.1481.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sophisticatedcore-1.21.1-1.4.3.1481.jar",
+        "sha256": "784a9bfc39bf40534226252467282f1f27c63a59443d4ce03e4b5825981bb832",
+        "size": 1461553,
+        "required": true
+      },
+      {
+        "name": "Spark",
+        "filename": "spark-1.10.124-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/spark-1.10.124-neoforge.jar",
+        "sha256": "647e8a81afbe414dba1df4ba15fd06c5d32d4cb544e68828405e8e074c2e16db",
+        "size": 3642581,
+        "required": true
+      },
+      {
+        "name": "Sparsestructures 1.21.1",
+        "filename": "sparsestructures-neoforge-1.21.1-3.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/sparsestructures-neoforge-1.21.1-3.0.jar",
+        "sha256": "5aca0b33c0c83154810bbdd8ddc0d3e6a3e4591577274e2d27c10de0b45f2a45",
+        "size": 117743,
+        "required": true
+      },
+      {
+        "name": "Stackable Stew And Soup 1.21.1",
+        "filename": "stackable_stew_and_soup-merged-1.21.1-2.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/stackable_stew_and_soup-merged-1.21.1-2.0.1.jar",
+        "sha256": "069683404e5c7bf438ea8f0db42b2b4baf1fd1f42e2d114b5d4af80ed8ad1fa7",
+        "size": 234084,
+        "required": true
+      },
+      {
+        "name": "StorageDrawers 1.21.1",
+        "filename": "StorageDrawers-neoforge-1.21.1-13.11.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/StorageDrawers-neoforge-1.21.1-13.11.4.jar",
+        "sha256": "8bdbc98f32f4166061439e8dda346345012788ddebaeb743a3b585d8a0a0fbbc",
+        "size": 1131419,
+        "required": true
+      },
+      {
+        "name": "Structureessentials 1.21.1",
+        "filename": "structureessentials-1.21.1-4.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/structureessentials-1.21.1-4.8.jar",
+        "sha256": "41b3010f87c56f5d8cb8f195b738b416b421a70a2a775dbdc2bdc02b3a7b6f7f",
+        "size": 60611,
+        "required": true
+      },
+      {
+        "name": "Supermartijn642corelib",
+        "filename": "supermartijn642corelib-1.1.20-neoforge-mc1.21.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/supermartijn642corelib-1.1.20-neoforge-mc1.21.jar",
+        "sha256": "ad599fcd409f087e3e95a8263ff830b80ece841fc9854a9deb6c9b7738a292fc",
+        "size": 558373,
+        "required": true
+      },
+      {
+        "name": "Supplementaries 1.21",
+        "filename": "supplementaries-1.21-3.5.17-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/supplementaries-1.21-3.5.17-neoforge.jar",
+        "sha256": "c3f9f2da9e13ac72a47b65c6adb5ff2558cf48e01c712c3050bacacae4fa4462",
+        "size": 13344069,
+        "required": true
+      },
+      {
+        "name": "TerraBlender 1.21.1",
+        "filename": "TerraBlender-neoforge-1.21.1-4.1.0.8.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/TerraBlender-neoforge-1.21.1-4.1.0.8.jar",
+        "sha256": "edb34c388fe17ea88d0a7fd11174bbf8ae8f28a4c8ce886f1bf9a5cf0ebc36b8",
+        "size": 120364,
+        "required": true
+      },
+      {
+        "name": "ThisRocks 1.21",
+        "filename": "ThisRocks-1.21-1.8.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/ThisRocks-1.21-1.8.0.jar",
+        "sha256": "816050b099f58db7cdeed0afba5ca7810398fba648c706f91909b297e3e0573b",
+        "size": 201456,
+        "required": true
+      },
+      {
+        "name": "Time On Display 1.21",
+        "filename": "time_on_display-merged-1.21-2.0.0.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/time_on_display-merged-1.21-2.0.0.jar",
+        "sha256": "0aaaef68fa4dcbec07d64d6c775c759dfe3bd7bc22b136fd9021b2140ea16b96",
+        "size": 86367,
+        "required": true
+      },
+      {
+        "name": "Tipsmod 1.21.1",
+        "filename": "tipsmod-neoforge-1.21.1-21.1.3.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/tipsmod-neoforge-1.21.1-21.1.3.jar",
+        "sha256": "242d7ed8d7b78e12be37c09d38ed0dc25e55d3af9d5f4395400b7c57cb30381b",
+        "size": 121037,
+        "required": true
+      },
+      {
+        "name": "ToastControl 1.21.1",
+        "filename": "ToastControl-1.21.1-9.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/ToastControl-1.21.1-9.0.1.jar",
+        "sha256": "f80bc1be4375faaac73971e6d51cc1500935f7144fa33108ee4f2fdbd8f70f66",
+        "size": 21079,
+        "required": true
+      },
+      {
+        "name": "Torchmaster 1.21.1",
+        "filename": "torchmaster-neoforge-1.21.1-21.1.9.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/torchmaster-neoforge-1.21.1-21.1.9.jar",
+        "sha256": "db9a2fa385757656797a5a14ffad1777fbe596e2e443f1deba5f7534706eb806",
+        "size": 130605,
+        "required": true
+      },
+      {
+        "name": "Trashslot 1.21.1",
+        "filename": "trashslot-neoforge-1.21.1-21.1.4.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/trashslot-neoforge-1.21.1-21.1.4.jar",
+        "sha256": "92b14abfc1df3e0d02f91b3944ae475000f5719fb62078f877b0941889ca3a0b",
+        "size": 123189,
+        "required": true
+      },
+      {
+        "name": "Trimeffects",
+        "filename": "trimeffects-neoforge-mc1.21-2.1.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/trimeffects-neoforge-mc1.21-2.1.1.jar",
+        "sha256": "54b2263dc92c2445589aa83f17392de48af97cc97cc1aa0d731a812378f1582a",
+        "size": 41015,
+        "required": true
+      },
+      {
+        "name": "Twilightforest 1.21.1 4.8.3287 Universal",
+        "filename": "twilightforest-1.21.1-4.8.3287-universal.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/twilightforest-1.21.1-4.8.3287-universal.jar",
+        "sha256": "5ed1d20e11827db9d1757ff7a080a9640285ad18b858c83893d43795a3c20f7c",
+        "size": 27088062,
+        "required": true
+      },
+      {
+        "name": "Txnilib 1.0.24",
+        "filename": "txnilib-neoforge-1.0.24-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/txnilib-neoforge-1.0.24-1.21.1.jar",
+        "sha256": "411e811a6a53a63c2716dbf71cd1167e3a98d000b884458759d6192720be3e18",
+        "size": 6276522,
+        "required": true
+      },
+      {
+        "name": "Unlocked Typing 1.21.1",
+        "filename": "unlocked_typing-merged-1.21.1-1.0.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/unlocked_typing-merged-1.21.1-1.0.1.jar",
+        "sha256": "e8288e3349a8422f8ecc2625e6437272883a0f73b0ea546335a1ca8026d58a3f",
+        "size": 377683,
+        "required": true
+      },
+      {
+        "name": "Vanillabackport 1.21.1",
+        "filename": "vanillabackport-neoforge-1.21.1-1.1.4.3.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/vanillabackport-neoforge-1.21.1-1.1.4.3.jar",
+        "sha256": "042cbb00e1fa9e6809c06ddc24591c1b58b85813920fead1c7a14d75ecb25ec8",
+        "size": 7161575,
+        "required": true
+      },
+      {
+        "name": "Voicechat 1.21.1",
+        "filename": "voicechat-neoforge-1.21.1-2.6.12.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/voicechat-neoforge-1.21.1-2.6.12.jar",
+        "sha256": "9cefdd558ab938f9a80b69e3d0ea8d3500205b16cba4cc8855e6d8575ea1f405",
+        "size": 4890489,
+        "required": true
+      },
+      {
+        "name": "Waystones 1.21.1",
+        "filename": "waystones-neoforge-1.21.1-21.1.27.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/waystones-neoforge-1.21.1-21.1.27.jar",
+        "sha256": "21d7c61cd2ef4f52dd570a415da3baf2056720d7d2bd98ad791e5c93f557779c",
+        "size": 874503,
+        "required": true
+      },
+      {
+        "name": "Yet Another Config Lib V3",
+        "filename": "yet_another_config_lib_v3-3.8.2+1.21.1-neoforge.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/yet_another_config_lib_v3-3.8.2%2B1.21.1-neoforge.jar",
+        "sha256": "b5c30321b46cfaa521645a04aff89d2804d8167a25bb23ad4b1ae8da73093a2f",
+        "size": 1118651,
+        "required": true
+      },
+      {
+        "name": "Zombie Variants 1.0.3",
+        "filename": "zombie_variants-neoforge-1.0.3-1.21.1.jar",
+        "url": "https://github.com/CarlosFloresDev/tortillaland-mods/releases/download/v1/zombie_variants-neoforge-1.0.3-1.21.1.jar",
+        "sha256": "3524cc3e22306aa47bc1be0ead99acf315102c4778b51ccd8b791186529efea6",
+        "size": 406970,
+        "required": true
+      }
+    ]
+  }
+]

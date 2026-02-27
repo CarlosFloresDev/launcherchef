@@ -1,0 +1,6 @@
+{
+  "ramMin": 1024,
+  "ramMax": 6144,
+  "javaPath": "C:\\Users\\car_g\\curseforge\\minecraft\\Install\\java\\Jre_21\\bin\\javaw.exe",
+  "distroUrl": "https://raw.githubusercontent.com/CarlosFloresDev/tortillaland-mods/main/distribution.json"
+}
