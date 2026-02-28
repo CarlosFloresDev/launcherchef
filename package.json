@@ -1,6 +1,6 @@
 {
   "name": "launcherchef",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "LauncherChef - Launcher de Minecraft con gestión automática de mods",
   "main": "main.js",
   "scripts": {
@@ -29,7 +29,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "signAndEditExecutable": false
@@ -41,12 +43,20 @@
       "shortcutName": "LauncherChef",
       "artifactName": "LauncherChef-Setup-${version}.${ext}"
     },
-    "asar": true
+    "asar": true,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "CarlosFloresDev",
+        "repo": "launcherchefUPD"
+      }
+    ]
   },
   "author": "LauncherChef",
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.5.16",
+    "electron-updater": "^6.8.3",
     "minecraft-launcher-core": "^3.18.2",
     "msmc": "^5.0.5"
   },

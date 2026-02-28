@@ -5,7 +5,10 @@ const http = require('http');
 const crypto = require('crypto');
 const AdmZip = require('adm-zip');
 
-module.exports = function (ipcMain, dataDir) {
+module.exports = function (ipcMain, getDataDir) {
+
+  // Support both function (dynamic) and string (legacy) for dataDir
+  const resolveDataDir = typeof getDataDir === 'function' ? getDataDir : () => getDataDir;
 
   /**
    * Properly encode a URL, handling special characters in path segments.
@@ -127,7 +130,7 @@ module.exports = function (ipcMain, dataDir) {
     if (!configsUrl) return { synced: false, reason: 'No configs URL' };
 
     const configDir = path.join(instanceDir, 'config');
-    const tempZip = path.join(dataDir, 'temp_configs.zip');
+    const tempZip = path.join(resolveDataDir(), 'temp_configs.zip');
 
     try {
       // Check if configs already exist (skip if config dir has files)
@@ -184,7 +187,7 @@ module.exports = function (ipcMain, dataDir) {
    */
   ipcMain.handle('mods:sync', async (event, serverConfig) => {
     try {
-      const instanceDir = path.join(dataDir, 'instances', serverConfig.id);
+      const instanceDir = path.join(resolveDataDir(), 'instances', serverConfig.id);
       const modsDir = path.join(instanceDir, 'mods');
 
       // Ensure directories
@@ -309,7 +312,7 @@ module.exports = function (ipcMain, dataDir) {
   // Get locally installed mods
   ipcMain.handle('mods:getLocal', async (_event, instanceId) => {
     try {
-      const modsDir = path.join(dataDir, 'instances', instanceId, 'mods');
+      const modsDir = path.join(resolveDataDir(), 'instances', instanceId, 'mods');
       if (!fs.existsSync(modsDir)) return [];
 
       const files = fs.readdirSync(modsDir).filter(f => f.endsWith('.jar'));
