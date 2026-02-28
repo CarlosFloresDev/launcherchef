@@ -1757,14 +1757,7 @@ body {
   font-size: inherit;
 }
 
-@keyframes lucide-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.lucide-spin {
-  animation: lucide-spin 1s linear infinite;
-}
+/* lucide-spin animation is in lucide-local.css */
 
 /* ============================================
    Server Upload Toolbar (multi-button)

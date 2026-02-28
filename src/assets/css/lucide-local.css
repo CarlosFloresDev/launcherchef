@@ -1,0 +1,65 @@
+/* Lucide Icons - Local font (bundled for Electron) */
+@font-face {
+  font-family: "lucide";
+  src: url('../fonts/lucide/lucide.woff2') format('woff2'),
+       url('../fonts/lucide/lucide.woff') format('woff'),
+       url('../fonts/lucide/lucide.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Base class */
+.lucide {
+  font-family: 'lucide' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Spin animation for loaders */
+@keyframes lucide-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.lucide-spin {
+  animation: lucide-spin 1s linear infinite;
+}
+
+/* === Icon glyphs === */
+.lucide-arrow-left::before   { content: "\e048"; }
+.lucide-calendar::before     { content: "\e063"; }
+.lucide-check::before        { content: "\e06c"; }
+.lucide-chef-hat::before     { content: "\e2ac"; }
+.lucide-clock::before        { content: "\e087"; }
+.lucide-cloud-upload::before { content: "\e091"; }
+.lucide-download::before     { content: "\e0b2"; }
+.lucide-folder-open::before  { content: "\e247"; }
+.lucide-gamepad::before      { content: "\e0de"; }
+.lucide-gamepad-2::before    { content: "\e0df"; }
+.lucide-hard-drive::before   { content: "\e0ed"; }
+.lucide-list::before         { content: "\e106"; }
+.lucide-loader::before       { content: "\e109"; }
+.lucide-lock::before         { content: "\e10b"; }
+.lucide-maximize::before     { content: "\e112"; }
+.lucide-minus::before        { content: "\e11c"; }
+.lucide-package::before      { content: "\e129"; }
+.lucide-palette::before      { content: "\e1dd"; }
+.lucide-play::before         { content: "\e13c"; }
+.lucide-plus::before         { content: "\e13d"; }
+.lucide-radio::before        { content: "\e142"; }
+.lucide-refresh-cw::before   { content: "\e145"; }
+.lucide-server::before       { content: "\e153"; }
+.lucide-settings::before     { content: "\e154"; }
+.lucide-square::before       { content: "\e167"; }
+.lucide-terminal::before     { content: "\e181"; }
+.lucide-trash-2::before      { content: "\e18e"; }
+.lucide-undo-2::before       { content: "\e2a1"; }
+.lucide-upload::before       { content: "\e19e"; }
+.lucide-x::before            { content: "\e1b2"; }
