@@ -5,15 +5,21 @@ const https = require('https');
 const http = require('http');
 const AdmZip = require('adm-zip');
 
-module.exports = function (ipcMain, dataDir, configDir) {
+module.exports = function (ipcMain, getDataDir, configDir) {
   const launcher = new Client();
   const { execSync } = require('child_process');
+
+  // Track the running game process
+  let gameProcess = null;
 
   // Config directory (passed from main.js)
   const CONFIG_PATH = configDir || path.join(__dirname, '..', '..', 'config');
 
+  // Support both function (dynamic) and string (legacy) for dataDir
+  const resolveDataDir = typeof getDataDir === 'function' ? getDataDir : () => getDataDir;
+
   // Directory where we store our own Java runtime
-  const JAVA_DIR = path.join(dataDir, 'java');
+  const JAVA_DIR = path.join(resolveDataDir(), 'java');
 
   /**
    * Download a file from URL to dest. Handles redirects.
@@ -119,7 +125,7 @@ module.exports = function (ipcMain, dataDir, configDir) {
 
       sender.send('log', `[Java] Descargando: ${fileName} (${(fileSize / 1024 / 1024).toFixed(1)} MB)`);
 
-      const zipPath = path.join(dataDir, 'java21-temp.zip');
+      const zipPath = path.join(resolveDataDir(), 'java21-temp.zip');
 
       await downloadFile(downloadUrl, zipPath, (received, total) => {
         const pct = Math.round((received / total) * 100);
@@ -136,7 +142,7 @@ module.exports = function (ipcMain, dataDir, configDir) {
 
       // Extract ZIP
       const zip = new AdmZip(zipPath);
-      const tempExtractDir = path.join(dataDir, 'java21-temp-extract');
+      const tempExtractDir = path.join(resolveDataDir(), 'java21-temp-extract');
 
       if (fs.existsSync(tempExtractDir)) {
         fs.rmSync(tempExtractDir, { recursive: true, force: true });
@@ -258,7 +264,7 @@ module.exports = function (ipcMain, dataDir, configDir) {
    * Ensure NeoForge installer is downloaded.
    */
   async function ensureNeoForgeInstaller(neoforgeVersion, instanceDir, sender) {
-    const installersDir = path.join(dataDir, 'installers');
+    const installersDir = path.join(resolveDataDir(), 'installers');
     if (!fs.existsSync(installersDir)) fs.mkdirSync(installersDir, { recursive: true });
 
     const installerName = `neoforge-${neoforgeVersion}-installer.jar`;
@@ -284,6 +290,40 @@ module.exports = function (ipcMain, dataDir, configDir) {
     });
 
     sender.send('log', `[NeoForge] Instalador descargado: ${installerPath}`);
+    return installerPath;
+  }
+
+  /**
+   * Ensure classic Forge installer is downloaded.
+   */
+  async function ensureForgeInstaller(mcVersion, forgeVersion, sender) {
+    const installersDir = path.join(resolveDataDir(), 'installers');
+    if (!fs.existsSync(installersDir)) fs.mkdirSync(installersDir, { recursive: true });
+
+    const fullVersion = `${mcVersion}-${forgeVersion}`;
+    const installerName = `forge-${fullVersion}-installer.jar`;
+    const installerPath = path.join(installersDir, installerName);
+
+    if (fs.existsSync(installerPath)) {
+      sender.send('log', `[Forge] Instalador ya existe: ${installerName}`);
+      return installerPath;
+    }
+
+    const url = `https://maven.minecraftforge.net/net/minecraftforge/forge/${fullVersion}/forge-${fullVersion}-installer.jar`;
+    sender.send('log', `[Forge] Descargando instalador: ${url}`);
+    sender.send('progress', { type: 'Forge', current: 0, total: 100, name: 'Descargando instalador Forge...' });
+
+    await downloadFile(url, installerPath, (received, total) => {
+      const pct = Math.round((received / total) * 100);
+      sender.send('progress', {
+        type: 'Forge',
+        current: pct,
+        total: 100,
+        name: `Instalador Forge: ${(received / 1024 / 1024).toFixed(1)}MB / ${(total / 1024 / 1024).toFixed(1)}MB`
+      });
+    });
+
+    sender.send('log', `[Forge] Instalador descargado: ${installerPath}`);
     return installerPath;
   }
 
@@ -333,7 +373,7 @@ module.exports = function (ipcMain, dataDir, configDir) {
 
       // Instance directory per server
       const serverId = options.serverId || 'default';
-      const instanceDir = path.join(dataDir, 'instances', serverId);
+      const instanceDir = path.join(resolveDataDir(), 'instances', serverId);
 
       if (!fs.existsSync(instanceDir)) {
         fs.mkdirSync(instanceDir, { recursive: true });
@@ -364,8 +404,8 @@ module.exports = function (ipcMain, dataDir, configDir) {
       }
 
       // Determine mod loader
-      const modLoader = options.modLoader || 'neoforge';
-      const modLoaderVersion = options.modLoaderVersion || '21.1.219';
+      const modLoader = options.modLoader || 'vanilla';
+      const modLoaderVersion = options.modLoaderVersion || '';
       const mcVersion = options.version || '1.21.1';
 
       event.sender.send('log', `[LauncherChef] Preparando Minecraft ${mcVersion} + ${modLoader} ${modLoaderVersion}`);
@@ -392,15 +432,22 @@ module.exports = function (ipcMain, dataDir, configDir) {
         }
       };
 
-      // Handle NeoForge / Forge
-      if (modLoader === 'neoforge' || modLoader === 'forge') {
+      // Handle mod loaders
+      if (modLoader === 'neoforge') {
         event.sender.send('progress', { type: 'setup', current: 10, total: 100, name: 'Descargando instalador de NeoForge...' });
-
         const installerPath = await ensureNeoForgeInstaller(modLoaderVersion, instanceDir, event.sender);
         launchOpts.forge = installerPath;
-
-        event.sender.send('log', `[LauncherChef] Usando instalador: ${installerPath}`);
+        event.sender.send('log', `[LauncherChef] Usando instalador NeoForge: ${installerPath}`);
         event.sender.send('progress', { type: 'setup', current: 30, total: 100, name: 'Instalador listo, iniciando Minecraft...' });
+      } else if (modLoader === 'forge') {
+        event.sender.send('progress', { type: 'setup', current: 10, total: 100, name: 'Descargando instalador de Forge...' });
+        const installerPath = await ensureForgeInstaller(mcVersion, modLoaderVersion, event.sender);
+        launchOpts.forge = installerPath;
+        event.sender.send('log', `[LauncherChef] Usando instalador Forge: ${installerPath}`);
+        event.sender.send('progress', { type: 'setup', current: 30, total: 100, name: 'Instalador listo, iniciando Minecraft...' });
+      } else if (modLoader === 'fabric') {
+        launchOpts.version.custom = `fabric-loader-${modLoaderVersion}-${mcVersion}`;
+        event.sender.send('log', `[LauncherChef] Usando Fabric: fabric-loader-${modLoaderVersion}-${mcVersion}`);
       }
 
       // Auto-connect to server
@@ -448,15 +495,40 @@ module.exports = function (ipcMain, dataDir, configDir) {
 
       // Launch!
       event.sender.send('log', `[LauncherChef] Lanzando...`);
+
+      gameProcess = await launcher.launch(launchOpts);
+
+      // Notify renderer that game has started (process is running)
       event.sender.send('game:start');
 
-      await launcher.launch(launchOpts);
+      // When process exits, clear reference
+      if (gameProcess && gameProcess.on) {
+        gameProcess.on('close', () => {
+          gameProcess = null;
+        });
+      }
 
       return { success: true };
     } catch (err) {
       event.sender.send('log', `[ERROR] ${err.message}`);
       event.sender.send('log', `[ERROR] Stack: ${err.stack}`);
+      gameProcess = null;
       event.sender.send('game:close');
+      return { success: false, error: err.message };
+    }
+  });
+
+  // Kill the running game process
+  ipcMain.handle('mc:kill', async (event) => {
+    try {
+      if (gameProcess) {
+        event.sender.send('log', '[LauncherChef] Cerrando Minecraft...');
+        gameProcess.kill();
+        gameProcess = null;
+        return { success: true };
+      }
+      return { success: false, error: 'No hay juego en ejecucion' };
+    } catch (err) {
       return { success: false, error: err.message };
     }
   });

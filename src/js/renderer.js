@@ -13,6 +13,12 @@ let state = {
   servers: [],
   selectedServer: null,
   playing: false,
+  instances: [],
+  selectedInstance: null,
+  instanceTab: 'mods',
+  uploadFiles: [],
+  manageMods: [],
+  manageFileSha: null,
   settings: {
     ramMin: 1024,
     ramMax: 4096,
@@ -62,19 +68,102 @@ const dom = {
   modsServerLabel: $('#mods-server-label'),
   btnSyncMods: $('#btn-sync-mods'),
   modGrid: $('#mod-grid'),
+  // Skins
+  skinContainer: $('#skin-container'),
+  skinPreview: $('#skin-preview'),
+  skinBody: $('#skin-body'),
+  skinPlaceholder: $('#skin-placeholder'),
+  skinPlayerName: $('#skin-player-name'),
+  skinUuid: $('#skin-uuid'),
+  skinActions: $('#skin-actions'),
+  skinOfflineMsg: $('#skin-offline-msg'),
+  btnUploadSkin: $('#btn-upload-skin'),
+  variantClassic: $('#variant-classic'),
+  variantSlim: $('#variant-slim'),
+  // Instances
+  instanceList: $('#instance-list'),
+  instanceToolbar: $('#instance-toolbar'),
+  btnCreateInstance: $('#btn-create-instance'),
+  instanceCreateForm: $('#instance-create-form'),
+  btnBackInstanceCreate: $('#btn-back-instance-create'),
+  instanceName: $('#instance-name'),
+  instanceIconPicker: $('#instance-icon-picker'),
+  instanceMcVersion: $('#instance-mc-version'),
+  instanceLoader: $('#instance-loader'),
+  instanceLoaderVersion: $('#instance-loader-version'),
+  loaderVersionRow: $('#loader-version-row'),
+  btnCreateInstanceConfirm: $('#btn-create-instance-confirm'),
+  instanceDetail: $('#instance-detail'),
+  btnBackInstanceList: $('#btn-back-instance-list'),
+  instanceDetailName: $('#instance-detail-name'),
+  instanceDetailVersion: $('#instance-detail-version'),
+  instanceDetailLoader: $('#instance-detail-loader'),
+  instanceDetailCreated: $('#instance-detail-created'),
+  instanceTabs: $$('.instance-tab'),
+  instanceFileCount: $('#instance-file-count'),
+  btnAddInstanceFiles: $('#btn-add-instance-files'),
+  instanceFileList: $('#instance-file-list'),
+  btnInstancePlay: $('#btn-instance-play'),
+  btnCloseGame: $('#btn-close-game'),
+  btnDeleteInstance: $('#btn-delete-instance'),
+  instanceProgress: $('#instance-progress'),
+  instanceProgressFill: $('#instance-progress-fill'),
+  instanceProgressText: $('#instance-progress-text'),
+  // Mod Manager
+  btnShowModManager: $('#btn-show-mod-manager'),
+  githubModManager: $('#github-mod-manager'),
+  btnBackModManager: $('#btn-back-mod-manager'),
+  manageServerSelect: $('#manage-server-select'),
+  btnFetchGithubMods: $('#btn-fetch-github-mods'),
+  manageModsListContainer: $('#manage-mods-list-container'),
+  manageModsTitle: $('#manage-mods-title'),
+  manageModCount: $('#manage-mod-count'),
+  manageModList: $('#manage-mod-list'),
+  manageProgress: $('#manage-progress'),
+  manageProgressFill: $('#manage-progress-fill'),
+  manageProgressText: $('#manage-progress-text'),
+  // GitHub Upload
+  serverUploadToolbar: $('#server-upload-toolbar'),
+  btnShowGithubUpload: $('#btn-show-github-upload'),
+  githubUploadPanel: $('#github-upload-panel'),
+  btnBackUpload: $('#btn-back-upload'),
+  uploadServerSelect: $('#upload-server-select'),
+  uploadFileCount: $('#upload-file-count'),
+  btnSelectJars: $('#btn-select-jars'),
+  uploadFileList: $('#upload-file-list'),
+  uploadProgress: $('#upload-progress'),
+  uploadProgressFill: $('#upload-progress-fill'),
+  uploadProgressText: $('#upload-progress-text'),
+  btnUploadGithub: $('#btn-upload-github'),
   // Settings
   ramMin: $('#ram-min'),
   ramMax: $('#ram-max'),
   javaPath: $('#java-path'),
   distroUrl: $('#distro-url'),
+  githubToken: $('#github-token'),
+  githubOwner: $('#github-owner'),
+  githubRepo: $('#github-repo'),
+  githubTag: $('#github-tag'),
+  btnTestGithubToken: $('#btn-test-github-token'),
   dataPathDisplay: $('#data-path-display'),
+  btnChangePath: $('#btn-change-path'),
+  btnResetPath: $('#btn-reset-path'),
   btnLoadDistro: $('#btn-load-distro'),
   btnSaveSettings: $('#btn-save-settings'),
   // Log
   logConsole: $('#log-console'),
   logBody: $('#log-body'),
   logToggle: $('#log-toggle'),
-  btnShowLog: $('#btn-show-log')
+  btnShowLog: $('#btn-show-log'),
+  // Auto-update
+  updateBar: $('#update-bar'),
+  updateBarText: $('#update-bar-text'),
+  updateBarProgress: $('#update-bar-progress'),
+  updateBarProgressFill: $('#update-bar-progress-fill'),
+  btnUpdateDownload: $('#btn-update-download'),
+  btnUpdateInstall: $('#btn-update-install'),
+  btnUpdateDismiss: $('#btn-update-dismiss'),
+  appVersion: $('#app-version')
 };
 
 // ============================================
@@ -91,7 +180,12 @@ async function init() {
   setupServerEvents();
   setupModEvents();
   setupSettingsEvents();
+  setupSkinEvents();
+  setupInstanceEvents();
+  setupGithubEvents();
+  setupModManagerEvents();
   setupProgressEvents();
+  setupUpdateEvents();
 }
 
 // ============================================
@@ -118,6 +212,16 @@ function setupNavigation() {
       // Refresh mod list when switching to mods tab
       if (section === 'mods' && state.selectedServer) {
         refreshModList();
+      }
+
+      // Refresh skin preview when switching to skins tab
+      if (section === 'skins') {
+        refreshSkinPreview();
+      }
+
+      // Refresh instances when switching to instances tab
+      if (section === 'instances') {
+        loadInstances();
       }
     });
   });
@@ -169,6 +273,15 @@ async function loadSettings() {
   dom.ramMax.value = state.settings.ramMax || 4096;
   dom.javaPath.value = state.settings.javaPath || '';
   dom.distroUrl.value = state.settings.distroUrl || '';
+  dom.githubToken.value = state.settings.githubToken || '';
+  dom.githubOwner.value = state.settings.githubOwner || '';
+  dom.githubRepo.value = state.settings.githubRepo || '';
+  dom.githubTag.value = state.settings.githubTag || 'v1';
+
+  // Show current data path (custom or default)
+  if (state.settings.dataDir) {
+    dom.dataPathDisplay.textContent = state.settings.dataDir;
+  }
 }
 
 // ============================================
@@ -202,7 +315,7 @@ function setLoggedIn(profile) {
   // Set avatar
   if (isPremium && profile.id && !profile.id.includes('-')) {
     // Premium: use real skin
-    dom.userAvatar.innerHTML = `<img src="https://mc-heads.net/avatar/${profile.id}/40" alt="skin">`;
+    dom.userAvatar.innerHTML = `<img src="https://nmsr.nickac.dev/face/${profile.id}" alt="skin">`;
   } else {
     // Offline: just show initial
     dom.userAvatar.innerHTML = '';
@@ -385,8 +498,8 @@ function renderServerList() {
       <span class="server-version">${server.minecraft_version} - ${server.mod_loader}</span>
       <p class="server-description">${server.description}</p>
       <div class="server-meta">
-        <span>📦 ${server.mods.length} mods</span>
-        <span>📡 ${server.address}</span>
+        <span><i class="lucide lucide-package"></i> ${server.mods.length} mods</span>
+        <span><i class="lucide lucide-radio"></i> ${server.address}</span>
       </div>
     `;
     card.addEventListener('click', () => selectServer(server));
@@ -422,7 +535,7 @@ async function selectServer(server) {
     const isInstalled = localFilenames.has(mod.filename);
     if (isInstalled) installedCount++;
     const statusClass = isInstalled ? 'installed' : 'pending';
-    const statusText = isInstalled ? '✓ Instalado' : 'Pendiente';
+    const statusText = isInstalled ? '<i class="lucide lucide-check"></i> Instalado' : '<i class="lucide lucide-clock"></i> Pendiente';
 
     const item = document.createElement('div');
     item.className = 'mod-item';
@@ -463,10 +576,10 @@ function updatePlayButton() {
   dom.btnPlay.disabled = !canPlay || state.playing;
 
   if (state.playing) {
-    dom.btnPlay.innerHTML = '<span class="play-icon">🎮</span> JUGANDO...';
+    dom.btnPlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-gamepad-2"></i></span> JUGANDO...';
     dom.btnPlay.classList.add('playing');
   } else {
-    dom.btnPlay.innerHTML = '<span class="play-icon">▶</span> JUGAR';
+    dom.btnPlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-play"></i></span> JUGAR';
     dom.btnPlay.classList.remove('playing');
   }
 }
@@ -524,6 +637,16 @@ dom.btnPlay.addEventListener('click', async () => {
 // ============================================
 function setupProgressEvents() {
   api.onProgress((data) => {
+    // Update GitHub upload progress bar separately
+    if (data.type === 'github-upload') {
+      dom.uploadProgress.style.display = 'block';
+      const current = data.current || 0;
+      const pct = Math.min(100, Math.round((current / data.total) * 100));
+      dom.uploadProgressFill.style.width = `${pct}%`;
+      dom.uploadProgressText.textContent = data.name || `${current}/${data.total}`;
+      return;
+    }
+
     dom.progressContainer.style.display = 'block';
 
     if (data.total && data.total > 0) {
@@ -541,12 +664,37 @@ function setupProgressEvents() {
     updatePlayButton();
     dom.progressContainer.style.display = 'none';
     dom.progressText.textContent = '';
+    // Reset instance play button too
+    if (dom.btnInstancePlay) {
+      dom.btnInstancePlay.disabled = false;
+      dom.btnInstancePlay.className = 'btn-play';
+      dom.btnInstancePlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-play"></i></span> JUGAR';
+      dom.instanceProgress.style.display = 'none';
+    }
+    // Reset close game button
+    if (dom.btnCloseGame) {
+      dom.btnCloseGame.style.display = 'none';
+    }
     addLog('[LauncherChef] Minecraft se ha cerrado', 'warn');
   });
 
   api.onGameStart(() => {
+    // Update server section progress
     dom.progressText.textContent = 'Minecraft esta corriendo...';
     dom.progressFill.style.width = '100%';
+
+    // Update instance play button to show "JUGANDO"
+    if (dom.btnInstancePlay) {
+      dom.btnInstancePlay.disabled = true;
+      dom.btnInstancePlay.className = 'btn-play playing';
+      dom.btnInstancePlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-gamepad-2"></i></span> JUGANDO...';
+      dom.instanceProgressText.textContent = 'Minecraft esta corriendo...';
+      dom.instanceProgressFill.style.width = '100%';
+    }
+    // Show close game button
+    if (dom.btnCloseGame) {
+      dom.btnCloseGame.style.display = 'inline-flex';
+    }
   });
 }
 
@@ -558,7 +706,7 @@ function setupModEvents() {
     if (!state.selectedServer) return;
 
     dom.btnSyncMods.disabled = true;
-    dom.btnSyncMods.textContent = '⏳ Sincronizando...';
+    dom.btnSyncMods.innerHTML = '<i class="lucide lucide-loader lucide-spin"></i> Sincronizando...';
 
     const result = await api.syncMods({
       id: state.selectedServer.id,
@@ -567,7 +715,7 @@ function setupModEvents() {
     });
 
     dom.btnSyncMods.disabled = false;
-    dom.btnSyncMods.textContent = '🔄 Sincronizar';
+    dom.btnSyncMods.innerHTML = '<i class="lucide lucide-refresh-cw"></i> Sincronizar';
 
     if (result.success) {
       addLog('[Mods] Sincronizacion completada', 'success');
@@ -605,7 +753,7 @@ async function refreshServerModStatus() {
       const statusEl = item.querySelector('.mod-item-status');
       if (statusEl) {
         statusEl.className = `mod-item-status ${isInstalled ? 'installed' : 'pending'}`;
-        statusEl.textContent = isInstalled ? '✓ Instalado' : 'Pendiente';
+        statusEl.innerHTML = isInstalled ? '<i class="lucide lucide-check"></i> Instalado' : '<i class="lucide lucide-clock"></i> Pendiente';
       }
     }
   });
@@ -621,7 +769,7 @@ async function refreshModList() {
   if (!state.selectedServer) {
     dom.modGrid.innerHTML = `
       <div class="empty-state">
-        <span class="empty-icon">📦</span>
+        <span class="empty-icon"><i class="lucide lucide-package"></i></span>
         <p>Selecciona un servidor primero para ver sus mods</p>
       </div>`;
     return;
@@ -633,7 +781,7 @@ async function refreshModList() {
   if (localMods.length === 0) {
     dom.modGrid.innerHTML = `
       <div class="empty-state">
-        <span class="empty-icon">📦</span>
+        <span class="empty-icon"><i class="lucide lucide-package"></i></span>
         <p>No hay mods instalados. Presiona "Sincronizar" para descargarlos.</p>
       </div>`;
     return;
@@ -655,24 +803,756 @@ async function refreshModList() {
 }
 
 // ============================================
+// Skins
+// ============================================
+let skinVariant = 'classic';
+
+function setupSkinEvents() {
+  // Variant selector
+  dom.variantClassic.addEventListener('click', () => {
+    skinVariant = 'classic';
+    dom.variantClassic.classList.add('active');
+    dom.variantSlim.classList.remove('active');
+  });
+
+  dom.variantSlim.addEventListener('click', () => {
+    skinVariant = 'slim';
+    dom.variantSlim.classList.add('active');
+    dom.variantClassic.classList.remove('active');
+  });
+
+  // Upload skin button
+  dom.btnUploadSkin.addEventListener('click', async () => {
+    const filePath = await api.selectSkinFile();
+    if (!filePath) return;
+
+    dom.btnUploadSkin.innerHTML = '<i class="lucide lucide-loader lucide-spin"></i> Subiendo...';
+    dom.btnUploadSkin.disabled = true;
+
+    const result = await api.uploadSkin(filePath, skinVariant);
+
+    dom.btnUploadSkin.disabled = false;
+
+    if (result.success) {
+      dom.btnUploadSkin.innerHTML = '<i class="lucide lucide-check"></i> Skin cambiada!';
+      addLog('[Skin] Skin cambiada exitosamente', 'success');
+
+      // Immediately update preview using the texture hash from Mojang response
+      if (result.skinUrl) {
+        // Extract texture hash from URL like http://textures.minecraft.net/texture/{hash}
+        const parts = result.skinUrl.split('/');
+        const textureHash = parts[parts.length - 1];
+        if (textureHash && textureHash.length > 10) {
+          // Use nmsr.nickac.dev with texture hash for instant render (no cache)
+          dom.skinBody.src = `https://nmsr.nickac.dev/fullbody/textures/${textureHash}`;
+          dom.skinBody.style.display = 'block';
+          dom.skinPlaceholder.style.display = 'none';
+        }
+      }
+    } else {
+      dom.btnUploadSkin.innerHTML = '<i class="lucide lucide-x"></i> Error';
+      addLog(`[Skin] Error: ${result.error}`, 'error');
+    }
+
+    setTimeout(() => {
+      dom.btnUploadSkin.innerHTML = '<i class="lucide lucide-folder-open"></i> Cambiar Skin';
+    }, 3000);
+  });
+}
+
+async function refreshSkinPreview() {
+  try {
+    const skinInfo = await api.getSkinProfile();
+    if (!skinInfo.success || !skinInfo.uuid) {
+      // Not logged in
+      dom.skinPlaceholder.style.display = 'flex';
+      dom.skinBody.style.display = 'none';
+      dom.skinActions.style.display = 'none';
+      dom.skinOfflineMsg.style.display = 'none';
+      dom.skinPlayerName.textContent = '-';
+      dom.skinUuid.textContent = '-';
+      return;
+    }
+
+    dom.skinPlayerName.textContent = skinInfo.name;
+    dom.skinUuid.textContent = skinInfo.uuid;
+
+    // Clean UUID (remove dashes)
+    const cleanUuid = skinInfo.uuid.replace(/-/g, '');
+
+    if (skinInfo.premium) {
+      // Premium: show full body render and upload options
+      dom.skinBody.src = `https://nmsr.nickac.dev/fullbody/${cleanUuid}?ts=${Date.now()}`;
+      dom.skinBody.style.display = 'block';
+      dom.skinPlaceholder.style.display = 'none';
+      dom.skinActions.style.display = 'block';
+      dom.skinOfflineMsg.style.display = 'none';
+    } else {
+      // Offline: show default skin preview, no upload
+      dom.skinBody.src = `https://nmsr.nickac.dev/fullbody/MHF_Steve`;
+      dom.skinBody.style.display = 'block';
+      dom.skinPlaceholder.style.display = 'none';
+      dom.skinActions.style.display = 'none';
+      dom.skinOfflineMsg.style.display = 'flex';
+    }
+  } catch {
+    dom.skinPlaceholder.style.display = 'flex';
+    dom.skinBody.style.display = 'none';
+  }
+}
+
+// ============================================
+// Instances
+// ============================================
+let selectedIcon = '🎮';
+
+async function loadInstances() {
+  state.instances = await api.listInstances();
+  renderInstanceList();
+}
+
+function renderInstanceList() {
+  dom.instanceList.innerHTML = '';
+  if (state.instances.length === 0) {
+    dom.instanceList.innerHTML = `
+      <div class="empty-state">
+        <span class="empty-icon"><i class="lucide lucide-gamepad-2"></i></span>
+        <p>No hay instancias. Crea una para empezar.</p>
+      </div>`;
+    return;
+  }
+  state.instances.forEach(inst => {
+    const card = document.createElement('div');
+    card.className = 'server-card';
+    card.innerHTML = `
+      <div class="server-name">${inst.icon || '🎮'} ${inst.name}</div>
+      <span class="server-version">${inst.minecraft_version} - ${inst.mod_loader}${inst.mod_loader_version ? ' ' + inst.mod_loader_version : ''}</span>
+      <div class="server-meta">
+        <span><i class="lucide lucide-calendar"></i> ${new Date(inst.created).toLocaleDateString()}</span>
+        ${inst.lastPlayed ? `<span><i class="lucide lucide-gamepad-2"></i> ${new Date(inst.lastPlayed).toLocaleDateString()}</span>` : ''}
+      </div>
+    `;
+    card.addEventListener('click', () => selectInstance(inst));
+    dom.instanceList.appendChild(card);
+  });
+}
+
+function showInstanceView(view) {
+  dom.instanceList.style.display = view === 'list' ? 'grid' : 'none';
+  dom.instanceToolbar.style.display = view === 'list' ? 'flex' : 'none';
+  dom.instanceCreateForm.style.display = view === 'create' ? 'block' : 'none';
+  dom.instanceDetail.style.display = view === 'detail' ? 'block' : 'none';
+}
+
+async function selectInstance(instance) {
+  state.selectedInstance = instance;
+  dom.instanceDetailName.textContent = `${instance.icon} ${instance.name}`;
+  dom.instanceDetailVersion.textContent = instance.minecraft_version;
+  dom.instanceDetailLoader.textContent = instance.mod_loader +
+    (instance.mod_loader_version ? ` ${instance.mod_loader_version}` : '');
+  dom.instanceDetailCreated.textContent = new Date(instance.created).toLocaleString();
+
+  // Enable play button if logged in
+  dom.btnInstancePlay.disabled = !state.loggedIn;
+
+  state.instanceTab = 'mods';
+  dom.instanceTabs.forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === 'mods');
+  });
+  await refreshInstanceFiles();
+  showInstanceView('detail');
+}
+
+async function refreshInstanceFiles() {
+  if (!state.selectedInstance) return;
+  const files = await api.getInstanceContents(state.selectedInstance.id, state.instanceTab);
+  dom.instanceFileCount.textContent = `${files.length} archivos`;
+  dom.instanceFileList.innerHTML = '';
+
+  if (files.length === 0) {
+    dom.instanceFileList.innerHTML = `
+      <div class="empty-state" style="padding:30px;">
+        <span class="empty-icon"><i class="lucide lucide-folder-open"></i></span>
+        <p>No hay archivos. Presiona "+ Agregar" para anadir.</p>
+      </div>`;
+    return;
+  }
+
+  files.forEach(file => {
+    const item = document.createElement('div');
+    item.className = 'mod-item';
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    item.innerHTML = `
+      <span class="mod-item-name">${file.filename}</span>
+      <span class="mod-item-size">${sizeMB} MB</span>
+      <button class="btn-remove-file" data-filename="${file.filename}">✕</button>
+    `;
+    item.querySelector('.btn-remove-file').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const result = await api.removeInstanceFile(
+        state.selectedInstance.id, state.instanceTab, file.filename
+      );
+      if (result.success) refreshInstanceFiles();
+    });
+    dom.instanceFileList.appendChild(item);
+  });
+}
+
+function setupInstanceEvents() {
+  // Icon picker
+  const icons = ['🎮', '⚔️', '🏰', '🌍', '🔧', '🍖', '🎯', '🚀', '🌙', '💎'];
+  dom.instanceIconPicker.innerHTML = icons
+    .map(icon => `<button class="icon-btn${icon === '🎮' ? ' active' : ''}" data-icon="${icon}">${icon}</button>`)
+    .join('');
+  dom.instanceIconPicker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.icon-btn');
+    if (!btn) return;
+    dom.instanceIconPicker.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedIcon = btn.dataset.icon;
+  });
+
+  // Create button -> show form
+  dom.btnCreateInstance.addEventListener('click', async () => {
+    showInstanceView('create');
+    dom.instanceName.value = '';
+    dom.instanceLoader.value = 'vanilla';
+    dom.loaderVersionRow.style.display = 'none';
+    selectedIcon = '🎮';
+    dom.instanceIconPicker.querySelectorAll('.icon-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.icon === '🎮');
+    });
+
+    // Populate MC versions
+    dom.instanceMcVersion.innerHTML = '<option>Cargando...</option>';
+    const versions = await api.getVersions();
+    dom.instanceMcVersion.innerHTML = versions
+      .map(v => `<option value="${v.id}">${v.id}</option>`).join('');
+  });
+
+  // Back buttons
+  dom.btnBackInstanceCreate.addEventListener('click', () => showInstanceView('list'));
+  dom.btnBackInstanceList.addEventListener('click', () => {
+    showInstanceView('list');
+    loadInstances();
+  });
+
+  // Loader change -> fetch loader versions
+  dom.instanceLoader.addEventListener('change', async () => {
+    const loader = dom.instanceLoader.value;
+    if (loader === 'vanilla') {
+      dom.loaderVersionRow.style.display = 'none';
+      return;
+    }
+    dom.loaderVersionRow.style.display = 'flex';
+    dom.instanceLoaderVersion.innerHTML = '<option>Cargando...</option>';
+    const mcVer = dom.instanceMcVersion.value;
+    const versions = await api.getLoaderVersions(mcVer, loader);
+    if (versions.length === 0) {
+      dom.instanceLoaderVersion.innerHTML = '<option value="">No disponible para esta version</option>';
+    } else {
+      dom.instanceLoaderVersion.innerHTML = versions
+        .map(v => `<option value="${v.version}">${v.version}${v.stable ? '' : ' (beta)'}</option>`)
+        .join('');
+    }
+  });
+
+  // MC version change -> re-fetch loader versions
+  dom.instanceMcVersion.addEventListener('change', () => {
+    if (dom.instanceLoader.value !== 'vanilla') {
+      dom.instanceLoader.dispatchEvent(new Event('change'));
+    }
+  });
+
+  // Create instance confirm
+  dom.btnCreateInstanceConfirm.addEventListener('click', async () => {
+    const name = dom.instanceName.value.trim();
+    if (!name) { addLog('[Instancias] El nombre no puede estar vacio', 'warn'); return; }
+
+    const loader = dom.instanceLoader.value;
+    if (loader !== 'vanilla' && !dom.instanceLoaderVersion.value) {
+      addLog('[Instancias] Selecciona una version del loader', 'warn');
+      return;
+    }
+
+    dom.btnCreateInstanceConfirm.disabled = true;
+    dom.btnCreateInstanceConfirm.textContent = 'Creando...';
+
+    const result = await api.createInstance({
+      name,
+      minecraft_version: dom.instanceMcVersion.value,
+      mod_loader: loader,
+      mod_loader_version: loader === 'vanilla' ? null : dom.instanceLoaderVersion.value,
+      icon: selectedIcon
+    });
+
+    dom.btnCreateInstanceConfirm.disabled = false;
+    dom.btnCreateInstanceConfirm.textContent = 'Crear Instancia';
+
+    if (result.success) {
+      addLog(`[Instancias] Instancia "${name}" creada`, 'success');
+      await loadInstances();
+      showInstanceView('list');
+    } else {
+      addLog(`[Instancias] Error: ${result.error}`, 'error');
+    }
+  });
+
+  // Tab switching
+  dom.instanceTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      dom.instanceTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      state.instanceTab = tab.dataset.tab;
+      refreshInstanceFiles();
+    });
+  });
+
+  // Add files
+  dom.btnAddInstanceFiles.addEventListener('click', async () => {
+    if (!state.selectedInstance) return;
+    const result = await api.addInstanceFiles(state.selectedInstance.id, state.instanceTab);
+    if (result.success) {
+      addLog(`[Instancias] ${result.added.length} archivo(s) agregado(s)`, 'success');
+      refreshInstanceFiles();
+    }
+  });
+
+  // Launch instance
+  dom.btnInstancePlay.addEventListener('click', async () => {
+    if (!state.selectedInstance || state.playing) return;
+    const inst = state.selectedInstance;
+
+    state.playing = true;
+    updatePlayButton();
+    dom.btnInstancePlay.disabled = true;
+    dom.btnInstancePlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-loader lucide-spin"></i></span> LANZANDO...';
+
+    dom.instanceProgress.style.display = 'block';
+    dom.instanceProgressText.textContent = 'Preparando Minecraft...';
+    dom.instanceProgressFill.style.width = '10%';
+
+    addLog(`[Launch] Lanzando instancia: ${inst.name} (${inst.minecraft_version} ${inst.mod_loader})`);
+
+    // Update lastPlayed
+    await api.updateInstanceLastPlayed(inst.id);
+
+    const launchResult = await api.launch({
+      version: inst.minecraft_version,
+      serverId: inst.id,
+      modLoader: inst.mod_loader,
+      modLoaderVersion: inst.mod_loader_version || '',
+      username: state.profile?.name || 'Player'
+    });
+
+    if (!launchResult.success) {
+      addLog(`[Launch] Error: ${launchResult.error}`, 'error');
+      state.playing = false;
+      updatePlayButton();
+      dom.btnInstancePlay.disabled = false;
+      dom.btnInstancePlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-play"></i></span> JUGAR';
+      dom.instanceProgress.style.display = 'none';
+    }
+  });
+
+  // Close game button
+  dom.btnCloseGame.addEventListener('click', async () => {
+    dom.btnCloseGame.disabled = true;
+    dom.btnCloseGame.innerHTML = '<i class="lucide lucide-loader lucide-spin"></i> Cerrando...';
+    addLog('[LauncherChef] Cerrando Minecraft...');
+    const result = await api.killGame();
+    if (result.success) {
+      addLog('[LauncherChef] Minecraft cerrado por el usuario', 'success');
+    } else {
+      addLog(`[LauncherChef] Error cerrando: ${result.error}`, 'error');
+    }
+    dom.btnCloseGame.disabled = false;
+    dom.btnCloseGame.innerHTML = '<i class="lucide lucide-square"></i> Cerrar Juego';
+  });
+
+  // Delete instance
+  dom.btnDeleteInstance.addEventListener('click', async () => {
+    if (!state.selectedInstance) return;
+    const name = state.selectedInstance.name;
+    if (!confirm(`Eliminar instancia "${name}"?\nSe borraran todos los archivos.`)) return;
+
+    const result = await api.deleteInstance(state.selectedInstance.id);
+    if (result.success) {
+      addLog(`[Instancias] Instancia "${name}" eliminada`, 'success');
+      state.selectedInstance = null;
+      await loadInstances();
+      showInstanceView('list');
+    }
+  });
+}
+
+// ============================================
+// GitHub Mod Upload
+// ============================================
+function setupGithubEvents() {
+  // Show upload panel
+  dom.btnShowGithubUpload.addEventListener('click', () => {
+    if (!state.settings.githubToken || !state.settings.githubOwner || !state.settings.githubRepo) {
+      addLog('[GitHub] Configura el token, owner y repo en Ajustes primero', 'warn');
+      return;
+    }
+    dom.serverList.style.display = 'none';
+    dom.serverDetail.style.display = 'none';
+    dom.githubUploadPanel.style.display = 'block';
+    dom.serverUploadToolbar.style.display = 'none';
+    state.uploadFiles = [];
+    renderUploadFileList();
+    populateUploadServerSelect();
+  });
+
+  // Back button
+  dom.btnBackUpload.addEventListener('click', () => {
+    dom.githubUploadPanel.style.display = 'none';
+    dom.serverList.style.display = 'grid';
+    dom.serverUploadToolbar.style.display = 'flex';
+  });
+
+  // Select JAR files
+  dom.btnSelectJars.addEventListener('click', async () => {
+    const result = await api.selectModsForUpload();
+    if (!result.success || result.canceled) return;
+    // Merge with existing (avoid duplicates by filename)
+    const existingNames = new Set(state.uploadFiles.map(f => f.filename));
+    for (const file of result.files) {
+      if (!existingNames.has(file.filename)) {
+        state.uploadFiles.push(file);
+      }
+    }
+    renderUploadFileList();
+    addLog(`[GitHub] ${result.files.length} archivo(s) seleccionado(s)`, 'success');
+  });
+
+  // Upload button
+  dom.btnUploadGithub.addEventListener('click', async () => {
+    if (state.uploadFiles.length === 0) return;
+
+    const serverId = dom.uploadServerSelect.value;
+    if (!serverId) {
+      addLog('[GitHub] Selecciona un servidor destino', 'warn');
+      return;
+    }
+
+    dom.btnUploadGithub.disabled = true;
+    dom.btnUploadGithub.innerHTML = '<span class="play-icon"><i class="lucide lucide-loader lucide-spin"></i></span> Subiendo...';
+    dom.uploadProgress.style.display = 'block';
+    dom.uploadProgressText.textContent = 'Preparando subida...';
+    dom.uploadProgressFill.style.width = '0%';
+
+    const result = await api.uploadModsToGithub({
+      token: state.settings.githubToken,
+      owner: state.settings.githubOwner,
+      repo: state.settings.githubRepo,
+      tag: state.settings.githubTag || 'v1',
+      serverId,
+      files: state.uploadFiles
+    });
+
+    if (result.success) {
+      addLog(`[GitHub] Subida completada: ${result.uploaded} archivos subidos, distribution.json actualizado`, 'success');
+      dom.btnUploadGithub.innerHTML = '<span class="play-icon"><i class="lucide lucide-check"></i></span> Completado!';
+      dom.uploadProgressText.textContent = 'Subida completada!';
+      dom.uploadProgressFill.style.width = '100%';
+      state.uploadFiles = [];
+      renderUploadFileList();
+    } else {
+      addLog(`[GitHub] Error: ${result.error}`, 'error');
+      dom.btnUploadGithub.innerHTML = '<span class="play-icon"><i class="lucide lucide-x"></i></span> Error';
+      dom.uploadProgressText.textContent = `Error: ${result.error}`;
+    }
+
+    setTimeout(() => {
+      dom.btnUploadGithub.innerHTML = '<span class="play-icon"><i class="lucide lucide-upload"></i></span> Subir a GitHub';
+      dom.btnUploadGithub.disabled = state.uploadFiles.length === 0;
+      dom.uploadProgress.style.display = 'none';
+    }, 3000);
+  });
+
+  // Test token button
+  dom.btnTestGithubToken.addEventListener('click', async () => {
+    const token = dom.githubToken.value.trim();
+    if (!token) {
+      addLog('[GitHub] Introduce un token primero', 'warn');
+      return;
+    }
+    dom.btnTestGithubToken.textContent = 'Probando...';
+    dom.btnTestGithubToken.disabled = true;
+    const result = await api.testGithubToken(token);
+    dom.btnTestGithubToken.disabled = false;
+    if (result.success) {
+      dom.btnTestGithubToken.innerHTML = `<i class="lucide lucide-check"></i> ${result.username}`;
+      addLog(`[GitHub] Token valido - usuario: ${result.username}`, 'success');
+    } else {
+      dom.btnTestGithubToken.innerHTML = '<i class="lucide lucide-x"></i> Token invalido';
+      addLog(`[GitHub] Token invalido: ${result.error}`, 'error');
+    }
+    setTimeout(() => {
+      dom.btnTestGithubToken.textContent = 'Probar Token';
+    }, 3000);
+  });
+}
+
+function populateUploadServerSelect() {
+  dom.uploadServerSelect.innerHTML = '';
+  state.servers.forEach(server => {
+    const option = document.createElement('option');
+    option.value = server.id;
+    option.textContent = `${server.icon || ''} ${server.name} (${server.mods.length} mods)`;
+    dom.uploadServerSelect.appendChild(option);
+  });
+}
+
+function renderUploadFileList() {
+  dom.uploadFileCount.textContent = `${state.uploadFiles.length} archivos seleccionados`;
+  dom.btnUploadGithub.disabled = state.uploadFiles.length === 0;
+  dom.uploadFileList.innerHTML = '';
+
+  if (state.uploadFiles.length === 0) {
+    dom.uploadFileList.innerHTML = `
+      <div class="empty-state" style="padding:30px;">
+        <span class="empty-icon"><i class="lucide lucide-package"></i></span>
+        <p>Selecciona archivos .jar para subir al release de GitHub</p>
+      </div>`;
+    return;
+  }
+
+  state.uploadFiles.forEach((file, index) => {
+    const item = document.createElement('div');
+    item.className = 'mod-item';
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    item.innerHTML = `
+      <span class="mod-item-name">${file.name}</span>
+      <span class="mod-item-version">${file.filename}</span>
+      <span class="mod-item-size">${sizeMB} MB</span>
+      <button class="btn-remove-file" data-index="${index}">✕</button>
+    `;
+    item.querySelector('.btn-remove-file').addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.uploadFiles.splice(index, 1);
+      renderUploadFileList();
+    });
+    dom.uploadFileList.appendChild(item);
+  });
+}
+
+// ============================================
+// Mod Manager (Delete Mods from GitHub)
+// ============================================
+function setupModManagerEvents() {
+  // Show mod manager panel
+  dom.btnShowModManager.addEventListener('click', () => {
+    if (!state.settings.githubToken || !state.settings.githubOwner || !state.settings.githubRepo) {
+      addLog('[GitHub] Configura el token, owner y repo en Ajustes primero', 'warn');
+      return;
+    }
+    dom.serverList.style.display = 'none';
+    dom.serverDetail.style.display = 'none';
+    dom.githubUploadPanel.style.display = 'none';
+    dom.githubModManager.style.display = 'block';
+    dom.serverUploadToolbar.style.display = 'none';
+    dom.manageModsListContainer.style.display = 'none';
+    dom.manageProgress.style.display = 'none';
+    state.manageMods = [];
+    state.manageFileSha = null;
+    populateManageServerSelect();
+  });
+
+  // Back button
+  dom.btnBackModManager.addEventListener('click', () => {
+    dom.githubModManager.style.display = 'none';
+    dom.serverList.style.display = 'grid';
+    dom.serverUploadToolbar.style.display = 'flex';
+  });
+
+  // Fetch mods from GitHub
+  dom.btnFetchGithubMods.addEventListener('click', async () => {
+    const serverId = dom.manageServerSelect.value;
+    if (!serverId) {
+      addLog('[GitHub] Selecciona un servidor', 'warn');
+      return;
+    }
+
+    dom.btnFetchGithubMods.disabled = true;
+    dom.btnFetchGithubMods.innerHTML = '<i class="lucide lucide-loader lucide-spin"></i> Cargando...';
+    dom.manageProgress.style.display = 'block';
+    dom.manageProgressText.textContent = 'Obteniendo mods de GitHub...';
+    dom.manageProgressFill.style.width = '50%';
+
+    const result = await api.fetchGithubMods({
+      token: state.settings.githubToken,
+      owner: state.settings.githubOwner,
+      repo: state.settings.githubRepo,
+      tag: state.settings.githubTag || 'v1',
+      serverId
+    });
+
+    dom.btnFetchGithubMods.disabled = false;
+    dom.btnFetchGithubMods.innerHTML = '<i class="lucide lucide-download"></i> Cargar mods de GitHub';
+    dom.manageProgress.style.display = 'none';
+
+    if (result.success) {
+      state.manageMods = result.mods;
+      state.manageFileSha = result.fileSha;
+      dom.manageModsTitle.textContent = `Mods en: ${result.serverName}`;
+      dom.manageModsListContainer.style.display = 'block';
+      renderManageModList();
+      addLog(`[GitHub] ${result.mods.length} mods encontrados en "${result.serverName}"`, 'success');
+    } else {
+      addLog(`[GitHub] Error: ${result.error}`, 'error');
+    }
+  });
+}
+
+function populateManageServerSelect() {
+  dom.manageServerSelect.innerHTML = '';
+  state.servers.forEach(server => {
+    const option = document.createElement('option');
+    option.value = server.id;
+    option.textContent = `${server.icon || ''} ${server.name} (${server.mods.length} mods)`;
+    dom.manageServerSelect.appendChild(option);
+  });
+}
+
+function renderManageModList() {
+  dom.manageModCount.textContent = `${state.manageMods.length} mods`;
+  dom.manageModList.innerHTML = '';
+
+  if (state.manageMods.length === 0) {
+    dom.manageModList.innerHTML = `
+      <div class="empty-state" style="padding:30px;">
+        <span class="empty-icon"><i class="lucide lucide-package"></i></span>
+        <p>Este servidor no tiene mods en distribution.json</p>
+      </div>`;
+    return;
+  }
+
+  state.manageMods.forEach((mod, index) => {
+    const item = document.createElement('div');
+    item.className = 'mod-manage-item';
+    const sizeMB = mod.size ? (mod.size / (1024 * 1024)).toFixed(1) + ' MB' : '-';
+    item.innerHTML = `
+      <div class="mod-manage-info">
+        <span class="mod-manage-name">${mod.name}</span>
+        <span class="mod-manage-filename">${mod.filename}</span>
+      </div>
+      <span class="mod-manage-size">${sizeMB}</span>
+      <button class="btn-delete-mod" data-index="${index}" title="Eliminar mod">
+        <i class="lucide lucide-trash-2"></i>
+      </button>
+    `;
+    item.querySelector('.btn-delete-mod').addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleDeleteMod(index);
+    });
+    dom.manageModList.appendChild(item);
+  });
+}
+
+async function handleDeleteMod(index) {
+  const mod = state.manageMods[index];
+  if (!mod) return;
+
+  if (!confirm(`Eliminar "${mod.name}" (${mod.filename})?\n\nSe eliminara del release de GitHub y de distribution.json.`)) {
+    return;
+  }
+
+  // Disable all delete buttons during operation
+  dom.manageModList.querySelectorAll('.btn-delete-mod').forEach(btn => btn.disabled = true);
+
+  dom.manageProgress.style.display = 'block';
+  dom.manageProgressText.textContent = `Eliminando: ${mod.name}...`;
+  dom.manageProgressFill.style.width = '50%';
+
+  const result = await api.deleteGithubMod({
+    token: state.settings.githubToken,
+    owner: state.settings.githubOwner,
+    repo: state.settings.githubRepo,
+    tag: state.settings.githubTag || 'v1',
+    serverId: dom.manageServerSelect.value,
+    modFilename: mod.filename,
+    assetId: mod.assetId || null,
+    fileSha: state.manageFileSha
+  });
+
+  if (result.success) {
+    // Remove from local state
+    state.manageMods.splice(index, 1);
+    if (result.newFileSha) {
+      state.manageFileSha = result.newFileSha;
+    }
+
+    dom.manageProgressText.textContent = `"${mod.name}" eliminado correctamente`;
+    dom.manageProgressFill.style.width = '100%';
+    addLog(`[GitHub] Mod eliminado: ${mod.name} (${mod.filename})`, 'success');
+
+    renderManageModList();
+
+    setTimeout(() => {
+      dom.manageProgress.style.display = 'none';
+    }, 2000);
+  } else {
+    addLog(`[GitHub] Error eliminando "${mod.name}": ${result.error}`, 'error');
+    dom.manageProgressText.textContent = `Error: ${result.error}`;
+    dom.manageModList.querySelectorAll('.btn-delete-mod').forEach(btn => btn.disabled = false);
+    setTimeout(() => {
+      dom.manageProgress.style.display = 'none';
+    }, 3000);
+  }
+}
+
+// ============================================
 // Settings
 // ============================================
 function setupSettingsEvents() {
+  // Change installation directory
+  dom.btnChangePath.addEventListener('click', async () => {
+    const selectedPath = await api.selectDirectory();
+    if (selectedPath) {
+      dom.dataPathDisplay.textContent = selectedPath;
+      state.settings.dataDir = selectedPath;
+      addLog(`[Settings] Ruta de instalacion cambiada a: ${selectedPath}`);
+    }
+  });
+
+  // Reset to default path
+  dom.btnResetPath.addEventListener('click', async () => {
+    const paths = await api.getPaths();
+    dom.dataPathDisplay.textContent = paths.defaultData;
+    state.settings.dataDir = '';
+    addLog('[Settings] Ruta de instalacion restaurada a la por defecto');
+  });
+
   dom.btnSaveSettings.addEventListener('click', async () => {
+    const newDataDir = state.settings.dataDir || '';
+
     state.settings = {
       ramMin: parseInt(dom.ramMin.value) || 1024,
       ramMax: parseInt(dom.ramMax.value) || 4096,
       javaPath: dom.javaPath.value.trim(),
-      distroUrl: dom.distroUrl.value.trim()
+      dataDir: newDataDir,
+      distroUrl: dom.distroUrl.value.trim(),
+      githubToken: dom.githubToken.value.trim(),
+      githubOwner: dom.githubOwner.value.trim(),
+      githubRepo: dom.githubRepo.value.trim(),
+      githubTag: dom.githubTag.value.trim() || 'v1'
     };
 
     const result = await api.saveSettings(state.settings);
     if (result.success) {
+      // Update the data directory in the main process
+      await api.updateDataDir(newDataDir || null);
+      const paths = await api.getPaths();
+      dom.dataPathDisplay.textContent = paths.data;
+
       addLog('[Settings] Ajustes guardados', 'success');
-      dom.btnSaveSettings.textContent = '✓ Guardado';
+      dom.btnSaveSettings.innerHTML = '<i class="lucide lucide-check"></i> Guardado';
     } else {
       addLog(`[Settings] Error: ${result.error}`, 'error');
-      dom.btnSaveSettings.textContent = '✗ Error';
+      dom.btnSaveSettings.innerHTML = '<i class="lucide lucide-x"></i> Error';
     }
     setTimeout(() => {
       dom.btnSaveSettings.textContent = 'Guardar Ajustes';
@@ -705,6 +1585,90 @@ function setupSettingsEvents() {
 
     dom.btnLoadDistro.textContent = 'Cargar';
     dom.btnLoadDistro.disabled = false;
+  });
+}
+
+// ============================================
+// Auto-Update
+// ============================================
+async function setupUpdateEvents() {
+  // Show dynamic version
+  try {
+    const version = await api.getAppVersion();
+    if (version && dom.appVersion) {
+      dom.appVersion.textContent = `v${version}`;
+    }
+  } catch { /* ignore in dev */ }
+
+  // Update event listeners
+  api.onUpdateChecking(() => {
+    addLog('[Updater] Buscando actualizaciones...');
+  });
+
+  api.onUpdateAvailable((info) => {
+    addLog(`[Updater] Nueva version disponible: v${info.version}`, 'success');
+    dom.updateBar.style.display = 'flex';
+    dom.updateBarText.textContent = `Nueva version disponible: v${info.version}`;
+    dom.btnUpdateDownload.style.display = 'inline-flex';
+    dom.btnUpdateInstall.style.display = 'none';
+    dom.updateBarProgress.style.display = 'none';
+  });
+
+  api.onUpdateNotAvailable(() => {
+    addLog('[Updater] Ya tienes la ultima version');
+  });
+
+  api.onUpdateProgress((progress) => {
+    dom.updateBar.style.display = 'flex';
+    dom.updateBarProgress.style.display = 'block';
+    dom.updateBarProgressFill.style.width = `${progress.percent}%`;
+    dom.btnUpdateDownload.style.display = 'none';
+
+    const mbTransferred = (progress.transferred / (1024 * 1024)).toFixed(1);
+    const mbTotal = (progress.total / (1024 * 1024)).toFixed(1);
+    const speed = (progress.bytesPerSecond / (1024 * 1024)).toFixed(1);
+    dom.updateBarText.textContent = `Descargando: ${mbTransferred}/${mbTotal} MB (${speed} MB/s) - ${progress.percent}%`;
+  });
+
+  api.onUpdateDownloaded((info) => {
+    addLog(`[Updater] Actualizacion v${info.version} descargada. Lista para instalar.`, 'success');
+    dom.updateBarText.textContent = `v${info.version} lista para instalar`;
+    dom.updateBarProgress.style.display = 'none';
+    dom.btnUpdateDownload.style.display = 'none';
+    dom.btnUpdateInstall.style.display = 'inline-flex';
+  });
+
+  api.onUpdateError((msg) => {
+    addLog(`[Updater] Error: ${msg}`, 'error');
+    // No mostrar la barra si no hay update
+    if (dom.updateBar.style.display === 'flex') {
+      dom.updateBarText.textContent = `Error de actualizacion`;
+      setTimeout(() => {
+        dom.updateBar.style.display = 'none';
+      }, 5000);
+    }
+  });
+
+  // Botones de la barra
+  dom.btnUpdateDownload.addEventListener('click', async () => {
+    dom.btnUpdateDownload.textContent = 'Descargando...';
+    dom.btnUpdateDownload.disabled = true;
+    addLog('[Updater] Iniciando descarga...');
+    const result = await api.downloadUpdate();
+    if (!result.success) {
+      addLog(`[Updater] Error descargando: ${result.error}`, 'error');
+      dom.btnUpdateDownload.textContent = 'Reintentar';
+      dom.btnUpdateDownload.disabled = false;
+    }
+  });
+
+  dom.btnUpdateInstall.addEventListener('click', () => {
+    addLog('[Updater] Instalando actualizacion y reiniciando...');
+    api.installUpdate();
+  });
+
+  dom.btnUpdateDismiss.addEventListener('click', () => {
+    dom.updateBar.style.display = 'none';
   });
 }
 

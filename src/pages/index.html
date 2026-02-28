@@ -4,19 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LauncherChef</title>
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.min.css">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
   <!-- Custom Titlebar -->
   <div class="titlebar" id="titlebar">
     <div class="titlebar-drag">
-      <div class="titlebar-icon">🍳</div>
+      <div class="titlebar-icon"><i class="lucide lucide-chef-hat"></i></div>
       <span class="titlebar-title">LauncherChef</span>
     </div>
     <div class="titlebar-controls">
       <button class="tb-btn" id="btn-minimize">─</button>
       <button class="tb-btn" id="btn-maximize">□</button>
-      <button class="tb-btn tb-close" id="btn-close">✕</button>
+      <button class="tb-btn tb-close" id="btn-close"><i class="lucide lucide-x"></i></button>
+    </div>
+  </div>
+
+  <!-- Update Notification Bar -->
+  <div class="update-bar" id="update-bar" style="display:none;">
+    <div class="update-bar-content">
+      <span class="update-bar-icon"><i class="lucide lucide-refresh-cw"></i></span>
+      <span class="update-bar-text" id="update-bar-text">Buscando actualizaciones...</span>
+      <div class="update-bar-progress" id="update-bar-progress" style="display:none;">
+        <div class="update-bar-progress-fill" id="update-bar-progress-fill"></div>
+      </div>
+    </div>
+    <div class="update-bar-actions">
+      <button class="update-bar-btn" id="btn-update-download" style="display:none;">Descargar</button>
+      <button class="update-bar-btn update-bar-btn-install" id="btn-update-install" style="display:none;">Instalar y Reiniciar</button>
+      <button class="update-bar-btn-dismiss" id="btn-update-dismiss"><i class="lucide lucide-x"></i></button>
     </div>
   </div>
 
@@ -50,18 +67,24 @@
 
       <nav class="nav-menu">
         <button class="nav-item active" data-section="servers">
-          <span class="nav-icon">🖥️</span> Servidores
+          <span class="nav-icon"><i class="lucide lucide-server"></i></span> Servidores
         </button>
         <button class="nav-item" data-section="mods">
-          <span class="nav-icon">📦</span> Mods
+          <span class="nav-icon"><i class="lucide lucide-package"></i></span> Mods
+        </button>
+        <button class="nav-item" data-section="instances">
+          <span class="nav-icon"><i class="lucide lucide-gamepad-2"></i></span> Instancias
+        </button>
+        <button class="nav-item" data-section="skins">
+          <span class="nav-icon"><i class="lucide lucide-palette"></i></span> Skins
         </button>
         <button class="nav-item" data-section="settings">
-          <span class="nav-icon">⚙️</span> Ajustes
+          <span class="nav-icon"><i class="lucide lucide-settings"></i></span> Ajustes
         </button>
       </nav>
 
       <div class="sidebar-footer">
-        <span class="version-tag">v1.0.0</span>
+        <span class="version-tag" id="app-version">v1.0.0</span>
       </div>
     </aside>
 
@@ -74,13 +97,18 @@
           <p class="section-desc">Selecciona un servidor para jugar. Los mods se sincronizaran automaticamente.</p>
         </div>
 
+        <div class="server-upload-toolbar" id="server-upload-toolbar">
+          <button class="btn-sync" id="btn-show-mod-manager"><i class="lucide lucide-list"></i> Gestionar Mods</button>
+          <button class="btn-sync" id="btn-show-github-upload"><i class="lucide lucide-upload"></i> Subir a GitHub</button>
+        </div>
+
         <div class="server-list" id="server-list">
           <!-- Servers loaded dynamically -->
         </div>
 
         <div class="server-detail" id="server-detail" style="display:none;">
           <div class="detail-header">
-            <button class="btn-back" id="btn-back-servers">← Volver</button>
+            <button class="btn-back" id="btn-back-servers"><i class="lucide lucide-arrow-left"></i> Volver</button>
             <h3 id="detail-server-name">Servidor</h3>
           </div>
           <div class="detail-info">
@@ -114,8 +142,89 @@
               <span class="progress-text" id="progress-text">Preparando...</span>
             </div>
             <button class="btn-play" id="btn-play" disabled>
-              <span class="play-icon">▶</span> JUGAR
+              <span class="play-icon"><i class="lucide lucide-play"></i></span> JUGAR
             </button>
+          </div>
+        </div>
+
+        <!-- GitHub Upload Panel -->
+        <div class="github-upload-panel" id="github-upload-panel" style="display:none;">
+          <div class="detail-header">
+            <button class="btn-back" id="btn-back-upload"><i class="lucide lucide-arrow-left"></i> Volver</button>
+            <h3><i class="lucide lucide-upload"></i> Subir Mods a GitHub</h3>
+          </div>
+
+          <div class="settings-group">
+            <h3>Servidor destino</h3>
+            <p class="setting-hint">Selecciona a que servidor del distribution.json se agregaran los mods.</p>
+            <div class="setting-row">
+              <label for="upload-server-select">Servidor:</label>
+              <select id="upload-server-select" class="form-select"></select>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3>Archivos para subir</h3>
+            <div class="github-files-toolbar">
+              <span class="instance-file-count" id="upload-file-count">0 archivos seleccionados</span>
+              <button class="btn-sync" id="btn-select-jars"><i class="lucide lucide-plus"></i> Seleccionar .jar</button>
+            </div>
+            <div class="github-file-list" id="upload-file-list">
+              <div class="empty-state" style="padding:30px;">
+                <span class="empty-icon"><i class="lucide lucide-package"></i></span>
+                <p>Selecciona archivos .jar para subir al release de GitHub</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="github-upload-actions">
+            <div class="progress-container" id="upload-progress" style="display:none;">
+              <div class="progress-bar">
+                <div class="progress-fill" id="upload-progress-fill"></div>
+              </div>
+              <span class="progress-text" id="upload-progress-text">Preparando...</span>
+            </div>
+            <button class="btn-play" id="btn-upload-github" disabled>
+              <span class="play-icon"><i class="lucide lucide-upload"></i></span> Subir a GitHub
+            </button>
+          </div>
+        </div>
+
+        <!-- GitHub Mod Manager Panel -->
+        <div class="github-mod-manager" id="github-mod-manager" style="display:none;">
+          <div class="detail-header">
+            <button class="btn-back" id="btn-back-mod-manager"><i class="lucide lucide-arrow-left"></i> Volver</button>
+            <h3><i class="lucide lucide-list"></i> Gestionar Mods en GitHub</h3>
+          </div>
+
+          <div class="settings-group">
+            <h3>Servidor</h3>
+            <p class="setting-hint">Selecciona el servidor cuyos mods quieres gestionar en GitHub.</p>
+            <div class="setting-row">
+              <label for="manage-server-select">Servidor:</label>
+              <select id="manage-server-select" class="form-select"></select>
+            </div>
+            <button class="btn-secondary" id="btn-fetch-github-mods"><i class="lucide lucide-download"></i> Cargar mods de GitHub</button>
+          </div>
+
+          <div class="settings-group" id="manage-mods-list-container" style="display:none;">
+            <h3 id="manage-mods-title">Mods en GitHub</h3>
+            <div class="github-files-toolbar">
+              <span class="instance-file-count" id="manage-mod-count">0 mods</span>
+            </div>
+            <div class="github-file-list" id="manage-mod-list">
+              <div class="empty-state" style="padding:30px;">
+                <span class="empty-icon"><i class="lucide lucide-package"></i></span>
+                <p>Carga los mods del servidor para gestionarlos</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-container" id="manage-progress" style="display:none;">
+            <div class="progress-bar">
+              <div class="progress-fill" id="manage-progress-fill"></div>
+            </div>
+            <span class="progress-text" id="manage-progress-text">Procesando...</span>
           </div>
         </div>
       </section>
@@ -129,14 +238,162 @@
 
         <div class="mods-toolbar">
           <span class="mods-server-label" id="mods-server-label">Ningun servidor seleccionado</span>
-          <button class="btn-sync" id="btn-sync-mods" disabled>🔄 Sincronizar</button>
+          <button class="btn-sync" id="btn-sync-mods" disabled><i class="lucide lucide-refresh-cw"></i> Sincronizar</button>
         </div>
 
         <div class="mod-grid" id="mod-grid">
           <div class="empty-state">
-            <span class="empty-icon">📦</span>
+            <span class="empty-icon"><i class="lucide lucide-package"></i></span>
             <p>Selecciona un servidor primero para ver sus mods</p>
           </div>
+        </div>
+      </section>
+
+      <!-- Skins Section -->
+      <section class="section" id="section-skins">
+        <div class="section-header">
+          <h2>Skin de Minecraft</h2>
+          <p class="section-desc">Visualiza y cambia tu skin de Minecraft.</p>
+        </div>
+
+        <div class="skin-container" id="skin-container">
+          <!-- Content loaded dynamically -->
+          <div class="skin-card">
+            <div class="skin-preview" id="skin-preview">
+              <img id="skin-body" src="" alt="Skin" style="display:none;">
+              <div class="skin-placeholder" id="skin-placeholder">
+                <span><i class="lucide lucide-palette" style="font-size:48px;"></i></span>
+                <p>Inicia sesion para ver tu skin</p>
+              </div>
+            </div>
+            <div class="skin-info">
+              <h3 id="skin-player-name">-</h3>
+              <span class="skin-uuid" id="skin-uuid">-</span>
+            </div>
+          </div>
+
+          <div class="skin-actions" id="skin-actions" style="display:none;">
+            <div class="skin-variant-selector">
+              <label>Modelo:</label>
+              <div class="variant-buttons">
+                <button class="variant-btn active" id="variant-classic" data-variant="classic">Classic</button>
+                <button class="variant-btn" id="variant-slim" data-variant="slim">Slim</button>
+              </div>
+            </div>
+            <button class="btn-upload-skin" id="btn-upload-skin"><i class="lucide lucide-folder-open"></i> Cambiar Skin</button>
+            <p class="skin-hint">Selecciona un archivo .png (64x64 o 64x32)</p>
+          </div>
+
+          <div class="skin-offline-msg" id="skin-offline-msg" style="display:none;">
+            <span class="empty-icon"><i class="lucide lucide-lock"></i></span>
+            <p>El cambio de skin solo esta disponible para cuentas Premium (Microsoft).</p>
+            <p class="skin-hint">Los jugadores No Premium usan la skin por defecto de Minecraft.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Instances Section -->
+      <section class="section" id="section-instances">
+        <div class="section-header">
+          <h2>Instancias</h2>
+          <p class="section-desc">Crea y gestiona tus instancias personalizadas de Minecraft.</p>
+        </div>
+
+        <!-- Instance List -->
+        <div class="instance-toolbar" id="instance-toolbar">
+          <button class="btn-create-instance" id="btn-create-instance"><i class="lucide lucide-plus"></i> Nueva Instancia</button>
+        </div>
+        <div class="instance-list" id="instance-list"></div>
+
+        <!-- Create Instance Form -->
+        <div class="instance-create-form" id="instance-create-form" style="display:none;">
+          <div class="detail-header">
+            <button class="btn-back" id="btn-back-instance-create"><i class="lucide lucide-arrow-left"></i> Volver</button>
+            <h3>Nueva Instancia</h3>
+          </div>
+          <div class="settings-group">
+            <div class="setting-row">
+              <label for="instance-name">Nombre:</label>
+              <input type="text" id="instance-name" placeholder="Mi Instancia" maxlength="50">
+            </div>
+            <div class="setting-row">
+              <label>Icono:</label>
+              <div class="icon-picker" id="instance-icon-picker"></div>
+            </div>
+            <div class="setting-row">
+              <label for="instance-mc-version">Version de Minecraft:</label>
+              <select id="instance-mc-version" class="form-select"></select>
+            </div>
+            <div class="setting-row">
+              <label for="instance-loader">Mod Loader:</label>
+              <select id="instance-loader" class="form-select">
+                <option value="vanilla">Vanilla (Sin mods)</option>
+                <option value="fabric">Fabric</option>
+                <option value="forge">Forge</option>
+                <option value="neoforge">NeoForge</option>
+              </select>
+            </div>
+            <div class="setting-row" id="loader-version-row" style="display:none;">
+              <label for="instance-loader-version">Version del Loader:</label>
+              <select id="instance-loader-version" class="form-select">
+                <option value="">Selecciona un loader primero</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-save-settings" id="btn-create-instance-confirm">Crear Instancia</button>
+        </div>
+
+        <!-- Instance Detail View -->
+        <div class="instance-detail" id="instance-detail" style="display:none;">
+          <div class="detail-header">
+            <button class="btn-back" id="btn-back-instance-list"><i class="lucide lucide-arrow-left"></i> Volver</button>
+            <h3 id="instance-detail-name">Instancia</h3>
+          </div>
+          <div class="detail-info">
+            <div class="info-row">
+              <span class="info-label">Version:</span>
+              <span class="info-value" id="instance-detail-version">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Mod Loader:</span>
+              <span class="info-value" id="instance-detail-loader">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Creada:</span>
+              <span class="info-value" id="instance-detail-created">-</span>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="instance-tabs">
+            <button class="instance-tab active" data-tab="mods">Mods</button>
+            <button class="instance-tab" data-tab="shaderpacks">Shaders</button>
+            <button class="instance-tab" data-tab="resourcepacks">Resource Packs</button>
+          </div>
+
+          <div class="instance-files-toolbar">
+            <span class="instance-file-count" id="instance-file-count">0 archivos</span>
+            <button class="btn-sync" id="btn-add-instance-files"><i class="lucide lucide-plus"></i> Agregar</button>
+          </div>
+
+          <div class="instance-file-list" id="instance-file-list"></div>
+
+          <div class="launch-section">
+            <div class="progress-container" id="instance-progress" style="display:none;">
+              <div class="progress-bar">
+                <div class="progress-fill" id="instance-progress-fill"></div>
+              </div>
+              <span class="progress-text" id="instance-progress-text">Preparando...</span>
+            </div>
+            <div class="instance-play-actions">
+              <button class="btn-play" id="btn-instance-play" disabled>
+                <span class="play-icon"><i class="lucide lucide-play"></i></span> JUGAR
+              </button>
+              <button class="btn-close-game" id="btn-close-game" style="display:none;"><i class="lucide lucide-square"></i> Cerrar Juego</button>
+            </div>
+          </div>
+
+          <button class="btn-delete-instance" id="btn-delete-instance"><i class="lucide lucide-trash-2"></i> Eliminar Instancia</button>
         </div>
       </section>
 
@@ -167,10 +424,13 @@
         </div>
 
         <div class="settings-group">
-          <h3>Directorio de datos</h3>
-          <div class="setting-row">
+          <h3>Directorio de instalacion</h3>
+          <p class="setting-hint">Carpeta donde se guardan los archivos de Minecraft, mods y configuraciones.</p>
+          <div class="setting-row path-row">
             <label>Ubicacion:</label>
             <span class="path-display" id="data-path-display">-</span>
+            <button class="btn-icon" id="btn-change-path" title="Cambiar carpeta"><i class="lucide lucide-folder-open"></i></button>
+            <button class="btn-icon btn-reset-path" id="btn-reset-path" title="Restaurar ruta por defecto"><i class="lucide lucide-undo-2"></i></button>
           </div>
         </div>
 
@@ -184,6 +444,28 @@
           <button class="btn-secondary" id="btn-load-distro">Cargar</button>
         </div>
 
+        <div class="settings-group">
+          <h3>GitHub (Subida de Mods)</h3>
+          <p class="setting-hint">Configuracion para subir mods a un Release de GitHub y actualizar distribution.json automaticamente.</p>
+          <div class="setting-row">
+            <label for="github-token">Token de GitHub:</label>
+            <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
+          </div>
+          <div class="setting-row">
+            <label for="github-owner">Owner (usuario/org):</label>
+            <input type="text" id="github-owner" placeholder="CarlosFloresDev">
+          </div>
+          <div class="setting-row">
+            <label for="github-repo">Repositorio:</label>
+            <input type="text" id="github-repo" placeholder="tortillaland-mods">
+          </div>
+          <div class="setting-row">
+            <label for="github-tag">Tag del Release:</label>
+            <input type="text" id="github-tag" placeholder="v1" value="v1">
+          </div>
+          <button class="btn-secondary" id="btn-test-github-token">Probar Token</button>
+        </div>
+
         <button class="btn-save-settings" id="btn-save-settings">Guardar Ajustes</button>
       </section>
     </main>
@@ -193,12 +475,12 @@
   <div class="log-console" id="log-console" style="display:none;">
     <div class="log-header">
       <span>Consola</span>
-      <button class="log-toggle" id="log-toggle">✕</button>
+      <button class="log-toggle" id="log-toggle"><i class="lucide lucide-x"></i></button>
     </div>
     <div class="log-body" id="log-body"></div>
   </div>
 
-  <button class="btn-console-toggle" id="btn-show-log" title="Mostrar consola">📋</button>
+  <button class="btn-console-toggle" id="btn-show-log" title="Mostrar consola"><i class="lucide lucide-terminal"></i></button>
 
   <script src="../js/renderer.js"></script>
 </body>
