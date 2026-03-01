@@ -27,6 +27,10 @@ let state = {
   }
 };
 
+// Server ping cache
+const serverPingCache = {}; // { serverId: { online, latency, players, lastPing } }
+let pingInterval = null;
+
 // ============================================
 // DOM References
 // ============================================
@@ -163,7 +167,11 @@ const dom = {
   btnUpdateDownload: $('#btn-update-download'),
   btnUpdateInstall: $('#btn-update-install'),
   btnUpdateDismiss: $('#btn-update-dismiss'),
-  appVersion: $('#app-version')
+  appVersion: $('#app-version'),
+  // Ping detail
+  detailPingStatus: $('#detail-ping-status'),
+  detailPingLatency: $('#detail-ping-latency'),
+  detailPingPlayers: $('#detail-ping-players')
 };
 
 // ============================================
@@ -178,6 +186,7 @@ async function init() {
   await checkAuth();
   await loadServers();
   setupServerEvents();
+  startPingPolling();
   setupModEvents();
   setupSettingsEvents();
   setupSkinEvents();
@@ -680,6 +689,7 @@ async function selectServer(server) {
   dom.btnSyncMods.disabled = false;
 
   updatePlayButton();
+  updateDetailPingInfo();
   addLog(`[Server] Seleccionado: ${server.name} (${installedCount}/${server.mods.length} mods instalados)`);
 }
 
@@ -688,6 +698,109 @@ function setupServerEvents() {
     dom.serverList.style.display = 'grid';
     dom.serverDetail.style.display = 'none';
   });
+}
+
+// ============================================
+// Server Ping — Real-time monitoring
+// ============================================
+async function pingAllServers() {
+  if (!state.servers || state.servers.length === 0) return;
+
+  const promises = state.servers.map(async (server) => {
+    if (!server.address) return;
+    try {
+      const result = await api.pingServer(server.address);
+      serverPingCache[server.id] = { ...result, lastPing: Date.now() };
+    } catch {
+      serverPingCache[server.id] = {
+        online: false, latency: -1,
+        players: { online: 0, max: 0, sample: [] },
+        lastPing: Date.now()
+      };
+    }
+  });
+
+  await Promise.all(promises);
+  updateServerPingUI();
+  addLog(`[Ping] Servidores actualizados (${state.servers.length} verificados)`);
+}
+
+function updateServerPingUI() {
+  state.servers.forEach(server => {
+    const ping = serverPingCache[server.id];
+    if (!ping) return;
+
+    const card = document.querySelector(`.server-card[data-server-id="${server.id}"]`);
+    if (!card) return;
+
+    // Update status dot (real status)
+    const statusDot = card.querySelector('.server-status');
+    if (statusDot) {
+      statusDot.classList.toggle('offline', !ping.online);
+    }
+
+    // Update or create ping info bar inside the card
+    let pingInfo = card.querySelector('.server-ping-info');
+    if (!pingInfo) {
+      pingInfo = document.createElement('div');
+      pingInfo.className = 'server-ping-info';
+      card.appendChild(pingInfo);
+    }
+
+    if (ping.online) {
+      const latencyClass = ping.latency < 80 ? 'ping-good' : ping.latency < 150 ? 'ping-ok' : 'ping-bad';
+      pingInfo.innerHTML = `
+        <span class="${latencyClass}"><i class="lucide lucide-radio"></i> ${ping.latency}ms</span>
+        <span class="player-count"><i class="lucide lucide-gamepad-2"></i> ${ping.players.online}/${ping.players.max}</span>
+      `;
+    } else {
+      pingInfo.innerHTML = `<span class="ping-offline"><i class="lucide lucide-radio"></i> Offline</span>`;
+    }
+  });
+
+  // Also update detail view if open
+  updateDetailPingInfo();
+}
+
+function updateDetailPingInfo() {
+  if (!state.selectedServer) return;
+  const ping = serverPingCache[state.selectedServer.id];
+
+  const statusEl = dom.detailPingStatus;
+  const latencyEl = dom.detailPingLatency;
+  const playersEl = dom.detailPingPlayers;
+  if (!statusEl) return;
+
+  if (!ping) {
+    statusEl.textContent = 'Verificando...';
+    latencyEl.textContent = '—';
+    playersEl.textContent = '—';
+    return;
+  }
+
+  if (ping.online) {
+    statusEl.innerHTML = '<span class="status-online-text">● Online</span>';
+    const latencyClass = ping.latency < 80 ? 'ping-good' : ping.latency < 150 ? 'ping-ok' : 'ping-bad';
+    latencyEl.innerHTML = `<span class="${latencyClass}">${ping.latency}ms</span>`;
+    playersEl.textContent = `${ping.players.online} / ${ping.players.max}`;
+    // Show player names if available
+    if (ping.players.sample && ping.players.sample.length > 0) {
+      playersEl.title = ping.players.sample.join(', ');
+    }
+  } else {
+    statusEl.innerHTML = '<span class="status-offline-text">● Offline</span>';
+    latencyEl.textContent = '—';
+    playersEl.textContent = '—';
+    playersEl.title = '';
+  }
+}
+
+function startPingPolling() {
+  // Initial ping
+  pingAllServers();
+  // Poll every 30 seconds
+  if (pingInterval) clearInterval(pingInterval);
+  pingInterval = setInterval(pingAllServers, 30000);
 }
 
 // ============================================

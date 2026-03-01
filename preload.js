@@ -58,6 +58,9 @@ contextBridge.exposeInMainWorld('launcherAPI', {
   updateInstanceLastPlayed: (id) => ipcRenderer.invoke('instances:updateLastPlayed', id),
   createInstanceFromServer: (opts) => ipcRenderer.invoke('instances:createFromServer', opts),
 
+  // Server ping
+  pingServer: (address) => ipcRenderer.invoke('server:ping', address),
+
   // GitHub mod upload
   selectModsForUpload: () => ipcRenderer.invoke('github:selectMods'),
   uploadModsToGithub: (opts) => ipcRenderer.invoke('github:upload', opts),
