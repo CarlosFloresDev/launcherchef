@@ -220,4 +220,51 @@ module.exports = function (ipcMain, getDataDir, configDir) {
     }
     return { success: true };
   });
+
+  // Auto-create instance from a server (linked instance)
+  ipcMain.handle('instances:createFromServer', async (_e, opts) => {
+    try {
+      const all = loadInstances();
+
+      // Check if already linked
+      const existing = all.find(i => i.serverLinked === opts.serverId);
+      if (existing) {
+        // Update server info in case it changed
+        let changed = false;
+        if (existing.name !== opts.serverName) { existing.name = opts.serverName; changed = true; }
+        if (existing.minecraft_version !== opts.mcVersion) { existing.minecraft_version = opts.mcVersion; changed = true; }
+        if (existing.mod_loader !== opts.modLoader) { existing.mod_loader = opts.modLoader; changed = true; }
+        if (existing.mod_loader_version !== opts.modLoaderVersion) { existing.mod_loader_version = opts.modLoaderVersion; changed = true; }
+        if (existing.serverAddress !== opts.serverAddress) { existing.serverAddress = opts.serverAddress; changed = true; }
+        if (changed) saveInstances(all);
+        return { success: true, instance: existing, created: false };
+      }
+
+      // Create directories (shaderpacks & resourcepacks are new for servers)
+      const instanceDir = path.join(resolveDataDir(), 'instances', opts.serverId);
+      for (const sub of ['mods', 'shaderpacks', 'resourcepacks', 'config']) {
+        fs.mkdirSync(path.join(instanceDir, sub), { recursive: true });
+      }
+
+      const instance = {
+        id: opts.serverId,
+        name: opts.serverName,
+        minecraft_version: opts.mcVersion,
+        mod_loader: opts.modLoader || 'vanilla',
+        mod_loader_version: opts.modLoaderVersion || null,
+        created: new Date().toISOString(),
+        lastPlayed: null,
+        icon: opts.icon || '🖥️',
+        serverLinked: opts.serverId,
+        serverAddress: opts.serverAddress || null
+      };
+
+      all.push(instance);
+      saveInstances(all);
+
+      return { success: true, instance, created: true };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  });
 };

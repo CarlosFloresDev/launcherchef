@@ -230,8 +230,24 @@ module.exports = function (ipcMain, getDataDir) {
       // Build a set of target filenames
       const targetFilenames = new Set(targetMods.map(m => m.filename));
 
-      // 1. Remove mods that are NOT in the target list
-      const toRemove = installedFiles.filter(f => !targetFilenames.has(f));
+      // Load previous server-mods manifest (tracks which mods were installed by sync)
+      const manifestPath = path.join(instanceDir, '.server-mods-manifest.json');
+      let previousManaged = [];
+      try {
+        if (fs.existsSync(manifestPath)) {
+          const manifestData = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+          previousManaged = manifestData.managedFiles || [];
+        }
+      } catch { /* ignore corrupt manifest */ }
+
+      // 1. Remove only SERVER-MANAGED mods that are no longer in the target list
+      //    User-added mods (not in manifest) are left untouched
+      const toRemove = installedFiles.filter(f => {
+        // If no previous manifest exists, use legacy behavior (remove non-target mods)
+        if (previousManaged.length === 0) return !targetFilenames.has(f);
+        // Otherwise, only remove if it was managed by server AND is no longer needed
+        return previousManaged.includes(f) && !targetFilenames.has(f);
+      });
       for (const file of toRemove) {
         event.sender.send('log', `[ModSync] Eliminando mod obsoleto: ${file}`);
         fs.unlinkSync(path.join(modsDir, file));
@@ -294,6 +310,18 @@ module.exports = function (ipcMain, getDataDir) {
           results.errors.push({ mod: mod.filename, error: err.message });
           event.sender.send('log', `[ModSync] ✗ Error con ${mod.filename}: ${err.message}`);
         }
+      }
+
+      // Write server-mods manifest (tracks managed files so user mods are preserved)
+      try {
+        const manifest = {
+          serverName: serverConfig.name || serverConfig.id,
+          managedFiles: targetMods.map(m => m.filename),
+          lastSync: new Date().toISOString()
+        };
+        fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
+      } catch (e) {
+        event.sender.send('log', `[ModSync] Aviso: No se pudo escribir manifest: ${e.message}`);
       }
 
       event.sender.send('log',
