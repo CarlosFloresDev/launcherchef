@@ -33,6 +33,7 @@
 }
 
 /* === Icon glyphs === */
+.lucide-alert-triangle::before { content: "\e193"; }
 .lucide-arrow-left::before   { content: "\e048"; }
 .lucide-calendar::before     { content: "\e063"; }
 .lucide-check::before        { content: "\e06c"; }

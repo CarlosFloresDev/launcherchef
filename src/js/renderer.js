@@ -252,6 +252,58 @@ function addLog(msg, type = '') {
 }
 
 // ============================================
+// Toast Notifications
+// ============================================
+function showToast({ type = 'info', title, message, icon, duration = 5000 }) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+
+  const defaultIcons = {
+    info: 'lucide-package',
+    success: 'lucide-check',
+    warning: 'lucide-alert-triangle',
+    error: 'lucide-x'
+  };
+  const iconName = icon || defaultIcons[type];
+
+  toast.innerHTML = `
+    <span class="toast-icon"><i class="lucide ${iconName}"></i></span>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      ${message ? `<div class="toast-message">${message}</div>` : ''}
+    </div>
+    <button class="toast-close"><i class="lucide lucide-x"></i></button>
+    ${duration > 0 ? `<div class="toast-progress" style="animation-duration:${duration}ms;"></div>` : ''}
+  `;
+
+  const dismiss = () => {
+    if (toast.classList.contains('removing')) return;
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 300);
+  };
+
+  toast.querySelector('.toast-close').addEventListener('click', (e) => {
+    e.stopPropagation();
+    dismiss();
+  });
+  toast.addEventListener('click', dismiss);
+
+  container.appendChild(toast);
+
+  // Max 5 toasts visible
+  while (container.children.length > 5) {
+    container.firstChild.remove();
+  }
+
+  if (duration > 0) {
+    setTimeout(dismiss, duration);
+  }
+}
+
+// ============================================
 // Paths & Settings
 // ============================================
 let appPaths = {};
@@ -410,6 +462,9 @@ async function loadServers() {
       addLog('[Distro] Actualizando lista de servidores...');
       const distro = await api.fetchDistro(distroUrl);
       if (distro && distro.servers && distro.servers.length > 0) {
+        // Detect changes between cached and new servers → show notifications
+        detectServerChanges(cachedServers, distro.servers);
+
         state.servers = distro.servers;
         await api.saveServers(distro.servers);
         addLog(`[Distro] Lista actualizada: ${distro.servers.length} servidores, ${distro.servers.reduce((sum, s) => sum + s.mods.length, 0)} mods totales`, 'success');
@@ -429,6 +484,73 @@ async function loadServers() {
   }
 
   renderServerList();
+}
+
+/**
+ * Compare old vs new server data and show toast notifications for changes.
+ */
+function detectServerChanges(oldServers, newServers) {
+  if (!oldServers || oldServers.length === 0) return; // First load, don't notify
+
+  for (const newSrv of newServers) {
+    const oldSrv = oldServers.find(s => s.id === newSrv.id);
+
+    if (!oldSrv) {
+      showToast({
+        type: 'info', icon: 'lucide-server',
+        title: `Nuevo servidor: ${newSrv.name}`,
+        message: `${newSrv.minecraft_version} con ${newSrv.mods?.length || 0} mods`,
+        duration: 8000
+      });
+      continue;
+    }
+
+    // Compare mods
+    const oldModNames = new Set((oldSrv.mods || []).map(m => m.filename));
+    const newModNames = new Set((newSrv.mods || []).map(m => m.filename));
+    const addedMods = [...newModNames].filter(m => !oldModNames.has(m));
+    const removedMods = [...oldModNames].filter(m => !newModNames.has(m));
+
+    if (addedMods.length > 0) {
+      const names = addedMods.map(f => f.replace('.jar', '')).slice(0, 3);
+      showToast({
+        type: 'info', icon: 'lucide-package',
+        title: `${newSrv.name}: ${addedMods.length} mod(s) nuevo(s)`,
+        message: names.join(', ') + (addedMods.length > 3 ? '...' : ''),
+        duration: 8000
+      });
+    }
+
+    if (removedMods.length > 0) {
+      const names = removedMods.map(f => f.replace('.jar', '')).slice(0, 3);
+      showToast({
+        type: 'warning', icon: 'lucide-trash-2',
+        title: `${newSrv.name}: ${removedMods.length} mod(s) eliminado(s)`,
+        message: names.join(', ') + (removedMods.length > 3 ? '...' : ''),
+        duration: 6000
+      });
+    }
+
+    // Compare MC version
+    if (oldSrv.minecraft_version !== newSrv.minecraft_version) {
+      showToast({
+        type: 'warning', icon: 'lucide-refresh-cw',
+        title: `${newSrv.name} actualizado`,
+        message: `MC ${oldSrv.minecraft_version} → ${newSrv.minecraft_version}`,
+        duration: 8000
+      });
+    }
+
+    // Compare mod loader version
+    if (oldSrv.mod_loader_version !== newSrv.mod_loader_version) {
+      showToast({
+        type: 'info', icon: 'lucide-refresh-cw',
+        title: `${newSrv.name}: loader actualizado`,
+        message: `${newSrv.mod_loader} ${oldSrv.mod_loader_version} → ${newSrv.mod_loader_version}`,
+        duration: 6000
+      });
+    }
+  }
 }
 
 function getExampleServers() {
@@ -608,6 +730,19 @@ dom.btnPlay.addEventListener('click', async () => {
     addLog(`[Launch] Error sincronizando mods: ${syncResult.error}`, 'error');
   }
 
+  // Auto-register server as instance (for custom mods/shaders/resourcepacks)
+  try {
+    await api.createInstanceFromServer({
+      serverId: server.id,
+      serverName: server.name,
+      icon: server.icon,
+      mcVersion: server.minecraft_version,
+      modLoader: server.mod_loader,
+      modLoaderVersion: server.mod_loader_version,
+      serverAddress: server.address
+    });
+  } catch (e) { addLog(`[Instances] Aviso: ${e.message}`); }
+
   // Refresh mod status display after sync
   await refreshServerModStatus();
 
@@ -719,6 +854,15 @@ function setupModEvents() {
 
     if (result.success) {
       addLog('[Mods] Sincronizacion completada', 'success');
+      // Auto-register server as instance
+      try {
+        const srv = state.selectedServer;
+        await api.createInstanceFromServer({
+          serverId: srv.id, serverName: srv.name, icon: srv.icon,
+          mcVersion: srv.minecraft_version, modLoader: srv.mod_loader,
+          modLoaderVersion: srv.mod_loader_version, serverAddress: srv.address
+        });
+      } catch { /* ignore */ }
     } else {
       addLog(`[Mods] Error: ${result.error}`, 'error');
     }
@@ -921,15 +1065,25 @@ function renderInstanceList() {
       </div>`;
     return;
   }
-  state.instances.forEach(inst => {
+  // Sort: server-linked instances first, then by creation date
+  const sorted = [...state.instances].sort((a, b) => {
+    if (a.serverLinked && !b.serverLinked) return -1;
+    if (!a.serverLinked && b.serverLinked) return 1;
+    return new Date(b.created) - new Date(a.created);
+  });
+  sorted.forEach(inst => {
     const card = document.createElement('div');
     card.className = 'server-card';
+    const badge = inst.serverLinked
+      ? '<span class="instance-server-badge"><i class="lucide lucide-server"></i> Servidor</span>'
+      : '';
     card.innerHTML = `
-      <div class="server-name">${inst.icon || '🎮'} ${inst.name}</div>
+      <div class="server-name">${inst.icon || '🎮'} ${inst.name} ${badge}</div>
       <span class="server-version">${inst.minecraft_version} - ${inst.mod_loader}${inst.mod_loader_version ? ' ' + inst.mod_loader_version : ''}</span>
       <div class="server-meta">
         <span><i class="lucide lucide-calendar"></i> ${new Date(inst.created).toLocaleDateString()}</span>
         ${inst.lastPlayed ? `<span><i class="lucide lucide-gamepad-2"></i> ${new Date(inst.lastPlayed).toLocaleDateString()}</span>` : ''}
+        ${inst.serverLinked ? `<span><i class="lucide lucide-radio"></i> ${inst.serverAddress || ''}</span>` : ''}
       </div>
     `;
     card.addEventListener('click', () => selectInstance(inst));
@@ -946,7 +1100,10 @@ function showInstanceView(view) {
 
 async function selectInstance(instance) {
   state.selectedInstance = instance;
-  dom.instanceDetailName.textContent = `${instance.icon} ${instance.name}`;
+  const nameBadge = instance.serverLinked
+    ? ` <span class="instance-server-badge"><i class="lucide lucide-server"></i> Servidor</span>`
+    : '';
+  dom.instanceDetailName.innerHTML = `${instance.icon} ${instance.name}${nameBadge}`;
   dom.instanceDetailVersion.textContent = instance.minecraft_version;
   dom.instanceDetailLoader.textContent = instance.mod_loader +
     (instance.mod_loader_version ? ` ${instance.mod_loader_version}` : '');
@@ -1134,16 +1291,42 @@ function setupInstanceEvents() {
 
     addLog(`[Launch] Lanzando instancia: ${inst.name} (${inst.minecraft_version} ${inst.mod_loader})`);
 
+    // If server-linked, sync base mods first
+    if (inst.serverLinked) {
+      dom.instanceProgressText.textContent = 'Sincronizando mods del servidor...';
+      const server = state.servers.find(s => s.id === inst.serverLinked);
+      if (server) {
+        addLog(`[Launch] Sincronizando mods base de ${server.name}...`);
+        const syncResult = await api.syncMods({
+          id: server.id,
+          name: server.name,
+          mods: server.mods,
+          configsUrl: server.configsUrl || null
+        });
+        if (!syncResult.success) {
+          addLog(`[Launch] Aviso: Error en sync de mods base: ${syncResult.error}`, 'error');
+        }
+      }
+    }
+
     // Update lastPlayed
     await api.updateInstanceLastPlayed(inst.id);
 
-    const launchResult = await api.launch({
+    // Build launch options
+    const launchOpts = {
       version: inst.minecraft_version,
       serverId: inst.id,
       modLoader: inst.mod_loader,
       modLoaderVersion: inst.mod_loader_version || '',
       username: state.profile?.name || 'Player'
-    });
+    };
+
+    // Server-linked instances auto-connect to server
+    if (inst.serverLinked && inst.serverAddress) {
+      launchOpts.serverAddress = inst.serverAddress;
+    }
+
+    const launchResult = await api.launch(launchOpts);
 
     if (!launchResult.success) {
       addLog(`[Launch] Error: ${launchResult.error}`, 'error');
@@ -1612,6 +1795,13 @@ async function setupUpdateEvents() {
     dom.btnUpdateDownload.style.display = 'inline-flex';
     dom.btnUpdateInstall.style.display = 'none';
     dom.updateBarProgress.style.display = 'none';
+
+    showToast({
+      type: 'info', icon: 'lucide-download',
+      title: 'Actualizacion disponible',
+      message: `LauncherChef v${info.version} listo para descargar`,
+      duration: 10000
+    });
   });
 
   api.onUpdateNotAvailable(() => {

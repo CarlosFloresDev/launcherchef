@@ -4,7 +4,7 @@
 ; ============================================================
 ;  BRANDING
 ; ============================================================
-BrandingText "LauncherChef v2.0.0"
+BrandingText "LauncherChef v2.1.0"
 
 ; ============================================================
 ;  MUI TEXT CUSTOMIZATION (guarded to avoid duplicates)
