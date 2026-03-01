@@ -520,6 +520,49 @@ body {
   box-shadow: 0 0 8px rgba(255, 51, 68, 0.6);
 }
 
+/* Pulse animation on online status dot */
+@keyframes pingPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 255, 65, 0.6); }
+  50% { box-shadow: 0 0 16px rgba(0, 255, 65, 0.9); }
+}
+
+.server-card .server-status:not(.offline) {
+  animation: pingPulse 2s ease-in-out infinite;
+}
+
+/* Server Ping Info (inside cards) */
+.server-ping-info {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+}
+
+.server-ping-info .lucide {
+  font-size: 11px;
+  margin-right: 3px;
+}
+
+.ping-good { color: #00ff41; }
+.ping-ok { color: #ffb800; }
+.ping-bad { color: #ff3344; }
+.ping-offline { color: var(--text-muted); font-style: italic; }
+.player-count { color: var(--text-secondary); }
+
+/* Detail view ping status */
+.status-online-text {
+  color: #00ff41;
+  font-weight: 600;
+}
+
+.status-offline-text {
+  color: #ff3344;
+  font-weight: 600;
+}
+
 /* ============================================
    Server Detail View
    ============================================ */

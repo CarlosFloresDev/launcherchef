@@ -150,6 +150,9 @@ require('./src/lib/instanceHandler')(ipcMain, getDataDir, CONFIG_DIR);
 // GitHub mod upload module
 require('./src/lib/githubHandler')(ipcMain, getDataDir, CONFIG_DIR);
 
+// Server ping module (Minecraft SLP protocol)
+require('./src/lib/serverPingHandler')(ipcMain);
+
 // Settings persistence
 const SETTINGS_FILE = path.join(CONFIG_DIR, 'settings.json');
 const SERVERS_FILE = path.join(CONFIG_DIR, 'servers.json');
