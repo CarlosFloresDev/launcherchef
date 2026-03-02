@@ -379,28 +379,36 @@ module.exports = function (ipcMain, getDataDir, configDir) {
         fs.mkdirSync(instanceDir, { recursive: true });
       }
 
-      // Get auth
+      // Get auth — NOTE: Authenticator.getAuth() is async in MCLC v3
       let authObj;
+      let isOfflineAccount = true;
       try {
         const authFile = path.join(CONFIG_PATH, 'auth.json');
         if (fs.existsSync(authFile)) {
           const authData = JSON.parse(fs.readFileSync(authFile, 'utf-8'));
           if (authData.premium === false || !authData.mcToken) {
-            authObj = Authenticator.getAuth(authData.name || 'Player');
+            // Offline mode
+            authObj = await Authenticator.getAuth(authData.name || 'Player');
+            authObj.meta = { type: 'mojang', demo: false };
           } else {
+            // Premium Microsoft account
+            isOfflineAccount = false;
             authObj = {
               access_token: authData.mcToken,
               client_token: '',
               uuid: authData.uuid || authData.profile?.id || '',
               name: authData.name || authData.profile?.name || 'Player',
-              user_properties: '{}'
+              user_properties: '{}',
+              meta: { type: 'msa', demo: false }
             };
           }
         } else {
-          authObj = Authenticator.getAuth(options.username || 'Player');
+          authObj = await Authenticator.getAuth(options.username || 'Player');
+          authObj.meta = { type: 'mojang', demo: false };
         }
       } catch {
-        authObj = Authenticator.getAuth(options.username || 'Player');
+        authObj = await Authenticator.getAuth(options.username || 'Player');
+        authObj.meta = { type: 'mojang', demo: false };
       }
 
       // Determine mod loader
@@ -431,6 +439,20 @@ module.exports = function (ipcMain, getDataDir, configDir) {
           gameDirectory: instanceDir
         }
       };
+
+      // For offline accounts: bypass Xbox Live multiplayer check
+      // Redirects Minecraft services API to an invalid host so the game
+      // can't verify account and defaults to allowing multiplayer
+      if (isOfflineAccount) {
+        launchOpts.customArgs = [
+          '-Dminecraft.api.env=custom',
+          '-Dminecraft.api.auth.host=https://nope.invalid',
+          '-Dminecraft.api.account.host=https://nope.invalid',
+          '-Dminecraft.api.session.host=https://nope.invalid',
+          '-Dminecraft.api.services.host=https://nope.invalid'
+        ];
+        event.sender.send('log', '[LauncherChef] Modo offline: bypass de servicios Xbox Live para multiplayer');
+      }
 
       // Handle mod loaders
       if (modLoader === 'neoforge') {

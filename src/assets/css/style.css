@@ -907,6 +907,176 @@ body {
 }
 
 /* ============================================
+   Game History
+   ============================================ */
+.history-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: rgba(18, 18, 30, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 65, 0.08);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
+}
+
+.history-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(18, 18, 30, 0.8);
+  border: 1px solid rgba(0, 255, 65, 0.06);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+}
+
+.history-entry:hover {
+  border-color: rgba(0, 255, 65, 0.2);
+  background: rgba(18, 18, 30, 0.95);
+}
+
+.history-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+
+.history-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.history-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.history-type-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.history-type-badge .lucide {
+  font-size: 9px;
+}
+
+.history-type-badge.server {
+  background: rgba(0, 255, 65, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(0, 255, 65, 0.15);
+}
+
+.history-type-badge.instance {
+  background: rgba(100, 140, 255, 0.1);
+  color: #648cff;
+  border: 1px solid rgba(100, 140, 255, 0.15);
+}
+
+.history-version {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.history-player {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.history-player .lucide {
+  font-size: 9px;
+}
+
+.history-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.history-duration {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.duration-long { color: var(--accent); }
+.duration-medium { color: #ffb800; }
+.duration-short { color: var(--text-secondary); }
+
+.history-date {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.history-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.history-entry:hover .history-delete {
+  opacity: 1;
+}
+
+.history-delete:hover {
+  color: var(--danger);
+  background: rgba(255, 51, 68, 0.1);
+}
+
+.history-delete .lucide {
+  font-size: 13px;
+}
+
+/* ============================================
    Settings
    ============================================ */
 .settings-group {

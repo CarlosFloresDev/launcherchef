@@ -153,6 +153,9 @@ require('./src/lib/githubHandler')(ipcMain, getDataDir, CONFIG_DIR);
 // Server ping module (Minecraft SLP protocol)
 require('./src/lib/serverPingHandler')(ipcMain);
 
+// Game history module
+require('./src/lib/gameHistoryHandler')(ipcMain, CONFIG_DIR);
+
 // Settings persistence
 const SETTINGS_FILE = path.join(CONFIG_DIR, 'settings.json');
 const SERVERS_FILE = path.join(CONFIG_DIR, 'servers.json');
