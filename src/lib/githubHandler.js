@@ -571,6 +571,18 @@ module.exports = function (ipcMain, getDataDir, configDir) {
 
       if (updateRes.statusCode === 200 || updateRes.statusCode === 201) {
         sender.send('log', `[GitHub] Mod eliminado de distribution.json: ${modFilename}`);
+
+        // Also delete the local .jar file from the instance
+        try {
+          const localModPath = path.join(getDataDir(), 'instances', serverId, 'mods', modFilename);
+          if (fs.existsSync(localModPath)) {
+            fs.unlinkSync(localModPath);
+            sender.send('log', `[GitHub] Mod local eliminado: ${modFilename}`);
+          }
+        } catch (localErr) {
+          sender.send('log', `[GitHub] Aviso: No se pudo eliminar mod local: ${localErr.message}`);
+        }
+
         return {
           success: true,
           newFileSha: updateRes.data.content ? updateRes.data.content.sha : null,

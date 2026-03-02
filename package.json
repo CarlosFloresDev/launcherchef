@@ -1,6 +1,6 @@
 {
   "name": "launcherchef",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "LauncherChef - Launcher de Minecraft con gestión automática de mods",
   "main": "main.js",
   "scripts": {

@@ -61,6 +61,11 @@ contextBridge.exposeInMainWorld('launcherAPI', {
   // Server ping
   pingServer: (address) => ipcRenderer.invoke('server:ping', address),
 
+  // Game history
+  saveGameSession: (session) => ipcRenderer.invoke('game-history:save', session),
+  loadGameHistory: () => ipcRenderer.invoke('game-history:load'),
+  deleteGameSession: (id) => ipcRenderer.invoke('game-history:delete', id),
+
   // GitHub mod upload
   selectModsForUpload: () => ipcRenderer.invoke('github:selectMods'),
   uploadModsToGithub: (opts) => ipcRenderer.invoke('github:upload', opts),

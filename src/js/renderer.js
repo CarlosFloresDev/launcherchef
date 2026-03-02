@@ -24,7 +24,10 @@ let state = {
     ramMax: 4096,
     javaPath: '',
     distroUrl: ''
-  }
+  },
+  gameHistory: [],
+  currentSession: null,
+  launchSource: null
 };
 
 // Server ping cache
@@ -171,7 +174,10 @@ const dom = {
   // Ping detail
   detailPingStatus: $('#detail-ping-status'),
   detailPingLatency: $('#detail-ping-latency'),
-  detailPingPlayers: $('#detail-ping-players')
+  detailPingPlayers: $('#detail-ping-players'),
+  // Game History
+  historyStats: $('#history-stats'),
+  historyList: $('#history-list')
 };
 
 // ============================================
@@ -195,6 +201,7 @@ async function init() {
   setupModManagerEvents();
   setupProgressEvents();
   setupUpdateEvents();
+  await loadGameHistory();
 }
 
 // ============================================
@@ -824,6 +831,7 @@ dom.btnPlay.addEventListener('click', async () => {
 
   const server = state.selectedServer;
   state.playing = true;
+  state.launchSource = 'server'; // Track what we're launching
   updatePlayButton();
 
   // Show progress
@@ -907,7 +915,7 @@ function setupProgressEvents() {
     }
   });
 
-  api.onGameClose(() => {
+  api.onGameClose(async () => {
     state.playing = false;
     updatePlayButton();
     dom.progressContainer.style.display = 'none';
@@ -924,6 +932,25 @@ function setupProgressEvents() {
       dom.btnCloseGame.style.display = 'none';
     }
     addLog('[LauncherChef] Minecraft se ha cerrado', 'warn');
+
+    // --- Save game session to history ---
+    if (state.currentSession) {
+      const endTime = new Date().toISOString();
+      const startMs = new Date(state.currentSession.startTime).getTime();
+      const endMs = new Date(endTime).getTime();
+      state.currentSession.endTime = endTime;
+      state.currentSession.duration = endMs - startMs;
+      try {
+        await api.saveGameSession(state.currentSession);
+        addLog(`[Historial] Sesion guardada: ${state.currentSession.targetName} (${formatDuration(state.currentSession.duration)})`);
+      } catch (err) {
+        addLog(`[Historial] Error guardando sesion: ${err.message}`, 'error');
+      }
+      state.currentSession = null;
+      state.launchSource = null;
+      // Refresh history view
+      await loadGameHistory();
+    }
   });
 
   api.onGameStart(() => {
@@ -943,6 +970,167 @@ function setupProgressEvents() {
     if (dom.btnCloseGame) {
       dom.btnCloseGame.style.display = 'inline-flex';
     }
+
+    // --- Start tracking game session ---
+    const now = new Date().toISOString();
+    const sessionId = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+    if (state.launchSource === 'server' && state.selectedServer) {
+      const srv = state.selectedServer;
+      state.currentSession = {
+        id: sessionId,
+        type: 'server',
+        targetId: srv.id,
+        targetName: srv.name,
+        targetIcon: srv.icon || '🖥️',
+        playerName: state.profile?.name || 'Offline',
+        startTime: now,
+        endTime: null,
+        duration: 0,
+        mcVersion: srv.minecraft_version,
+        modLoader: `${srv.mod_loader} ${srv.mod_loader_version}`
+      };
+    } else if (state.launchSource === 'instance' && state.selectedInstance) {
+      const inst = state.selectedInstance;
+      state.currentSession = {
+        id: sessionId,
+        type: 'instance',
+        targetId: inst.id,
+        targetName: inst.name,
+        targetIcon: inst.icon || '📦',
+        playerName: state.profile?.name || 'Offline',
+        startTime: now,
+        endTime: null,
+        duration: 0,
+        mcVersion: inst.minecraft_version,
+        modLoader: inst.mod_loader || 'vanilla'
+      };
+    }
+
+    if (state.currentSession) {
+      addLog(`[Historial] Sesion iniciada: ${state.currentSession.targetName}`);
+    }
+  });
+}
+
+// ============================================
+// Game History
+// ============================================
+function formatDuration(ms) {
+  if (!ms || ms <= 0) return '< 1 min';
+  const totalMin = Math.floor(ms / 60000);
+  const hours = Math.floor(totalMin / 60);
+  const mins = totalMin % 60;
+  if (hours > 0) return `${hours}h ${mins}min`;
+  return `${mins} min`;
+}
+
+function formatHistoryDate(isoStr) {
+  const d = new Date(isoStr);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const isToday = d.toDateString() === today.toDateString();
+  const isYesterday = d.toDateString() === yesterday.toDateString();
+
+  const time = d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+
+  if (isToday) return `Hoy, ${time}`;
+  if (isYesterday) return `Ayer, ${time}`;
+  return `${d.toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })}, ${time}`;
+}
+
+async function loadGameHistory() {
+  try {
+    state.gameHistory = await api.loadGameHistory();
+  } catch {
+    state.gameHistory = [];
+  }
+  renderHistory();
+}
+
+function renderHistoryStats() {
+  const history = state.gameHistory;
+  const totalSessions = history.length;
+  const totalTime = history.reduce((sum, s) => sum + (s.duration || 0), 0);
+
+  // Most played target
+  const playCount = {};
+  history.forEach(s => {
+    const key = s.targetName || s.targetId;
+    playCount[key] = (playCount[key] || 0) + 1;
+  });
+  const mostPlayed = Object.entries(playCount).sort((a, b) => b[1] - a[1])[0];
+
+  dom.historyStats.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${totalSessions}</div>
+      <div class="stat-label">Sesiones</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${formatDuration(totalTime)}</div>
+      <div class="stat-label">Tiempo Total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${mostPlayed ? mostPlayed[0] : '—'}</div>
+      <div class="stat-label">Mas Jugado</div>
+    </div>
+  `;
+}
+
+function renderHistory() {
+  renderHistoryStats();
+
+  const history = state.gameHistory;
+
+  if (!history || history.length === 0) {
+    dom.historyList.innerHTML = '<div class="empty-state"><i class="lucide lucide-calendar" style="font-size:32px;opacity:0.3"></i><br>Sin sesiones registradas</div>';
+    return;
+  }
+
+  dom.historyList.innerHTML = '';
+
+  history.forEach(session => {
+    const entry = document.createElement('div');
+    entry.className = 'history-entry';
+    const typeBadge = session.type === 'server'
+      ? '<span class="history-type-badge server"><i class="lucide lucide-server"></i> Servidor</span>'
+      : '<span class="history-type-badge instance"><i class="lucide lucide-gamepad-2"></i> Instancia</span>';
+
+    const durationClass = session.duration > 3600000 ? 'duration-long' : session.duration > 1800000 ? 'duration-medium' : 'duration-short';
+
+    entry.innerHTML = `
+      <div class="history-icon">${session.targetIcon || '🎮'}</div>
+      <div class="history-info">
+        <div class="history-name">${session.targetName || session.targetId}</div>
+        <div class="history-meta">
+          ${typeBadge}
+          <span class="history-version">${session.mcVersion || ''}</span>
+          <span class="history-player"><i class="lucide lucide-gamepad-2"></i> ${session.playerName || ''}</span>
+        </div>
+      </div>
+      <div class="history-right">
+        <div class="history-duration ${durationClass}">${formatDuration(session.duration)}</div>
+        <div class="history-date">${formatHistoryDate(session.startTime)}</div>
+      </div>
+      <button class="history-delete" data-id="${session.id}" title="Eliminar"><i class="lucide lucide-trash-2"></i></button>
+    `;
+
+    // Delete button handler
+    entry.querySelector('.history-delete').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = e.currentTarget.dataset.id;
+      try {
+        await api.deleteGameSession(id);
+        addLog('[Historial] Sesion eliminada');
+        await loadGameHistory();
+      } catch (err) {
+        addLog(`[Historial] Error eliminando: ${err.message}`, 'error');
+      }
+    });
+
+    dom.historyList.appendChild(entry);
   });
 }
 
@@ -1394,6 +1582,7 @@ function setupInstanceEvents() {
     const inst = state.selectedInstance;
 
     state.playing = true;
+    state.launchSource = 'instance'; // Track what we're launching
     updatePlayButton();
     dom.btnInstancePlay.disabled = true;
     dom.btnInstancePlay.innerHTML = '<span class="play-icon"><i class="lucide lucide-loader lucide-spin"></i></span> LANZANDO...';
