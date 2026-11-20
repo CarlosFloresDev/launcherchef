@@ -1,11 +1,12 @@
 {
   "ramMin": 1024,
-  "ramMax": 6144,
-  "javaPath": "C:\\Users\\car_g\\curseforge\\minecraft\\Install\\java\\Jre_21\\bin\\javaw.exe",
-  "dataDir": "D:\\Minecraft",
+  "ramMax": 4096,
+  "javaPath": "",
+  "dataDir": "",
   "distroUrl": "https://raw.githubusercontent.com/CarlosFloresDev/tortillaland-mods/main/distribution.json",
   "githubToken": "",
-  "githubOwner": "CarlosFloresDev",
-  "githubRepo": "tortillaland-mods",
-  "githubTag": "v1"
+  "githubOwner": "",
+  "githubRepo": "",
+  "githubTag": "v1",
+  "adminMode": false
 }

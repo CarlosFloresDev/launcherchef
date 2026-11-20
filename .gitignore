@@ -8,3 +8,8 @@ tortillaland-mods-temp/
 .env
 config/auth.json
 config/local.json
+
+# Local state
+.dev/
+config/instances.json
+config/game-history.json

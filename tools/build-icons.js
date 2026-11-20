@@ -12,6 +12,8 @@ for (const rel of new Set(sources)) {
   const text = fs.readFileSync(path.join(ROOT, rel), 'utf8');
   for (const m of text.matchAll(/lucide-([a-z0-9-]+)/g)) used.add(m[1]);
   for (const m of text.matchAll(/data-icon="([a-z0-9-]+)"/g)) used.add(m[1]);
+  // Icon names passed as plain strings in JS (LCIcon('x'), INSTANCE_ICONS, ...); non-icon words are skipped below.
+  if (rel.endsWith('.js')) for (const m of text.matchAll(/['"`]([a-z][a-z0-9-]{1,30})['"`]/g)) used.add(m[1]);
 }
 
 const symbols = [];

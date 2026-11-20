@@ -4,6 +4,7 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 const AdmZip = require('adm-zip');
+const { readJson, writeJson } = require('./secureStore');
 
 module.exports = function (ipcMain, getDataDir, configDir) {
   const launcher = new Client();
@@ -221,8 +222,22 @@ module.exports = function (ipcMain, getDataDir, configDir) {
       let isOfflineAccount = true;
       try {
         const authFile = path.join(CONFIG_PATH, 'auth.json');
-        if (fs.existsSync(authFile)) {
-          const authData = JSON.parse(fs.readFileSync(authFile, 'utf-8'));
+        const authData = readJson(authFile);
+        if (authData) {
+          // Microsoft tokens last about 24 h: refresh before every launch so online play keeps working.
+          if (authData.premium !== false && authData.refreshToken) {
+            try {
+              const { Auth } = require('msmc');
+              const xbox = await new Auth('select_account').refresh(authData.refreshToken);
+              const mc = await xbox.getMinecraft();
+              authData.mcToken = mc.mcToken;
+              authData.refreshToken = mc.refreshTkn || authData.refreshToken;
+              writeJson(authFile, authData);
+              event.sender.send('log', '[Auth] Sesión de Microsoft renovada.');
+            } catch (refreshErr) {
+              event.sender.send('log', `[Auth] No se pudo renovar la sesión (${refreshErr.message}); se usa la guardada.`);
+            }
+          }
           if (authData.premium === false || !authData.mcToken) {
             // Offline mode
             authObj = await Authenticator.getAuth(authData.name || 'Player');

@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, safeStorage } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { readJson, writeJson } = require('./src/lib/secureStore');
 
 // ============================================
 // Paths - use userData for packaged builds
@@ -9,8 +10,8 @@ const IS_DEV = !app.isPackaged;
 const ROOT_DIR = __dirname;
 
 // When packaged: AppData/Roaming/LauncherChef
-// When dev: ./minecraft_data and ./config
-const USER_DATA = IS_DEV ? ROOT_DIR : app.getPath('userData');
+// When dev: ./.dev (git-ignored) so personal state never ends up in the repo or the installer
+const USER_DATA = IS_DEV ? path.join(ROOT_DIR, '.dev') : app.getPath('userData');
 const DEFAULT_DATA_DIR = path.join(USER_DATA, 'minecraft_data');
 const CONFIG_DIR = path.join(USER_DATA, 'config');
 
@@ -77,9 +78,17 @@ function createWindow() {
     webPreferences: {
       preload: path.join(ROOT_DIR, 'preload.js'),
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      sandbox: true
     }
   });
+
+  // Never open new Electron windows or navigate away from the app; external links go to the browser.
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  mainWindow.webContents.on('will-navigate', (e) => e.preventDefault());
 
   mainWindow.loadFile(path.join(ROOT_DIR, 'src', 'pages', 'index.html'));
 
@@ -98,7 +107,10 @@ ipcMain.on('window:maximize', () => {
   }
 });
 ipcMain.on('window:close', () => mainWindow?.close());
-ipcMain.on('shell:openExternal', (_e, url) => shell.openExternal(url));
+ipcMain.on('shell:openExternal', (_e, url) => {
+  // Only web links; blocks file:// and custom protocols coming from page content.
+  if (typeof url === 'string' && /^https?:\/\//.test(url)) shell.openExternal(url);
+});
 
 // Expose paths to renderer
 ipcMain.handle('get:paths', () => ({
@@ -163,9 +175,28 @@ require('./src/lib/modrinthHandler')(ipcMain, getDataDir, CONFIG_DIR);
 const SETTINGS_FILE = path.join(CONFIG_DIR, 'settings.json');
 const SERVERS_FILE = path.join(CONFIG_DIR, 'servers.json');
 
+// The GitHub token is encrypted at rest with the OS keychain (DPAPI on Windows) when available.
+function encryptSecret(value) {
+  if (!value || !safeStorage.isEncryptionAvailable()) return null;
+  return safeStorage.encryptString(value).toString('base64');
+}
+function decryptSecret(value) {
+  try {
+    return value ? safeStorage.decryptString(Buffer.from(value, 'base64')) : '';
+  } catch {
+    return '';
+  }
+}
+
 ipcMain.handle('settings:save', (_e, settings) => {
   try {
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+    const toStore = { ...settings };
+    const encrypted = encryptSecret(settings.githubToken);
+    if (encrypted) {
+      toStore.githubTokenEnc = encrypted;
+      delete toStore.githubToken;
+    }
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(toStore, null, 2));
     return { success: true };
   } catch (err) {
     return { success: false, error: err.message };
@@ -175,7 +206,12 @@ ipcMain.handle('settings:save', (_e, settings) => {
 ipcMain.handle('settings:load', () => {
   try {
     if (fs.existsSync(SETTINGS_FILE)) {
-      return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf-8'));
+      const stored = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf-8'));
+      if (stored.githubTokenEnc) {
+        stored.githubToken = decryptSecret(stored.githubTokenEnc);
+        delete stored.githubTokenEnc;
+      }
+      return stored;
     }
   } catch { /* ignore */ }
   return { ramMin: 1024, ramMax: 6144, javaPath: '', dataDir: '', distroUrl: 'https://raw.githubusercontent.com/CarlosFloresDev/tortillaland-mods/main/distribution.json' };
@@ -245,7 +281,7 @@ async function refreshMcToken() {
   const AUTH_FILE = path.join(CONFIG_DIR, 'auth.json');
   if (!fs.existsSync(AUTH_FILE)) return null;
 
-  const authData = JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8'));
+  const authData = readJson(AUTH_FILE);
   if (!authData.refreshToken) return authData.mcToken || null;
 
   try {
@@ -257,7 +293,7 @@ async function refreshMcToken() {
     // Update saved tokens
     authData.mcToken = mc.mcToken;
     authData.refreshToken = mc.refreshTkn || authData.refreshToken;
-    fs.writeFileSync(AUTH_FILE, JSON.stringify(authData, null, 2));
+    writeJson(AUTH_FILE, authData);
 
     console.log('[Skin] Token refrescado exitosamente');
     return mc.mcToken;
@@ -275,7 +311,7 @@ ipcMain.handle('skin:upload', async (_e, { filePath, variant }) => {
     if (!fs.existsSync(AUTH_FILE)) {
       return { success: false, error: 'No hay sesion activa' };
     }
-    const authData = JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8'));
+    const authData = readJson(AUTH_FILE);
     if (!authData.mcToken) {
       return { success: false, error: 'Solo cuentas Premium pueden cambiar su skin' };
     }
@@ -353,7 +389,7 @@ ipcMain.handle('skin:getProfile', async () => {
   try {
     const SETTINGS_AUTH = path.join(CONFIG_DIR, 'auth.json');
     if (!fs.existsSync(SETTINGS_AUTH)) return { success: false };
-    const authData = JSON.parse(fs.readFileSync(SETTINGS_AUTH, 'utf-8'));
+    const authData = readJson(SETTINGS_AUTH);
     return {
       success: true,
       uuid: authData.uuid || authData.profile?.id || '',

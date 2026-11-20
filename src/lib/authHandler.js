@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { readJson, writeJson } = require('./secureStore');
 
 module.exports = function (ipcMain, configDir) {
   // Use configDir passed from main.js (resolves to correct location in both dev and packaged)
@@ -11,19 +12,12 @@ module.exports = function (ipcMain, configDir) {
   let currentMCToken = null;
 
   function loadSavedAuth() {
-    try {
-      if (fs.existsSync(AUTH_FILE)) {
-        return JSON.parse(fs.readFileSync(AUTH_FILE, 'utf-8'));
-      }
-    } catch {
-      // Corrupted auth file
-    }
-    return null;
+    return readJson(AUTH_FILE);
   }
 
   function saveAuth(data) {
     try {
-      fs.writeFileSync(AUTH_FILE, JSON.stringify(data, null, 2));
+      writeJson(AUTH_FILE, data);
     } catch {
       // Non-critical
     }

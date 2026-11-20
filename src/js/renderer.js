@@ -148,6 +148,7 @@ const dom = {
   javaPath: $('#java-path'),
   distroUrl: $('#distro-url'),
   githubToken: $('#github-token'),
+  adminMode: $('#admin-mode'),
   githubOwner: $('#github-owner'),
   githubRepo: $('#github-repo'),
   githubTag: $('#github-tag'),
@@ -259,6 +260,33 @@ function setupLogConsole() {
   });
 }
 
+// Instance/server icons are Lucide icon names. Older data stored emojis, so map those to icons.
+const EMOJI_TO_ICON = {
+  '🎮': 'gamepad-2', '⚔️': 'sword', '🏰': 'castle', '🌍': 'trees', '🔧': 'wrench', '🍖': 'utensils',
+  '🎯': 'crosshair', '🚀': 'rocket', '🌙': 'moon', '💎': 'gem', '🌮': 'utensils', '🖥️': 'server', '📦': 'package',
+};
+const INSTANCE_ICONS = ['gamepad-2', 'sword', 'castle', 'trees', 'pickaxe', 'flame', 'gem', 'rocket', 'shield', 'mountain'];
+
+function iconName(icon, fallback = 'box') {
+  if (!icon) return fallback;
+  if (EMOJI_TO_ICON[icon]) return EMOJI_TO_ICON[icon];
+  return /^[a-z0-9-]+$/.test(icon) ? icon : fallback;
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+}
+
+function iconHtml(icon, fallback) {
+  return LCIcon(iconName(icon, fallback), 'entity-icon');
+}
+
+// Admin tools (GitHub upload / mod manager) are hidden unless admin mode is enabled in Settings.
+function applyAdminMode() {
+  const on = Boolean(dom.adminMode && dom.adminMode.checked);
+  document.querySelectorAll('.admin-only').forEach((el) => { el.hidden = !on; });
+}
+
 function addLog(msg, type = '') {
   const line = document.createElement('div');
   line.className = `log-line ${type}`;
@@ -342,6 +370,8 @@ async function loadSettings() {
   dom.javaPath.value = state.settings.javaPath || '';
   dom.distroUrl.value = state.settings.distroUrl || '';
   dom.githubToken.value = state.settings.githubToken || '';
+  dom.adminMode.checked = Boolean(state.settings.adminMode);
+  applyAdminMode();
   dom.githubOwner.value = state.settings.githubOwner || '';
   dom.githubRepo.value = state.settings.githubRepo || '';
   dom.githubTag.value = state.settings.githubTag || 'v1';
@@ -579,7 +609,7 @@ function getExampleServers() {
       minecraft_version: '1.20.4',
       mod_loader: 'fabric',
       mod_loader_version: '0.15.6',
-      icon: '🍖',
+      icon: 'utensils',
       status: 'online',
       mods: [
         { name: 'Sodium', filename: 'sodium-fabric-0.5.8+mc1.20.4.jar', url: '', sha256: '', required: true },
@@ -596,7 +626,7 @@ function getExampleServers() {
       minecraft_version: '1.20.1',
       mod_loader: 'forge',
       mod_loader_version: '47.2.0',
-      icon: '🔧',
+      icon: 'wrench',
       status: 'online',
       mods: [
         { name: 'Create', filename: 'create-1.20.1-0.5.1f.jar', url: '', sha256: '', required: true },
@@ -614,7 +644,7 @@ function getExampleServers() {
       minecraft_version: '1.20.4',
       mod_loader: 'fabric',
       mod_loader_version: '0.15.6',
-      icon: '⚔️',
+      icon: 'sword',
       status: 'offline',
       mods: [
         { name: 'Sodium', filename: 'sodium-fabric-0.5.8+mc1.20.4.jar', url: '', sha256: '', required: true },
@@ -632,7 +662,7 @@ function renderServerList() {
     card.dataset.serverId = server.id;
     card.innerHTML = `
       <div class="server-status ${server.status === 'online' ? '' : 'offline'}"></div>
-      <div class="server-name">${server.icon || '🖥️'} ${server.name}</div>
+      <div class="server-name">${iconHtml(server.icon, 'server')} ${server.name}</div>
       <span class="server-version">${server.minecraft_version} - ${server.mod_loader}</span>
       <p class="server-description">${server.description}</p>
       <div class="server-meta">
@@ -653,7 +683,7 @@ async function selectServer(server) {
   dom.serverDetail.style.display = 'block';
 
   // Fill detail
-  dom.detailName.textContent = `${server.icon || ''} ${server.name}`;
+  dom.detailName.innerHTML = `${iconHtml(server.icon, 'server')} ${escapeHtml(server.name)}`;
   dom.detailVersion.textContent = server.minecraft_version;
   dom.detailLoader.textContent = `${server.mod_loader} ${server.mod_loader_version}`;
   dom.detailModCount.textContent = server.mods.length;
@@ -982,7 +1012,7 @@ function setupProgressEvents() {
         type: 'server',
         targetId: srv.id,
         targetName: srv.name,
-        targetIcon: srv.icon || '🖥️',
+        targetIcon: iconName(srv.icon, 'server'),
         playerName: state.profile?.name || 'Offline',
         startTime: now,
         endTime: null,
@@ -997,7 +1027,7 @@ function setupProgressEvents() {
         type: 'instance',
         targetId: inst.id,
         targetName: inst.name,
-        targetIcon: inst.icon || '📦',
+        targetIcon: iconName(inst.icon, 'package'),
         playerName: state.profile?.name || 'Offline',
         startTime: now,
         endTime: null,
@@ -1101,7 +1131,7 @@ function renderHistory() {
     const durationClass = session.duration > 3600000 ? 'duration-long' : session.duration > 1800000 ? 'duration-medium' : 'duration-short';
 
     entry.innerHTML = `
-      <div class="history-icon">${session.targetIcon || '🎮'}</div>
+      <div class="history-icon">${iconHtml(session.targetIcon, 'gamepad-2')}</div>
       <div class="history-info">
         <div class="history-name">${session.targetName || session.targetId}</div>
         <div class="history-meta">
@@ -1349,7 +1379,7 @@ async function refreshSkinPreview() {
 // ============================================
 // Instances
 // ============================================
-let selectedIcon = '🎮';
+let selectedIcon = 'gamepad-2';
 
 async function loadInstances() {
   state.instances = await api.listInstances();
@@ -1379,7 +1409,7 @@ function renderInstanceList() {
       ? '<span class="instance-server-badge"><i class="lucide lucide-server"></i> Servidor</span>'
       : '';
     card.innerHTML = `
-      <div class="server-name">${inst.icon || '🎮'} ${inst.name} ${badge}</div>
+      <div class="server-name">${iconHtml(inst.icon, 'gamepad-2')} ${inst.name} ${badge}</div>
       <span class="server-version">${inst.minecraft_version} - ${inst.mod_loader}${inst.mod_loader_version ? ' ' + inst.mod_loader_version : ''}</span>
       <div class="server-meta">
         <span><i class="lucide lucide-calendar"></i> ${new Date(inst.created).toLocaleDateString()}</span>
@@ -1404,7 +1434,7 @@ async function selectInstance(instance) {
   const nameBadge = instance.serverLinked
     ? ` <span class="instance-server-badge"><i class="lucide lucide-server"></i> Servidor</span>`
     : '';
-  dom.instanceDetailName.innerHTML = `${instance.icon} ${instance.name}${nameBadge}`;
+  dom.instanceDetailName.innerHTML = `${iconHtml(instance.icon, 'gamepad-2')} ${escapeHtml(instance.name)}${nameBadge}`;
   dom.instanceDetailVersion.textContent = instance.minecraft_version;
   dom.instanceDetailLoader.textContent = instance.mod_loader +
     (instance.mod_loader_version ? ` ${instance.mod_loader_version}` : '');
@@ -1443,7 +1473,7 @@ async function refreshInstanceFiles() {
     item.innerHTML = `
       <span class="mod-item-name">${file.filename}</span>
       <span class="mod-item-size">${sizeMB} MB</span>
-      <button class="btn-remove-file" data-filename="${file.filename}">✕</button>
+      <button class="btn-remove-file" data-filename="${file.filename}" aria-label="Quitar">${LCIcon('x')}</button>
     `;
     item.querySelector('.btn-remove-file').addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -1458,9 +1488,8 @@ async function refreshInstanceFiles() {
 
 function setupInstanceEvents() {
   // Icon picker
-  const icons = ['🎮', '⚔️', '🏰', '🌍', '🔧', '🍖', '🎯', '🚀', '🌙', '💎'];
-  dom.instanceIconPicker.innerHTML = icons
-    .map(icon => `<button class="icon-btn${icon === '🎮' ? ' active' : ''}" data-icon="${icon}">${icon}</button>`)
+  dom.instanceIconPicker.innerHTML = INSTANCE_ICONS
+    .map(icon => `<button class="icon-btn${icon === 'gamepad-2' ? ' active' : ''}" data-icon="${icon}" aria-label="${icon}">${LCIcon(icon)}</button>`)
     .join('');
   dom.instanceIconPicker.addEventListener('click', (e) => {
     const btn = e.target.closest('.icon-btn');
@@ -1476,9 +1505,9 @@ function setupInstanceEvents() {
     dom.instanceName.value = '';
     dom.instanceLoader.value = 'vanilla';
     dom.loaderVersionRow.style.display = 'none';
-    selectedIcon = '🎮';
+    selectedIcon = 'gamepad-2';
     dom.instanceIconPicker.querySelectorAll('.icon-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.icon === '🎮');
+      b.classList.toggle('active', b.dataset.icon === 'gamepad-2');
     });
 
     // Populate MC versions
@@ -1786,7 +1815,7 @@ function populateUploadServerSelect() {
   state.servers.forEach(server => {
     const option = document.createElement('option');
     option.value = server.id;
-    option.textContent = `${server.icon || ''} ${server.name} (${server.mods.length} mods)`;
+    option.textContent = `${server.name} (${server.mods.length} mods)`;
     dom.uploadServerSelect.appendChild(option);
   });
 }
@@ -1813,7 +1842,7 @@ function renderUploadFileList() {
       <span class="mod-item-name">${file.name}</span>
       <span class="mod-item-version">${file.filename}</span>
       <span class="mod-item-size">${sizeMB} MB</span>
-      <button class="btn-remove-file" data-index="${index}">✕</button>
+      <button class="btn-remove-file" data-index="${index}" aria-label="Quitar">${LCIcon('x')}</button>
     `;
     item.querySelector('.btn-remove-file').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1897,7 +1926,7 @@ function populateManageServerSelect() {
   state.servers.forEach(server => {
     const option = document.createElement('option');
     option.value = server.id;
-    option.textContent = `${server.icon || ''} ${server.name} (${server.mods.length} mods)`;
+    option.textContent = `${server.name} (${server.mods.length} mods)`;
     dom.manageServerSelect.appendChild(option);
   });
 }
@@ -2023,8 +2052,11 @@ function setupSettingsEvents() {
       githubToken: dom.githubToken.value.trim(),
       githubOwner: dom.githubOwner.value.trim(),
       githubRepo: dom.githubRepo.value.trim(),
-      githubTag: dom.githubTag.value.trim() || 'v1'
+      githubTag: dom.githubTag.value.trim() || 'v1',
+      adminMode: dom.adminMode.checked,
+      javaOverrides: state.settings.javaOverrides || {}
     };
+    applyAdminMode();
 
     const result = await api.saveSettings(state.settings);
     if (result.success) {
@@ -2168,3 +2200,6 @@ async function setupUpdateEvents() {
 // Start the app
 // ============================================
 document.addEventListener('DOMContentLoaded', init);
+
+// Toggle admin tools as soon as the checkbox changes (saved with the rest of the settings).
+dom.adminMode?.addEventListener('change', applyAdminMode);
