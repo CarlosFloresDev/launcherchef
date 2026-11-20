@@ -2192,3 +2192,19 @@ body {
   from { width: 100%; }
   to   { width: 0%; }
 }
+
+/* ============================================
+   SVG icons (sprite: src/assets/icons.svg)
+   ============================================ */
+svg.icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
+  vertical-align: -0.2em;
+}
+svg.icon.lucide-spin {
+  animation: lc-spin 0.9s linear infinite;
+}
+@keyframes lc-spin {
+  to { transform: rotate(360deg); }
+}
