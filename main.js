@@ -156,6 +156,9 @@ require('./src/lib/serverPingHandler')(ipcMain);
 // Game history module
 require('./src/lib/gameHistoryHandler')(ipcMain, CONFIG_DIR);
 
+// Modrinth: search and install mods, resource packs, shaders and modpacks
+require('./src/lib/modrinthHandler')(ipcMain, getDataDir, CONFIG_DIR);
+
 // Settings persistence
 const SETTINGS_FILE = path.join(CONFIG_DIR, 'settings.json');
 const SERVERS_FILE = path.join(CONFIG_DIR, 'servers.json');

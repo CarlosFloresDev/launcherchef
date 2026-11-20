@@ -58,6 +58,12 @@ contextBridge.exposeInMainWorld('launcherAPI', {
   updateInstanceLastPlayed: (id) => ipcRenderer.invoke('instances:updateLastPlayed', id),
   createInstanceFromServer: (opts) => ipcRenderer.invoke('instances:createFromServer', opts),
 
+  // Modrinth
+  modrinthSearch: (opts) => ipcRenderer.invoke('modrinth:search', opts),
+  modrinthProject: (id) => ipcRenderer.invoke('modrinth:project', id),
+  modrinthInstall: (opts) => ipcRenderer.invoke('modrinth:install', opts),
+  importModpack: (opts) => ipcRenderer.invoke('modrinth:importPack', opts),
+
   // Server ping
   pingServer: (address) => ipcRenderer.invoke('server:ping', address),
 
