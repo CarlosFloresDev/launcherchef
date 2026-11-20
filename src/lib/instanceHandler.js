@@ -177,6 +177,14 @@ module.exports = function (ipcMain, getDataDir, configDir) {
         }));
       }
 
+      if (loader === 'quilt') {
+        const data = await fetchJSON(`https://meta.quiltmc.org/v3/versions/loader/${mcVersion}`);
+        return data.slice(0, 25).map(entry => ({
+          version: entry.loader.version,
+          stable: !/(alpha|beta|pre|rc)/i.test(entry.loader.version)
+        }));
+      }
+
       if (loader === 'neoforge') {
         const data = await fetchJSON(
           'https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge'

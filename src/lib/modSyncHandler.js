@@ -4,6 +4,7 @@ const https = require('https');
 const http = require('http');
 const crypto = require('crypto');
 const AdmZip = require('adm-zip');
+const { downloadFile: netDownload, pool } = require('./net');
 
 module.exports = function (ipcMain, getDataDir) {
 
@@ -257,60 +258,33 @@ module.exports = function (ipcMain, getDataDir) {
       const results = { downloaded: 0, verified: 0, removed: toRemove.length, errors: [] };
       const total = targetMods.length;
 
-      for (let i = 0; i < targetMods.length; i++) {
-        const mod = targetMods[i];
+      // Up to 6 mods are verified/downloaded at once; each download retries and checks its SHA-256.
+      let done = 0;
+      await pool(targetMods, 6, async (mod) => {
         const modPath = path.join(modsDir, mod.filename);
-
-        event.sender.send('progress', {
-          type: 'mod-sync',
-          current: i + 1,
-          total: total,
-          name: mod.name || mod.filename
-        });
-
         try {
           if (fs.existsSync(modPath)) {
-            // Verify hash if provided
-            if (mod.sha256) {
-              const localHash = await hashFile(modPath);
-              if (localHash === mod.sha256) {
-                results.verified++;
-                continue;
-              } else {
-                event.sender.send('log', `[ModSync] Hash diferente, re-descargando: ${mod.filename}`);
-                fs.unlinkSync(modPath);
-              }
-            } else {
-              // No hash to verify, assume it's fine
+            if (!mod.sha256 || (await hashFile(modPath)) === mod.sha256) {
               results.verified++;
-              continue;
+              return;
             }
+            event.sender.send('log', `[ModSync] Hash diferente, re-descargando: ${mod.filename}`);
+            fs.unlinkSync(modPath);
           }
-
-          // Download the mod
-          if (!mod.url) {
-            throw new Error('No URL proporcionada');
-          }
+          if (!mod.url) throw new Error('No URL proporcionada');
 
           event.sender.send('log', `[ModSync] Descargando: ${mod.name || mod.filename}`);
-          await downloadFile(mod.url, modPath);
-
-          // Verify after download
-          if (mod.sha256) {
-            const downloadedHash = await hashFile(modPath);
-            if (downloadedHash !== mod.sha256) {
-              fs.unlinkSync(modPath);
-              throw new Error(`Hash no coincide para ${mod.filename}`);
-            }
-          }
-
+          await netDownload(safeEncodeUrl(mod.url), modPath, { sha256: mod.sha256 || undefined });
           results.downloaded++;
-          event.sender.send('log', `[ModSync] ✓ Descargado: ${mod.filename}`);
+          event.sender.send('log', `[ModSync] Descargado: ${mod.filename}`);
         } catch (err) {
           results.errors.push({ mod: mod.filename, error: err.message });
-          event.sender.send('log', `[ModSync] ✗ Error con ${mod.filename}: ${err.message}`);
+          event.sender.send('log', `[ModSync] Error con ${mod.filename}: ${err.message}`);
+        } finally {
+          done++;
+          event.sender.send('progress', { type: 'mod-sync', current: done, total, name: mod.name || mod.filename });
         }
-      }
+      });
 
       // Write server-mods manifest (tracks managed files so user mods are preserved)
       try {

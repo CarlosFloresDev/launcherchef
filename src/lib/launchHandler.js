@@ -18,8 +18,15 @@ module.exports = function (ipcMain, getDataDir, configDir) {
   // Support both function (dynamic) and string (legacy) for dataDir
   const resolveDataDir = typeof getDataDir === 'function' ? getDataDir : () => getDataDir;
 
-  // Directory where we store our own Java runtime
-  const JAVA_DIR = path.join(resolveDataDir(), 'java');
+  // Java runtimes are resolved per Minecraft version (8, 17, 21...) by the Java manager.
+  const createJavaManager = require('./javaManager');
+  const { ensureLoaderProfile } = require('./loaderProfiles');
+  let currentSender = null;
+  const javaManager = createJavaManager(
+    resolveDataDir,
+    (msg) => currentSender && currentSender.send('log', msg),
+    (p) => currentSender && currentSender.send('progress', p),
+  );
 
   /**
    * Download a file from URL to dest. Handles redirects.
@@ -80,184 +87,6 @@ module.exports = function (ipcMain, getDataDir, configDir) {
         res.on('error', reject);
       }).on('error', reject);
     });
-  }
-
-  /**
-   * Download and install Adoptium Java 21 JRE.
-   * Downloads a ZIP from Adoptium API, extracts it to JAVA_DIR.
-   * Returns the path to javaw.exe.
-   */
-  async function downloadJava21(sender) {
-    const javaExe = path.join(JAVA_DIR, 'bin', 'javaw.exe');
-
-    // Already downloaded?
-    if (fs.existsSync(javaExe)) {
-      sender.send('log', `[Java] Java 21 ya descargado: ${javaExe}`);
-      return javaExe;
-    }
-
-    sender.send('log', '[Java] Java 21 no encontrado. Descargando automaticamente...');
-    sender.send('progress', { type: 'java', current: 0, total: 100, name: 'Buscando Java 21...' });
-
-    if (!fs.existsSync(JAVA_DIR)) {
-      fs.mkdirSync(JAVA_DIR, { recursive: true });
-    }
-
-    try {
-      // Use Adoptium API to get the latest Java 21 JRE for Windows x64
-      const apiUrl = 'https://api.adoptium.net/v3/assets/latest/21/hotspot?architecture=x64&image_type=jre&os=windows&vendor=eclipse';
-      sender.send('log', '[Java] Consultando Adoptium API...');
-
-      const assets = await fetchJSON(apiUrl);
-
-      if (!assets || assets.length === 0) {
-        throw new Error('No se encontraron releases de Java 21 en Adoptium');
-      }
-
-      const asset = assets[0];
-      const downloadUrl = asset.binary?.package?.link;
-      const fileName = asset.binary?.package?.name || 'jdk21-jre.zip';
-      const fileSize = asset.binary?.package?.size || 0;
-
-      if (!downloadUrl) {
-        throw new Error('URL de descarga no disponible');
-      }
-
-      sender.send('log', `[Java] Descargando: ${fileName} (${(fileSize / 1024 / 1024).toFixed(1)} MB)`);
-
-      const zipPath = path.join(resolveDataDir(), 'java21-temp.zip');
-
-      await downloadFile(downloadUrl, zipPath, (received, total) => {
-        const pct = Math.round((received / total) * 100);
-        sender.send('progress', {
-          type: 'java',
-          current: pct,
-          total: 100,
-          name: `Java 21: ${(received / 1024 / 1024).toFixed(1)}MB / ${(total / 1024 / 1024).toFixed(1)}MB`
-        });
-      });
-
-      sender.send('log', '[Java] Extrayendo Java 21...');
-      sender.send('progress', { type: 'java', current: 95, total: 100, name: 'Extrayendo Java 21...' });
-
-      // Extract ZIP
-      const zip = new AdmZip(zipPath);
-      const tempExtractDir = path.join(resolveDataDir(), 'java21-temp-extract');
-
-      if (fs.existsSync(tempExtractDir)) {
-        fs.rmSync(tempExtractDir, { recursive: true, force: true });
-      }
-
-      zip.extractAllTo(tempExtractDir, true);
-
-      // The ZIP contains a folder like "jdk-21.0.x+y-jre" - find it and move contents to JAVA_DIR
-      const extractedDirs = fs.readdirSync(tempExtractDir);
-      const jdkDir = extractedDirs.find(d => d.startsWith('jdk-'));
-
-      if (!jdkDir) {
-        throw new Error('No se encontro carpeta JDK en el ZIP extraido');
-      }
-
-      const sourceDir = path.join(tempExtractDir, jdkDir);
-
-      // Remove old JAVA_DIR if exists and recreate
-      if (fs.existsSync(JAVA_DIR)) {
-        fs.rmSync(JAVA_DIR, { recursive: true, force: true });
-      }
-
-      // Move extracted JDK to JAVA_DIR
-      fs.renameSync(sourceDir, JAVA_DIR);
-
-      // Clean up temp files
-      if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
-      if (fs.existsSync(tempExtractDir)) {
-        fs.rmSync(tempExtractDir, { recursive: true, force: true });
-      }
-
-      // Verify
-      if (fs.existsSync(javaExe)) {
-        sender.send('log', `[Java] ✓ Java 21 instalado correctamente: ${javaExe}`);
-        sender.send('progress', { type: 'java', current: 100, total: 100, name: 'Java 21 listo!' });
-        return javaExe;
-      } else {
-        throw new Error('javaw.exe no encontrado despues de la extraccion');
-      }
-
-    } catch (err) {
-      sender.send('log', `[Java] ✗ Error descargando Java 21: ${err.message}`);
-      // Try to fall back to system detection
-      const fallback = autoDetectJava(sender);
-      if (fallback) return fallback;
-      throw new Error(`No se pudo obtener Java 21: ${err.message}. Instala Java 21 manualmente.`);
-    }
-  }
-
-  /**
-   * Auto-detect Java 21+ on the system.
-   * Checks common locations: our own download, CurseForge, Program Files, JAVA_HOME, PATH.
-   */
-  function autoDetectJava(sender) {
-    const candidates = [
-      // LauncherChef's own Java (downloaded automatically)
-      path.join(JAVA_DIR, 'bin', 'javaw.exe'),
-      // CurseForge Java 21
-      path.join(process.env.USERPROFILE || '', 'curseforge', 'minecraft', 'Install', 'java', 'Jre_21', 'bin', 'javaw.exe'),
-      path.join(process.env.USERPROFILE || '', 'curseforge', 'minecraft', 'Install', 'java', 'Jre_21', 'bin', 'java.exe'),
-      // CurseForge runtime delta
-      path.join(process.env.USERPROFILE || '', 'curseforge', 'minecraft', 'Install', 'runtime', 'java-runtime-delta', 'windows-x64', 'java-runtime-delta', 'bin', 'javaw.exe'),
-      // Adoptium / Temurin
-      'C:\\Program Files\\Eclipse Adoptium\\jdk-21\\bin\\javaw.exe',
-      'C:\\Program Files\\Eclipse Adoptium\\jre-21\\bin\\javaw.exe',
-      // Oracle JDK
-      'C:\\Program Files\\Java\\jdk-21\\bin\\javaw.exe',
-      // Microsoft JDK
-      'C:\\Program Files\\Microsoft\\jdk-21\\bin\\javaw.exe',
-      // Minecraft Launcher runtime
-      path.join(process.env.APPDATA || '', '.minecraft', 'runtime', 'java-runtime-delta', 'windows-x64', 'java-runtime-delta', 'bin', 'javaw.exe'),
-    ];
-
-    for (const candidate of candidates) {
-      if (fs.existsSync(candidate)) {
-        if (sender) sender.send('log', `[Java] Auto-detectado: ${candidate}`);
-        return candidate;
-      }
-    }
-
-    // Last resort: try system PATH
-    try {
-      execSync('"java" -version', { stdio: 'pipe' });
-      if (sender) sender.send('log', '[Java] Usando java del PATH del sistema');
-      return 'java';
-    } catch {
-      // No java found
-    }
-
-    return '';
-  }
-
-  /**
-   * Get Java path - first try auto-detect, then auto-download.
-   */
-  async function ensureJava(sender) {
-    // Check settings first
-    const configPath = path.join(CONFIG_PATH, 'settings.json');
-    try {
-      if (fs.existsSync(configPath)) {
-        const settings = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-        if (settings.javaPath && fs.existsSync(settings.javaPath)) {
-          sender.send('log', `[Java] Usando ruta de settings: ${settings.javaPath}`);
-          return settings.javaPath;
-        }
-      }
-    } catch { /* ignore */ }
-
-    // Try auto-detect
-    const detected = autoDetectJava(sender);
-    if (detected) return detected;
-
-    // Auto-download Java 21
-    sender.send('log', '[Java] No se detecto Java en el sistema. Descargando automaticamente...');
-    return await downloadJava21(sender);
   }
 
   /**
@@ -363,17 +192,25 @@ module.exports = function (ipcMain, getDataDir, configDir) {
       const ramMin = settings.ramMin || 1024;
       const ramMax = settings.ramMax || 6144;
 
-      // Ensure Java is available (auto-detect or auto-download)
+      currentSender = event.sender;
+      const mcVersionForJava = options.version || '1.21.1';
+
+      // Each Minecraft version needs a specific Java (1.16 and older: 8, 1.17-1.20.4: 17, 1.20.5+: 21).
       event.sender.send('log', '[LauncherChef] Verificando Java...');
-      const javaPath = await ensureJava(event.sender);
-
-      if (!javaPath) {
-        throw new Error('No se pudo encontrar ni descargar Java 21. Ve a Ajustes e indica la ruta manualmente, o instala Java 21 desde https://adoptium.net');
+      // Older settings stored a single global Java path; keep it only for the Java major it actually is.
+      const javaOverrides = { ...(settings.javaOverrides || {}) };
+      if (settings.javaPath && fs.existsSync(settings.javaPath)) {
+        const legacyMajor = javaManager.javaMajorOf(settings.javaPath);
+        if (legacyMajor && !javaOverrides[legacyMajor]) javaOverrides[legacyMajor] = settings.javaPath;
       }
+      const java = await javaManager.resolveFor(mcVersionForJava, javaOverrides);
+      const javaPath = java.path;
 
-      // Instance directory per server
+      // Game files (versions, libraries, assets) are shared by all instances; saves, mods and configs are per instance.
       const serverId = options.serverId || 'default';
       const instanceDir = path.join(resolveDataDir(), 'instances', serverId);
+      const sharedRoot = path.join(resolveDataDir(), 'shared');
+      fs.mkdirSync(sharedRoot, { recursive: true });
 
       if (!fs.existsSync(instanceDir)) {
         fs.mkdirSync(instanceDir, { recursive: true });
@@ -425,7 +262,7 @@ module.exports = function (ipcMain, getDataDir, configDir) {
       // Build launch options
       const launchOpts = {
         authorization: authObj,
-        root: instanceDir,
+        root: sharedRoot,
         version: {
           number: mcVersion,
           type: 'release'
@@ -457,7 +294,7 @@ module.exports = function (ipcMain, getDataDir, configDir) {
       // Handle mod loaders
       if (modLoader === 'neoforge') {
         event.sender.send('progress', { type: 'setup', current: 10, total: 100, name: 'Descargando instalador de NeoForge...' });
-        const installerPath = await ensureNeoForgeInstaller(modLoaderVersion, instanceDir, event.sender);
+        const installerPath = await ensureNeoForgeInstaller(modLoaderVersion, sharedRoot, event.sender);
         launchOpts.forge = installerPath;
         event.sender.send('log', `[LauncherChef] Usando instalador NeoForge: ${installerPath}`);
         event.sender.send('progress', { type: 'setup', current: 30, total: 100, name: 'Instalador listo, iniciando Minecraft...' });
@@ -467,9 +304,11 @@ module.exports = function (ipcMain, getDataDir, configDir) {
         launchOpts.forge = installerPath;
         event.sender.send('log', `[LauncherChef] Usando instalador Forge: ${installerPath}`);
         event.sender.send('progress', { type: 'setup', current: 30, total: 100, name: 'Instalador listo, iniciando Minecraft...' });
-      } else if (modLoader === 'fabric') {
-        launchOpts.version.custom = `fabric-loader-${modLoaderVersion}-${mcVersion}`;
-        event.sender.send('log', `[LauncherChef] Usando Fabric: fabric-loader-${modLoaderVersion}-${mcVersion}`);
+      } else if (modLoader === 'fabric' || modLoader === 'quilt') {
+        event.sender.send('progress', { type: 'setup', current: 10, total: 100, name: `Preparando ${modLoader}...` });
+        const profile = await ensureLoaderProfile(sharedRoot, modLoader, mcVersion, modLoaderVersion);
+        launchOpts.version.custom = profile.id;
+        event.sender.send('log', `[LauncherChef] Usando ${modLoader} ${profile.version} (${profile.id})`);
       }
 
       // Auto-connect to server
