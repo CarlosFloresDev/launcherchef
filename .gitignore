@@ -13,3 +13,4 @@ config/local.json
 .dev/
 config/instances.json
 config/game-history.json
+.claude/
